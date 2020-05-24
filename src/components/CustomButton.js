@@ -2,7 +2,7 @@ import React from 'react'
 import { Box, ButtonBase, Typography } from '@material-ui/core'
 import { INTERVAL } from '../utils/constants'
 
-export const CustomButton = ({ progress, flex = 1, label, value, onClick }) => (
+export const CustomButton = ({ progress, flex = 1, label, onClick }) => (
   <ButtonBase
     onClick={onClick}
     focusRipple
@@ -24,7 +24,6 @@ export const CustomButton = ({ progress, flex = 1, label, value, onClick }) => (
       zIndex={2}
     >
       <Typography style={{ fontSize: 12 }}>{label}</Typography>
-      {value && <Typography style={{ fontSize: 12 }}>${value}</Typography>}
     </Box>
 
     {typeof progress === 'number' && (
