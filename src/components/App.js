@@ -13,7 +13,6 @@ const People = (props) => <List droppableId="people" items={props.people} />
 
 function App({ state, actions }) {
   useInterval(actions.tick, INTERVAL)
-
   return (
     <Router>
       <Container>

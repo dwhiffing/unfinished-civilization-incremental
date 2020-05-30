@@ -15,18 +15,18 @@ const { states, update, actions } = meiosis.functionPatches.setup({
     Actions: getActions,
     Effects: (update, actions) => [
       (state) => {
-        state.tasks.forEach((task) => {
+        Object.values(state.tasks).forEach((task) => {
           if (task.progress >= task.duration * 1000) {
             actions.finishTask(task)
           }
         })
       },
       (state) => {
-        state.tasks.forEach((task) => {
+        Object.values(state.tasks).forEach((task) => {
           const _task = getTaskWithBuildingTask(state, task)
           if (
             task.progress === 0 &&
-            _task.buildingTask.slots.flat().length > 0
+            _task.buildingTask.slots.map((s) => s.list).flat().length > 0
           ) {
             actions.startTask(task)
           }

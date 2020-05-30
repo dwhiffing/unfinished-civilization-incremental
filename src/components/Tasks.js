@@ -5,28 +5,29 @@ import { List } from './DragDrop'
 
 export const Tasks = ({ actions, state }) => (
   <>
-    {state.buildings.map((building) => (
+    {Object.values(state.buildings).map((building) => (
       <div key={building.label}>
         <Typography>{building.label}</Typography>
 
-        {building.tasks.map((buildingTask) => {
-          const taskDefinition = state.tasks.find(
+        {Object.values(building.tasks).map((buildingTask) => {
+          const taskDefinition = Object.values(state.tasks).find(
             (t) => t.label === buildingTask.label,
           )
           const task = { ...taskDefinition, ...buildingTask }
+
           return (
             <div key={`task1-${task.label}`}>
               <TaskItem
                 index={0}
                 task={task}
                 building={building}
-                items={state.buildings[0].tasks[0].slots[0]}
+                items={state.buildings.camp.tasks.scavenge.slots[0].list}
               />
               <TaskItem
                 index={1}
                 task={task}
                 building={building}
-                items={state.buildings[0].tasks[0].slots[1]}
+                items={state.buildings.camp.tasks.scavenge.slots[1].list}
               />
             </div>
           )
@@ -51,7 +52,7 @@ function TaskItem({ index, task, items }) {
         }}
       >
         <List
-          droppableId={`buildings[0].tasks[0].slots[${index}]`}
+          droppableId={`buildings.camp.tasks.scavenge.slots[${index}].list`}
           items={items}
         />
         {typeof progress === 'number' && (

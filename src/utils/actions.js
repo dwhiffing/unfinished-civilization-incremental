@@ -5,14 +5,11 @@ import set from 'lodash/set'
 import merge from './merge'
 
 export const getTaskWithBuildingTask = (state, task) => {
-  const building = state.buildings.find((b) =>
-    b.tasks.some((t) => t.label === task.label),
+  const building = Object.values(state.buildings).find(
+    (b) => b.tasks[task.label],
   )
-  const buildingTask = building
-    ? building.tasks.find((t) => t.label === task.label)
-    : null
 
-  return { ...task, buildingTask }
+  return { ...task, buildingTask: building.tasks[task.label] }
 }
 
 export const getActions = (update, getState) => {
@@ -22,42 +19,31 @@ export const getActions = (update, getState) => {
 
   actions.tick = () =>
     perform({
-      tasks: (tasks) =>
-        tasks.map((b) => ({
-          ...b,
-          progress: b.progress > 0 ? b.progress + INTERVAL : b.progress,
-        })),
+      tasks: (tasks) => {
+        Object.values(tasks).forEach((task) => {
+          if (task.progress > 0) {
+            task.progress += INTERVAL
+          }
+        })
+        return tasks
+      },
     })
 
   actions.finishTask = (task) => {
     const _task = getTaskWithBuildingTask(getState(), task)
-    const multiplier = _task.buildingTask.slots.flat().length
+    const multiplier = _task.buildingTask.slots.map((s) => s.list).flat().length
     return perform({
-      tasks: (tasks) =>
-        tasks.map((t) => ({
-          ...t,
-          progress: t.label === task.label ? 0 : t.progress,
-        })),
-      resources: (resources) =>
-        resources.map((resource) =>
-          task.effect.label === resource.label
-            ? {
-                ...resource,
-                value: resource.value + task.effect.value * multiplier,
-              }
-            : resource,
-        ),
+      tasks: { [task.label]: { progress: 0 } },
+      resources: {
+        [task.effect.label]: {
+          value: (v) => v + task.effect.value * multiplier,
+        },
+      },
     })
   }
 
   actions.startTask = (task) => {
-    perform({
-      tasks: (tasks) =>
-        tasks.map((b) => ({
-          ...b,
-          progress: b.label === task.label ? b.progress + 0.01 : b.progress,
-        })),
-    })
+    perform({ tasks: { [task.label]: { progress: (p) => p + 0.01 } } })
   }
 
   actions.onDragEnd = ({ source, destination }) => {

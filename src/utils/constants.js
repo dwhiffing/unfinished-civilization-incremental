@@ -1,26 +1,40 @@
 export const INITIAL_MONEY = 0
 export const INTERVAL = 500
 
-const RESOURCES = [{ label: 'food' }]
+const generateSlots = (num) => {
+  let slots = []
+  let i = num
+  while (i-- > 0) {
+    slots.push({ list: [], progress: 0 })
+  }
 
-const BUILDINGS = [{ label: 'camp', tasks: ['scavenge'] }]
+  return slots
+}
 
-const TASKS = [
-  { label: 'scavenge', duration: 1, effect: { label: 'food', value: 1 } },
-]
+const RESOURCES = { food: { label: 'food', value: 0 } }
+
+const BUILDINGS = {
+  camp: {
+    label: 'camp',
+    tasks: { scavenge: { label: 'scavenge', slots: generateSlots(2) } },
+  },
+}
+
+const TASKS = {
+  scavenge: {
+    label: 'scavenge',
+    duration: 1,
+    progress: 0,
+    effect: { label: 'food', value: 1 },
+  },
+}
+
+const PEOPLE = [{ id: 'dan' }, { id: 'nad' }]
 
 // need to move progress to building
 export const INITIAL_STATE = {
-  resources: RESOURCES.map((r) => ({ ...r, value: 0 })),
-  buildings: BUILDINGS.map((b) => ({
-    ...b,
-    tasks: b.tasks.map((t) => ({ label: t, slots: [[], []] })),
-  })),
-  tasks: TASKS.map((b) => ({
-    ...b,
-    level: 0,
-    progress: 0,
-    amount: 0,
-  })),
-  people: [{ id: 'dan' }, { id: 'nad' }],
+  resources: RESOURCES,
+  buildings: BUILDINGS,
+  tasks: TASKS,
+  people: PEOPLE,
 }

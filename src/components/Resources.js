@@ -4,7 +4,7 @@ import { Box, Typography } from '@material-ui/core'
 
 export const Resources = ({ resources }) => (
   <div className="flex flex-column">
-    {resources.map((resource) => (
+    {Object.values(resources).map((resource) => (
       <Box key={resource.label} display="flex" flexDirection="row" mt={1}>
         <Box>
           <Typography style={{ color: 'black' }}>{resource.label}:</Typography>
