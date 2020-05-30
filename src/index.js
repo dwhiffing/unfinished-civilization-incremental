@@ -4,7 +4,7 @@ import './index.css'
 import Root from './components/App'
 import meiosis from 'meiosis-setup'
 import { INITIAL_STATE } from './utils/constants'
-import { getActions } from './utils/actions'
+import { getActions, getTaskWithBuildingTask } from './utils/actions'
 
 const App = meiosis.react.setup({ React, Root })
 
@@ -18,6 +18,17 @@ const { states, update, actions } = meiosis.functionPatches.setup({
         state.tasks.forEach((task) => {
           if (task.progress >= task.duration * 1000) {
             actions.finishTask(task)
+          }
+        })
+      },
+      (state) => {
+        state.tasks.forEach((task) => {
+          const _task = getTaskWithBuildingTask(state, task)
+          if (
+            task.progress === 0 &&
+            _task.buildingTask.slots.flat().length > 0
+          ) {
+            actions.startTask(task)
           }
         })
       },

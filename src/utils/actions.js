@@ -1,60 +1,63 @@
 import { INTERVAL } from './constants'
-import clamp from 'lodash/clamp'
+
 import get from 'lodash/get'
 import set from 'lodash/set'
+import merge from './merge'
+
+export const getTaskWithBuildingTask = (state, task) => {
+  const building = state.buildings.find((b) =>
+    b.tasks.some((t) => t.label === task.label),
+  )
+  const buildingTask = building
+    ? building.tasks.find((t) => t.label === task.label)
+    : null
+
+  return { ...task, buildingTask }
+}
 
 export const getActions = (update, getState) => {
   let actions = {}
 
-  actions.tick = () => {
-    return update((state) => ({
-      ...state,
-      tasks: state.tasks.map((b) => ({
-        ...b,
-        progress: b.progress > 0 ? b.progress + INTERVAL : b.progress,
-      })),
-    }))
-  }
+  const perform = (changes) => update((state) => merge(state, changes))
+
+  actions.tick = () =>
+    perform({
+      tasks: (tasks) =>
+        tasks.map((b) => ({
+          ...b,
+          progress: b.progress > 0 ? b.progress + INTERVAL : b.progress,
+        })),
+    })
 
   actions.finishTask = (task) => {
-    return update((state) => {
-      return {
-        ...state,
-        resources: state.resources.map((resource) => {
-          return task.effect.label === resource.label
-            ? {
-                ...resource,
-                value: resource.value + task.effect.value * (task.amount + 1),
-              }
-            : resource
-        }),
-        tasks: getState().tasks.map((t) => ({
+    const _task = getTaskWithBuildingTask(getState(), task)
+    const multiplier = _task.buildingTask.slots.flat().length
+    return perform({
+      tasks: (tasks) =>
+        tasks.map((t) => ({
           ...t,
           progress: t.label === task.label ? 0 : t.progress,
         })),
-      }
+      resources: (resources) =>
+        resources.map((resource) =>
+          task.effect.label === resource.label
+            ? {
+                ...resource,
+                value: resource.value + task.effect.value * multiplier,
+              }
+            : resource,
+        ),
     })
   }
 
-  actions.startTask = (taskLabel) => {
-    update((state) => ({
-      ...state,
-      tasks: getState().tasks.map((b) => ({
-        ...b,
-        progress: b.label === taskLabel ? b.progress + 0.01 : b.progress,
-      })),
-    }))
-  }
-
-  actions.addTask = (taskLabel, amount) => {
-    update((state) => ({
-      ...state,
-      tasks: getState().tasks.map((b) => ({
-        ...b,
-        amount:
-          b.label === taskLabel ? clamp(b.amount + amount, 0, 100) : b.amount,
-      })),
-    }))
+  actions.startTask = (task) => {
+    perform({
+      tasks: (tasks) =>
+        tasks.map((b) => ({
+          ...b,
+          progress: b.label === task.label ? b.progress + 0.01 : b.progress,
+        })),
+    })
   }
 
   actions.onDragEnd = ({ source, destination }) => {

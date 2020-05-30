@@ -1,5 +1,5 @@
 export const INITIAL_MONEY = 0
-export const INTERVAL = 100
+export const INTERVAL = 500
 
 const RESOURCES = [{ label: 'food' }]
 
@@ -9,11 +9,12 @@ const TASKS = [
   { label: 'scavenge', duration: 1, effect: { label: 'food', value: 1 } },
 ]
 
+// need to move progress to building
 export const INITIAL_STATE = {
   resources: RESOURCES.map((r) => ({ ...r, value: 0 })),
   buildings: BUILDINGS.map((b) => ({
     ...b,
-    tasks: b.tasks.map((t) => ({ label: t, slots: [] })),
+    tasks: b.tasks.map((t) => ({ label: t, slots: [[], []] })),
   })),
   tasks: TASKS.map((b) => ({
     ...b,

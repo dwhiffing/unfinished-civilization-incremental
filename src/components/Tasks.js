@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, Button } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { INTERVAL } from '../utils/constants'
 import { List } from './DragDrop'
 
@@ -15,15 +15,20 @@ export const Tasks = ({ actions, state }) => (
           )
           const task = { ...taskDefinition, ...buildingTask }
           return (
-            <TaskItem
-              key={`task-${task.label}`}
-              task={task}
-              building={building}
-              items={state.buildings[0].tasks[0].slots}
-              onClick={() => actions.startTask(task.label)}
-              onAdd={() => actions.addTask(task.label, +1)}
-              onSub={() => actions.addTask(task.label, -1)}
-            />
+            <div key={`task1-${task.label}`}>
+              <TaskItem
+                index={0}
+                task={task}
+                building={building}
+                items={state.buildings[0].tasks[0].slots[0]}
+              />
+              <TaskItem
+                index={1}
+                task={task}
+                building={building}
+                items={state.buildings[0].tasks[0].slots[1]}
+              />
+            </div>
           )
         })}
       </div>
@@ -31,7 +36,7 @@ export const Tasks = ({ actions, state }) => (
   </>
 )
 
-function TaskItem({ task, items, onClick, onAdd, onSub }) {
+function TaskItem({ index, task, items }) {
   const progress = 1 - task.progress / (task.duration * 1000)
   return (
     <Box display="flex" flexDirection="column" flex={1} maxWidth={300}>
@@ -45,7 +50,10 @@ function TaskItem({ task, items, onClick, onAdd, onSub }) {
           overflow: 'hidden',
         }}
       >
-        <List droppableId={`buildings[0].tasks[0].slots`} items={items} />
+        <List
+          droppableId={`buildings[0].tasks[0].slots[${index}]`}
+          items={items}
+        />
         {typeof progress === 'number' && (
           <Box
             position="absolute"
@@ -59,13 +67,7 @@ function TaskItem({ task, items, onClick, onAdd, onSub }) {
         )}
         <Box position="relative" zIndex={1}>
           <Typography>{task.label}</Typography>
-          <Typography>{task.amount}</Typography>
         </Box>
-      </Box>
-      <Box display="flex" flex={1}>
-        <Button onClick={onClick}>Perform</Button>
-        <Button onClick={onAdd}>Add</Button>
-        <Button onClick={onSub}>Sub</Button>
       </Box>
     </Box>
   )
