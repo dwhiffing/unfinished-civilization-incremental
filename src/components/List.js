@@ -1,8 +1,8 @@
 import React from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 
-export const List = (props) => (
-  <Droppable droppableId={props.droppableId}>
+export const List = ({ items, ...props }) => (
+  <Droppable {...props}>
     {(provided, snapshot) => (
       <div
         ref={provided.innerRef}
@@ -12,7 +12,7 @@ export const List = (props) => (
           width: 250,
         }}
       >
-        {props.items.map((item, index) => (
+        {items.map((item, index) => (
           <Item key={item.id} item={item} index={index} />
         ))}
         {provided.placeholder}
@@ -22,7 +22,7 @@ export const List = (props) => (
 )
 
 const Item = (props) => (
-  <Draggable draggableId={props.item.id} index={props.index}>
+  <Draggable draggableId={props.item.label} index={props.index}>
     {(provided, snapshot) => (
       <div
         ref={provided.innerRef}
@@ -36,7 +36,7 @@ const Item = (props) => (
           ...provided.draggableProps.style,
         }}
       >
-        {props.item.id}
+        {props.item.label}
       </div>
     )}
   </Draggable>
