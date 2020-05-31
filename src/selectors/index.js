@@ -32,34 +32,15 @@ export const getCities = createSelector(orm, (session) => {
     })
 })
 
-export const getBuildings = createSelector(orm, (session) => {
-  return session.Building.all()
+export const getResourceTotals = createSelector(orm, (session) => {
+  let resources = {}
+  session.ResourceStockpile.all()
     .toModelArray()
-    .map((building) => {
-      const { ref } = building
-      return {
-        ...ref,
-        seats: building.seats.toRefArray().map((seat) => {
-          return { ...seat, task: { ...seat.task.ref } }
-        }),
-      }
-    })
-})
-
-export const getResources = createSelector(orm, (session) => {
-  return session.Resource.all()
-    .toModelArray()
-    .map((resource) => {
+    .forEach((resource) => {
       const { ref } = resource
-      return { ...ref }
+      resources[ref.resourceId] = resources[ref.resourceId] || 0
+      resources[ref.resourceId] += ref.amount
     })
-})
 
-export const getPeople = createSelector(orm, (session) => {
-  return session.Person.all()
-    .toModelArray()
-    .map((person) => {
-      const { ref } = person
-      return { ...ref }
-    })
+  return resources
 })

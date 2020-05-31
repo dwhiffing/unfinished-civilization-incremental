@@ -1,6 +1,5 @@
 import orm from '../orm'
 import { resources, tasks, buildingTypes, cities } from '../constants'
-import { INTERVAL } from '..'
 
 const initalState = orm.getEmptyState()
 
@@ -18,44 +17,93 @@ export const reducer = (state = initalState, action) => {
     ResourceStockpile,
   } = sess
 
+  const createCity = ({
+    label = 'city',
+    people = [{ label: 'dan' }],
+    resources = [],
+    buildings = [],
+  } = {}) => {
+    const allResources = Resource.all().toModelArray()
+    const allBuildings = BuildingType.all().toModelArray()
+    const cityInstance = City.create({ label })
+
+    allResources.forEach((resource) => {
+      const _resource = resources.find((r) => r.resourceId === resource.ref.id)
+      cityInstance.resources.add(
+        ResourceStockpile.create({
+          resourceId: resource.id,
+          amount: _resource ? _resource.amount : 0,
+        }),
+      )
+    })
+
+    people.forEach((person) => createPerson(cityInstance.ref.id, person))
+    allBuildings.forEach((building) => {
+      const _building = buildings.find((r) => r.buildingId === building.ref.id)
+      createBuilding(cityInstance.ref.id, {
+        buildingId: building.id,
+        ...(_building || {}),
+      })
+    })
+  }
+
+  const createBuilding = (cityId, building) => {
+    const city = City.withId(cityId)
+    const buildingInstance = Building.create({ ...building })
+    let buildingType = BuildingType.all()
+      .toModelArray()
+      .find((b) => b.id === building.buildingId)
+
+    buildingInstance.set('buildingType', buildingType)
+
+    buildingType.tasks.forEach((task) => {
+      let i = building.seatCount || 1
+      while (i-- > 0) {
+        createSeat(buildingInstance.id, task)
+      }
+    })
+
+    city.buildings.add(buildingInstance)
+
+    return buildingInstance
+  }
+
+  const createPerson = (cityId, person) => {
+    const city = City.withId(cityId)
+    const personInstance = Person.create({ ...person })
+    city.people.add(personInstance)
+  }
+
+  const createSeat = (buildingId, task) => {
+    const building = Building.withId(buildingId)
+    const seatInstance = Seat.create({
+      progress: 0,
+      task: Task.all()
+        .toModelArray()
+        .find((t) => t.id === task.id),
+    })
+    building.seats.add(seatInstance)
+  }
+
   if (action.type === 'INIT') {
-    resources.forEach((resource) => Resource.create({ ...resource, value: 0 }))
+    resources.forEach((resource) => Resource.create({ ...resource, amount: 0 }))
     tasks.forEach((task) => Task.create({ ...task }))
     buildingTypes.forEach(({ ...buildingType }) =>
       BuildingType.create({ ...buildingType }),
     )
+    cities.forEach(createCity)
+  }
 
-    cities.forEach(({ people, buildings, resources, ...city }) => {
-      const cityInstance = City.create({ ...city })
-      people.forEach((person) => {
-        const personInstance = Person.create({ ...person })
-        cityInstance.people.add(personInstance)
-      })
-      resources.forEach((resource) => {
-        const resourceInstance = ResourceStockpile.create({ ...resource })
-        cityInstance.resources.add(resourceInstance)
-      })
-      buildings.forEach((building) => {
-        const buildingInstance = Building.create({ ...building })
-        let buildingType = BuildingType.all()
-          .toModelArray()
-          .find((b) => b.id === building.buildingId)
-        buildingInstance.set('buildingType', buildingType)
-        buildingType.tasks.forEach((task) => {
-          let i = task.count
-          while (i-- > 0) {
-            let seat = Seat.create({
-              progress: 0,
-              task: Task.all()
-                .toModelArray()
-                .find((t) => t.id === task.id),
-            })
-            buildingInstance.seats.add(seat)
-          }
-        })
-        cityInstance.buildings.add(buildingInstance)
-      })
-    })
+  if (action.type === 'CREATE_CITY') {
+    createCity(action.payload)
+  }
+
+  if (action.type === 'CREATE_SEAT') {
+    createSeat(action.payload.buildingId, action.payload.task)
+  }
+
+  if (action.type === 'CREATE_PERSON') {
+    createPerson(action.payload.cityId, action.payload.person)
   }
 
   if (action.type === 'TICK') {

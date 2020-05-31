@@ -5,6 +5,7 @@ import { INTERVAL } from '..'
 
 const Seat = ({ seat }) => {
   const progressPercent = 1 - seat.progress / seat.task.duration
+
   return (
     <Box display="flex" flexDirection="column" flex={1} maxWidth={90}>
       <Box
