@@ -8,6 +8,7 @@ import { Resources } from './Resources'
 import { Buildings } from './Buildings'
 import { People } from './People'
 import { getBuildings, getPeople, getResources } from '../utils/selectors'
+import { drag } from '../utils/actions'
 
 export default function App() {
   const dispatch = useDispatch()
@@ -20,10 +21,7 @@ export default function App() {
       <Container>
         <DragDropContext
           onDragEnd={({ source, destination, ...rest }) =>
-            dispatch({
-              type: 'DRAG',
-              payload: { source, destination, ...rest },
-            })
+            dispatch(drag({ source, destination, ...rest }))
           }
         >
           <Box display="flex" flexDirection="row" minHeight="100vh">

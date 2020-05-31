@@ -2,10 +2,11 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { DragList } from './DragList'
+import { finishTask } from '../utils/actions'
 
 const INTERVAL = 100
 
-const Seat = ({ index, seat }) => {
+const Seat = ({ seat }) => {
   const timeoutRef = useRef()
   const [progress, setProgress] = useState(0)
   const dispatch = useDispatch()
@@ -14,6 +15,7 @@ const Seat = ({ index, seat }) => {
   useEffect(() => {
     const id = setInterval(() => {
       setProgress((p) =>
+        // TODO: refactor
         p >= task.duration * INTERVAL ? 0 : seat.person ? p + INTERVAL : p,
       )
     }, INTERVAL)
@@ -24,12 +26,10 @@ const Seat = ({ index, seat }) => {
 
   useEffect(() => {
     if (progress >= task.duration * INTERVAL) {
-      timeoutRef.current = setTimeout(() => {
-        dispatch({
-          type: 'FINISH_TASK',
-          payload: { resourceId: 0, value: 1 },
-        })
-      }, INTERVAL)
+      timeoutRef.current = setTimeout(
+        () => dispatch(finishTask({ resourceId: 0, value: 1 })),
+        INTERVAL,
+      )
     }
   }, [task.duration, dispatch, progress, setProgress])
 
@@ -44,10 +44,7 @@ const Seat = ({ index, seat }) => {
   useEffect(() => {
     if (progress >= task.duration * INTERVAL) {
       let id = setTimeout(() => {
-        dispatch({
-          type: 'FINISH_TASK',
-          payload: { resourceId: 0, value: 1 },
-        })
+        dispatch(finishTask({ resourceId: 0, value: 1 }))
       }, INTERVAL)
       return () => {
         clearTimeout(id)

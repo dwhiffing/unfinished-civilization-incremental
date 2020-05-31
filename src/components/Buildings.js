@@ -2,12 +2,13 @@ import React, { useEffect } from 'react'
 import { Typography } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { Seat } from './Seat'
+import { init } from '../utils/actions'
 
 export const Buildings = ({ buildings }) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch({ type: 'INIT' })
+    dispatch(init())
   }, [dispatch])
 
   return (
