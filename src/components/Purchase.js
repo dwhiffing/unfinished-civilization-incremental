@@ -27,9 +27,9 @@ export const Purchase = ({ id, cityId, action }) => {
       onClick={async () => {
         if (isAffordable) {
           await Promise.all(
-            Object.entries(buyable.cost).map(([key, value]) => {
-              dispatch(updateResource(key, -value, cityId))
-            }),
+            Object.entries(buyable.cost).map(([key, value]) =>
+              dispatch(updateResource(key, -value, cityId)),
+            ),
           )
           await dispatch(action)
         }

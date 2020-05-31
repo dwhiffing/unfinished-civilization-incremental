@@ -24,6 +24,7 @@ export const getCities = createSelector(orm, (session) => {
                 ...seat,
                 task: { ...seat.task._fields },
                 building: { ...ref, cityId: city.id },
+                person: seat.person ? { ...seat.person._fields } : null,
               }
             }),
           }

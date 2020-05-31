@@ -1,5 +1,6 @@
 // TODO: these shouldn't be persisted
 
+export const RESOURCE_MULTIPLIER = 10
 export const resources = [{ id: 'food' }, { id: 'wood' }]
 export const buyables = [
   {

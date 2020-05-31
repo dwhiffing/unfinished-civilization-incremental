@@ -1,5 +1,12 @@
 import orm from '../orm'
-import { resources, tasks, buildingTypes, cities, buyables } from '../constants'
+import {
+  resources,
+  tasks,
+  buildingTypes,
+  cities,
+  buyables,
+  RESOURCE_MULTIPLIER,
+} from '../constants'
 import faker from 'faker'
 const initalState = orm.getEmptyState()
 
@@ -130,7 +137,12 @@ export const reducer = (state = initalState, action) => {
           const effect = seat.task._fields.effect
           const cityId = building.city.all().toRefArray()[0].id
           if (seat.progress >= seat.task._fields.duration) {
-            updateResource(ResourceStockpile, effect.id, effect.value, cityId)
+            updateResource(
+              ResourceStockpile,
+              effect.id,
+              effect.value * RESOURCE_MULTIPLIER,
+              cityId,
+            )
             seatModel.update({ progress: 0 })
             return
           }
@@ -153,7 +165,7 @@ export const reducer = (state = initalState, action) => {
     if (source.droppableId === destination.droppableId) {
       let otherPerson = Person.all()
         .toModelArray()
-        .find((person) => person.ref.index === destination.index)
+        .find((person) => person._fields.index === destination.index)
       draggedPerson &&
         draggedPerson.update({
           index: destination.index,

@@ -5,7 +5,6 @@ import { INTERVAL } from '..'
 
 const Seat = ({ seat }) => {
   const progressPercent = 1 - seat.progress / seat.task.duration
-
   return (
     <Box display="flex" flexDirection="column" flex={1} maxWidth={90}>
       <Box
@@ -18,7 +17,7 @@ const Seat = ({ seat }) => {
           overflow: 'hidden',
         }}
       >
-        <Box position="relative" zIndex={2}>
+        <Box position="relative">
           <Box position="relative" style={{ borderBottom: '1px solid #999' }}>
             <Typography
               style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}

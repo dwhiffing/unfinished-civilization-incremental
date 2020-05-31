@@ -37,6 +37,8 @@ const Items = React.memo(({ items }) =>
             alignItems: 'center',
             minHeight: 40,
             textAlign: 'center',
+            position: 'relative',
+            zIndex: snapshot.isDragging ? 20 : 1,
             background: snapshot.isDragging ? 'lightgreen' : 'grey',
             ...provided.draggableProps.style,
           }}
