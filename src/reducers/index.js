@@ -113,9 +113,9 @@ export const reducer = (state = initalState, action) => {
         const seats = building.seats.all().toModelArray()
         seats.forEach((seatModel) => {
           const seat = seatModel.ref
-          const effect = seat.task.ref.effect
+          const effect = seat.task._fields.effect
           const cityId = building.city.all().toRefArray()[0].id
-          if (seat.progress >= seat.task.ref.duration) {
+          if (seat.progress >= seat.task._fields.duration) {
             let resource = ResourceStockpile.all()
               .toModelArray()
               .find((r) => {

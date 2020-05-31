@@ -4,13 +4,14 @@ import { Provider } from 'react-redux'
 import { HashRouter as Router } from 'react-router-dom'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
-import { Container } from '@material-ui/core'
+import { Container, Button, Box } from '@material-ui/core'
 
 import { drag, init } from './actions'
-import store from './store'
+import store, { persistor } from './store'
 
 import './index.css'
 import { Routes } from './routes'
+import { PersistGate } from 'redux-persist/integration/react'
 
 if (process.env.NODE_ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render')
@@ -23,7 +24,11 @@ const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(init())
+    const hasSession = localStorage.getItem('hasSession') === '1'
+    if (!hasSession) {
+      localStorage.setItem('hasSession', '1')
+      dispatch(init())
+    }
   }, [dispatch])
 
   useEffect(() => {
@@ -41,18 +46,32 @@ const App = () => {
         }
       >
         <Routes />
+        <Box position="absolute" bottom={0} right={0}>
+          <Button
+            onClick={() => {
+              persistor.purge()
+              localStorage.removeItem('hasSession')
+              window.location = '/#/city'
+              window.location.reload()
+            }}
+          >
+            Clear save
+          </Button>
+        </Box>
       </DragDropContext>
     </Container>
   )
 }
 
 ReactDOM.render(
-  // <React.StrictMode>
-  <Provider store={store}>
-    <Router>
-      <App />
-    </Router>
-  </Provider>,
-  // </React.StrictMode>,
+  <React.StrictMode>
+    <Provider store={store}>
+      <Router>
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Router>
+    </Provider>
+  </React.StrictMode>,
   document.getElementById('root'),
 )

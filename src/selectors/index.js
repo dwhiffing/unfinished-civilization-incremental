@@ -22,7 +22,7 @@ export const getCities = createSelector(orm, (session) => {
             seats: building.seats.toRefArray().map((seat) => {
               return {
                 ...seat,
-                task: { ...seat.task.ref },
+                task: { ...seat.task._fields },
                 building: { ...ref, cityId: city.id },
               }
             }),
