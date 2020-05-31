@@ -8,6 +8,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@welldone-software/why-did-you-render": "^4.2.4",
+    "faker": "^4.1.0",
     "flatted": "^3.0.2",
     "lodassh": "0.0.1-security",
     "meiosis-setup": "^5.0.0",

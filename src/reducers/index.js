@@ -1,6 +1,6 @@
 import orm from '../orm'
 import { resources, tasks, buildingTypes, cities } from '../constants'
-
+import faker from 'faker'
 const initalState = orm.getEmptyState()
 
 export const reducer = (state = initalState, action) => {
@@ -18,8 +18,8 @@ export const reducer = (state = initalState, action) => {
   } = sess
 
   const createCity = ({
-    label = 'city',
-    people = [{ label: 'dan' }],
+    label = faker.address.city(),
+    people = [{}],
     resources = [],
     buildings = [],
   } = {}) => {
@@ -70,7 +70,10 @@ export const reducer = (state = initalState, action) => {
 
   const createPerson = (cityId, person) => {
     const city = City.withId(cityId)
-    const personInstance = Person.create({ ...person })
+    const personInstance = Person.create({
+      label: faker.name.firstName(),
+      ...person,
+    })
     city.people.add(personInstance)
   }
 

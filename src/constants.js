@@ -1,9 +1,5 @@
 export const resources = [{ id: 'food' }, { id: 'wood' }]
-export const cities = [
-  {
-    label: 'one',
-  },
-]
+export const cities = [{}]
 
 export const buildingTypes = [
   { id: 'camp', tasks: [{ id: 'scavenge' }] },

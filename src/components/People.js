@@ -15,7 +15,7 @@ export const People = ({ cityId, people }) => {
         onClick={() =>
           dispatch({
             type: 'CREATE_PERSON',
-            payload: { cityId: cityId, person: { label: 'foo' } },
+            payload: { cityId: cityId },
           })
         }
       >
