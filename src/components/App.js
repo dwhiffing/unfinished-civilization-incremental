@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Box, Container } from '@material-ui/core'
 
 import { Resources } from './Resources'
-import { Tasks } from './Tasks'
+import { Buildings } from './Buildings'
 import { People } from './People'
 import { getBuildings, getPeople, getResources } from '../utils/selectors'
 
@@ -35,7 +35,7 @@ export default function App() {
               <Route
                 exact
                 path="/"
-                render={() => <Tasks buildings={buildings} />}
+                render={() => <Buildings buildings={buildings} />}
               />
             </Box>
           </Box>
@@ -44,3 +44,4 @@ export default function App() {
     </Router>
   )
 }
+App.whyDidYouRender = true
