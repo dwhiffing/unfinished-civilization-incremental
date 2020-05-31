@@ -49,6 +49,14 @@ Resource.fields = {
   id: attr(),
 }
 
+class Buyable extends Model {}
+Buyable.modelName = 'Buyable'
+Buyable.fields = {
+  id: attr(),
+  label: attr(),
+  cost: attr(),
+}
+
 class ResourceStockpile extends Model {}
 ResourceStockpile.modelName = 'ResourceStockpile'
 ResourceStockpile.fields = {
@@ -74,6 +82,7 @@ orm.register(
   BuildingType,
   ResourceStockpile,
   City,
+  Buyable,
 )
 
 export default orm

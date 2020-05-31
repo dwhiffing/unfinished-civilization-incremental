@@ -6,7 +6,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
 import { Container, Button, Box } from '@material-ui/core'
 
-import { drag, init } from './actions'
+import { drag, init, tick } from './actions'
 import store, { persistor } from './store'
 
 import './index.css'
@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'development') {
   whyDidYouRender(React)
 }
 
-export const INTERVAL = 100
+export const INTERVAL = 1000
 
 const App = () => {
   const dispatch = useDispatch()
@@ -33,7 +33,7 @@ const App = () => {
 
   useEffect(() => {
     const id = setInterval(() => {
-      dispatch({ type: 'TICK' })
+      dispatch(tick())
     }, INTERVAL)
     return () => clearInterval(id)
   }, [dispatch])
@@ -51,8 +51,8 @@ const App = () => {
             onClick={() => {
               persistor.purge()
               localStorage.removeItem('hasSession')
-              window.location = '/#/city'
               window.location.reload()
+              window.location = '/#/city/0'
             }}
           >
             Clear save

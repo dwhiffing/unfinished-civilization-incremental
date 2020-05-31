@@ -1,5 +1,5 @@
 import orm from '../orm'
-import { resources, tasks, buildingTypes, cities } from '../constants'
+import { resources, tasks, buildingTypes, cities, buyables } from '../constants'
 import faker from 'faker'
 const initalState = orm.getEmptyState()
 
@@ -10,6 +10,7 @@ export const reducer = (state = initalState, action) => {
     Task,
     Building,
     BuildingType,
+    Buyable,
     Seat,
     Resource,
     City,
@@ -89,6 +90,7 @@ export const reducer = (state = initalState, action) => {
   }
 
   if (action.type === 'INIT') {
+    buyables.forEach((buyable) => Buyable.create({ ...buyable }))
     resources.forEach((resource) => Resource.create({ ...resource, amount: 0 }))
     tasks.forEach((task) => Task.create({ ...task }))
     buildingTypes.forEach(({ ...buildingType }) =>
@@ -109,6 +111,15 @@ export const reducer = (state = initalState, action) => {
     createPerson(action.payload.cityId, action.payload.person)
   }
 
+  if (action.type === 'UPDATE_RESOURCE') {
+    updateResource(
+      ResourceStockpile,
+      action.payload.resourceId,
+      action.payload.amount,
+      action.payload.cityId,
+    )
+  }
+
   if (action.type === 'TICK') {
     Building.all()
       .toModelArray()
@@ -119,21 +130,7 @@ export const reducer = (state = initalState, action) => {
           const effect = seat.task._fields.effect
           const cityId = building.city.all().toRefArray()[0].id
           if (seat.progress >= seat.task._fields.duration) {
-            let resource = ResourceStockpile.all()
-              .toModelArray()
-              .find((r) => {
-                return (
-                  r.resourceId === effect.id &&
-                  r.city
-                    .all()
-                    .toRefArray()
-                    .some((c) => c.id === cityId)
-                )
-              })
-            resource &&
-              resource.update({
-                amount: resource.ref.amount + effect.value,
-              })
+            updateResource(ResourceStockpile, effect.id, effect.value, cityId)
             seatModel.update({ progress: 0 })
             return
           }
@@ -146,7 +143,7 @@ export const reducer = (state = initalState, action) => {
   }
 
   if (action.type === 'DRAG' && action.payload.destination) {
-    // TODO: add swapping
+    // NICE: add swapping
     const { source, destination, draggableId } = action.payload
 
     let draggedPerson = Person.all()
@@ -180,4 +177,26 @@ export const reducer = (state = initalState, action) => {
   }
 
   return sess.state
+}
+
+function updateResource(ResourceStockpile, resourceId, value, cityId) {
+  // TODO: make it so that if no city id is passed, purchase is made with nation resources
+  let resource = ResourceStockpile.all()
+    .toModelArray()
+    .find((r) => {
+      return (
+        r.resourceId === resourceId &&
+        r.city
+          .all()
+          .toRefArray()
+          .some((c) => c.id === cityId)
+      )
+    })
+  if (resource && resource.ref.amount + value >= 0) {
+    resource.update({
+      amount: resource.ref.amount + value,
+    })
+    return resource
+  }
+  return false
 }

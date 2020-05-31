@@ -44,3 +44,14 @@ export const getResourceTotals = createSelector(orm, (session) => {
 
   return resources
 })
+
+export const getBuyables = createSelector(orm, (session) => {
+  return session.Buyable.all()
+    .toModelArray()
+    .map((resource) => {
+      const { ref } = resource
+      return {
+        ...ref,
+      }
+    })
+})

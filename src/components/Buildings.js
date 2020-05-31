@@ -1,11 +1,10 @@
 import React from 'react'
-import { Typography, Box, Button } from '@material-ui/core'
+import { Typography, Box } from '@material-ui/core'
 import { Seat } from './Seat'
-import { useDispatch } from 'react-redux'
+import { Purchase } from './Purchase'
+import { createSeat } from '../actions'
 
-export const Buildings = ({ buildings }) => {
-  const dispatch = useDispatch()
-
+export const Buildings = ({ cityId, buildings }) => {
   return (
     <>
       {buildings.map((building) => (
@@ -22,19 +21,11 @@ export const Buildings = ({ buildings }) => {
                 />
               )
             })}
-            <Button
-              onClick={() =>
-                dispatch({
-                  type: 'CREATE_SEAT',
-                  payload: {
-                    buildingId: building.id,
-                    task: building.seats[0].task,
-                  },
-                })
-              }
-            >
-              Create
-            </Button>
+            <Purchase
+              id="buySeat"
+              cityId={cityId}
+              action={createSeat(building)}
+            />
           </Box>
         </Box>
       ))}

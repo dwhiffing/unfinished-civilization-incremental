@@ -23,7 +23,7 @@ export const City = () => {
         <People cityId={city.id} people={city.people} />
       </Box>
       <Box flex={3} p={1}>
-        <Buildings buildings={city.buildings} />
+        <Buildings cityId={city.id} buildings={city.buildings} />
       </Box>
     </Box>
   )

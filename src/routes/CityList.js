@@ -1,10 +1,11 @@
 import React from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { Box, Button } from '@material-ui/core'
+import { useSelector } from 'react-redux'
+import { Box } from '@material-ui/core'
 import { getCities, getResourceTotals } from '../selectors'
+import { Purchase } from '../components/Purchase'
+import { createCity } from '../actions'
 
 export const CityList = () => {
-  const dispatch = useDispatch()
   const cities = useSelector(getCities)
   const totals = useSelector(getResourceTotals)
   return (
@@ -31,8 +32,8 @@ export const CityList = () => {
           </Box>
         ))}
       </Box>
-
-      <Button onClick={() => dispatch({ type: 'CREATE_CITY' })}>Create</Button>
+      {/* wont work until purchase can use total resources instead */}
+      <Purchase id="buyCity" action={createCity()} />
     </Box>
   )
 }
