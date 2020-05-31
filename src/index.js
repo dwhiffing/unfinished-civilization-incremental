@@ -17,11 +17,20 @@ if (process.env.NODE_ENV === 'development') {
   whyDidYouRender(React)
 }
 
+export const INTERVAL = 100
+
 const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
     dispatch(init())
+  }, [dispatch])
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      dispatch({ type: 'TICK' })
+    }, INTERVAL)
+    return () => clearInterval(id)
   }, [dispatch])
 
   return (

@@ -1,62 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import { Box, Typography } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
 import { DragList } from './DragList'
-import { finishTask } from '../actions'
-
-const INTERVAL = 100
+import { INTERVAL } from '..'
 
 const Seat = ({ seat }) => {
-  const timeoutRef = useRef()
-  const [progress, setProgress] = useState(0)
-  const dispatch = useDispatch()
-  const task = seat.task
-  const building = seat.building
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setProgress((p) => {
-        if (p >= task.duration * INTERVAL) {
-          return 0
-        }
-        return seat.person ? p + INTERVAL : p
-      })
-    }, INTERVAL)
-    return () => clearInterval(id)
-  }, [dispatch, setProgress, seat.person, task.duration])
-
-  useEffect(() => {
-    if (progress >= task.duration * INTERVAL) {
-      timeoutRef.current = setTimeout(
-        () =>
-          dispatch(
-            finishTask({
-              cityId: building.cityId,
-              resourceId: seat.task.effect.id,
-              value: 1,
-            }),
-          ),
-        INTERVAL,
-      )
-    }
-  }, [
-    building,
-    task.duration,
-    seat.task.effect.id,
-    dispatch,
-    progress,
-    setProgress,
-  ])
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current)
-      }
-    }
-  }, [])
-
-  const progressPercent = 1 - progress / (task.duration * INTERVAL)
+  const progressPercent = 1 - seat.progress / seat.task.duration
   return (
     <Box display="flex" flexDirection="column" flex={1} maxWidth={90}>
       <Box
@@ -74,7 +22,7 @@ const Seat = ({ seat }) => {
             <Typography
               style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}
             >
-              {task.id}
+              {seat.task.id}
             </Typography>
 
             {typeof progressPercent === 'number' && (

@@ -13,6 +13,12 @@ export const CityList = () => {
         {cities.map((c) => (
           <div key={c.id}>
             <a href={`#/city/${c.id}`}>{c.id}</a>
+            <p>
+              {c.resources.reduce(
+                (sum, r) => sum + `${r.resourceId}: ${r.amount} `,
+                '',
+              )}
+            </p>
           </div>
         ))}
       </Box>

@@ -1,5 +1,6 @@
 import orm from '../orm'
 import { resources, tasks, buildingTypes, cities } from '../constants'
+import { INTERVAL } from '..'
 
 const initalState = orm.getEmptyState()
 
@@ -44,6 +45,7 @@ export const reducer = (state = initalState, action) => {
           let i = task.count
           while (i-- > 0) {
             let seat = Seat.create({
+              progress: 0,
               task: Task.all()
                 .toModelArray()
                 .find((t) => t.id === task.id),
@@ -56,21 +58,40 @@ export const reducer = (state = initalState, action) => {
     })
   }
 
-  if (action.type === 'FINISH_TASK') {
-    let resource = ResourceStockpile.all()
+  if (action.type === 'TICK') {
+    Building.all()
       .toModelArray()
-      .find((r) => {
-        return (
-          r.resourceId === action.payload.resourceId &&
-          r.city
-            .all()
-            .toRefArray()
-            .some((c) => c.id === action.payload.cityId)
-        )
-      })
+      .forEach((building) => {
+        const seats = building.seats.all().toModelArray()
+        seats.forEach((seatModel) => {
+          const seat = seatModel.ref
+          const effect = seat.task.ref.effect
+          const cityId = building.city.all().toRefArray()[0].id
+          if (seat.progress >= seat.task.ref.duration) {
+            let resource = ResourceStockpile.all()
+              .toModelArray()
+              .find((r) => {
+                return (
+                  r.resourceId === effect.id &&
+                  r.city
+                    .all()
+                    .toRefArray()
+                    .some((c) => c.id === cityId)
+                )
+              })
+            resource &&
+              resource.update({
+                amount: resource.ref.amount + effect.value,
+              })
+            seatModel.update({ progress: 0 })
+            return
+          }
 
-    resource &&
-      resource.update({ amount: resource.ref.amount + action.payload.value })
+          seatModel.update({
+            progress: seat.person ? seat.progress + 1 : seat.progress,
+          })
+        })
+      })
   }
 
   if (action.type === 'DRAG' && action.payload.destination) {
