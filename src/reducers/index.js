@@ -1,36 +1,76 @@
 import orm from '../orm'
-import { resources, people, tasks, buildings } from '../constants'
+import { resources, tasks, buildingTypes, cities } from '../constants'
 
 const initalState = orm.getEmptyState()
 
 export const reducer = (state = initalState, action) => {
   const sess = orm.session(state)
 
-  const { Task, Building, Seat, Resource, Person } = sess
+  const {
+    Task,
+    Building,
+    BuildingType,
+    Seat,
+    Resource,
+    City,
+    Person,
+    ResourceStockpile,
+  } = sess
 
   if (action.type === 'INIT') {
     resources.forEach((resource) => Resource.create({ ...resource, value: 0 }))
-    people.forEach((person) => Person.create({ ...person }))
     tasks.forEach((task) => Task.create({ ...task }))
-    buildings.forEach(({ tasks, ...building }) => {
-      const _building = Building.create({ ...building })
-      tasks.forEach((task) => {
-        let i = task.count
-        while (i-- > 0) {
-          let seat = Seat.create({
-            task: Task.all()
-              .toModelArray()
-              .find((t) => t.id === task.id),
-          })
-          _building.seats.add(seat)
-        }
+    buildingTypes.forEach(({ ...buildingType }) =>
+      BuildingType.create({ ...buildingType }),
+    )
+
+    cities.forEach(({ people, buildings, resources, ...city }) => {
+      const cityInstance = City.create({ ...city })
+      people.forEach((person) => {
+        const personInstance = Person.create({ ...person })
+        cityInstance.people.add(personInstance)
+      })
+      resources.forEach((resource) => {
+        const resourceInstance = ResourceStockpile.create({ ...resource })
+        cityInstance.resources.add(resourceInstance)
+      })
+      buildings.forEach((building) => {
+        const buildingInstance = Building.create({ ...building })
+        let buildingType = BuildingType.all()
+          .toModelArray()
+          .find((b) => b.id === building.buildingId)
+        buildingInstance.set('buildingType', buildingType)
+        buildingType.tasks.forEach((task) => {
+          let i = task.count
+          while (i-- > 0) {
+            let seat = Seat.create({
+              task: Task.all()
+                .toModelArray()
+                .find((t) => t.id === task.id),
+            })
+            buildingInstance.seats.add(seat)
+          }
+        })
+        cityInstance.buildings.add(buildingInstance)
       })
     })
   }
 
   if (action.type === 'FINISH_TASK') {
-    let resource = Resource.withId(action.payload.resourceId)
-    resource.update({ value: resource.ref.value + action.payload.value })
+    let resource = ResourceStockpile.all()
+      .toModelArray()
+      .find((r) => {
+        return (
+          r.resourceId === action.payload.resourceId &&
+          r.city
+            .all()
+            .toRefArray()
+            .some((c) => c.id === action.payload.cityId)
+        )
+      })
+
+    resource &&
+      resource.update({ amount: resource.ref.amount + action.payload.value })
   }
 
   if (action.type === 'DRAG' && action.payload.destination) {
@@ -39,7 +79,7 @@ export const reducer = (state = initalState, action) => {
 
     let draggedPerson = Person.all()
       .toModelArray()
-      .find((person) => person.id === draggableId)
+      .find((person) => `${person.id}` === draggableId)
 
     if (source.droppableId === destination.droppableId) {
       let otherPerson = Person.all()

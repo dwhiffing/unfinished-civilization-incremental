@@ -11,6 +11,7 @@ const Seat = ({ seat }) => {
   const [progress, setProgress] = useState(0)
   const dispatch = useDispatch()
   const task = seat.task
+  const building = seat.building
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -28,11 +29,24 @@ const Seat = ({ seat }) => {
     if (progress >= task.duration * INTERVAL) {
       timeoutRef.current = setTimeout(
         () =>
-          dispatch(finishTask({ resourceId: seat.task.effect.id, value: 1 })),
+          dispatch(
+            finishTask({
+              cityId: building.cityId,
+              resourceId: seat.task.effect.id,
+              value: 1,
+            }),
+          ),
         INTERVAL,
       )
     }
-  }, [task.duration, seat.task.effect.id, dispatch, progress, setProgress])
+  }, [
+    building,
+    task.duration,
+    seat.task.effect.id,
+    dispatch,
+    progress,
+    setProgress,
+  ])
 
   useEffect(() => {
     return () => {

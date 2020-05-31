@@ -1,11 +1,7 @@
 import React from 'react'
 import { DragList } from './DragList'
-import { getPeople } from '../selectors'
-import { useSelector } from 'react-redux'
 
-export const People = () => {
-  const people = useSelector((state) => getPeople(state))
-
+export const People = ({ people }) => {
   return (
     <DragList
       droppableId="people"

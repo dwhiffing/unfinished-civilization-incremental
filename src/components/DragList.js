@@ -22,7 +22,7 @@ export const DragList = ({ items, ...props }) => (
 
 const Items = React.memo(({ items }) =>
   items.map((item, index) => (
-    <Draggable key={item.id} draggableId={item.id} index={index}>
+    <Draggable key={item.id} draggableId={`${item.id}`} index={index}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
@@ -48,4 +48,4 @@ const Items = React.memo(({ items }) =>
   )),
 )
 
-const Item = React.memo((props) => <span>{props.item.id}</span>)
+const Item = React.memo((props) => <span>{props.item.label}</span>)

@@ -1,23 +1,26 @@
 import React from 'react'
 import numeral from 'numeral'
 import { Box, Typography } from '@material-ui/core'
-import { getResources } from '../selectors'
-import { useSelector } from 'react-redux'
 
-export const Resources = () => {
-  const resources = useSelector((state) => getResources(state))
-
+export const Resources = ({ resources }) => {
   return (
     <Box className="flex flex-column" my={1}>
       {resources.map((resource) => (
-        <Box key={resource.id} display="flex" flexDirection="row" mt={1}>
+        <Box
+          key={resource.resourceId}
+          display="flex"
+          flexDirection="row"
+          mt={1}
+        >
           <Box>
-            <Typography style={{ color: 'black' }}>{resource.id}:</Typography>
+            <Typography style={{ color: 'black' }}>
+              {resource.resourceId}:
+            </Typography>
           </Box>
           <Box ml={1}>
             <Box display="flex" flexDirection="row" alignItems="center">
               <Typography>
-                {numeral(resource.value).format('0,0.00')}
+                {numeral(resource.amount).format('0,0.00')}
               </Typography>
             </Box>
           </Box>

@@ -1,25 +1,15 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Typography, Box } from '@material-ui/core'
-import { useDispatch, useSelector } from 'react-redux'
 import { Seat } from './Seat'
-import { init } from '../actions'
-import { getBuildings } from '../selectors'
 
-export const Buildings = () => {
-  const dispatch = useDispatch()
-  const buildings = useSelector((state) => getBuildings(state))
-
-  useEffect(() => {
-    dispatch(init())
-  }, [dispatch])
-
+export const Buildings = ({ buildings }) => {
   return (
     <>
       {buildings.map((building) => (
         <Box key={`building-${building.id}`}>
-          <Typography>{building.id}</Typography>
+          <Typography>{building.label}</Typography>
 
-          <Box display="flex" key={building.id}>
+          <Box display="flex">
             {building.seats.map((seat, index) => {
               return (
                 <Seat
