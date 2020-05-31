@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react'
 import { Typography, Box } from '@material-ui/core'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Seat } from './Seat'
-import { init } from '../utils/actions'
+import { init } from '../actions'
+import { getBuildings } from '../selectors'
 
-export const Buildings = ({ buildings }) => {
+export const Buildings = () => {
   const dispatch = useDispatch()
+  const buildings = useSelector((state) => getBuildings(state))
 
   useEffect(() => {
     dispatch(init())

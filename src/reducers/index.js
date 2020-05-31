@@ -1,17 +1,7 @@
-import orm from './orm'
+import orm from '../orm'
+import { resources, people, tasks, buildings } from '../constants'
 
 const initalState = orm.getEmptyState()
-
-const resources = [{ id: 'food' }, { id: 'wood' }]
-const buildings = [
-  { id: 'camp', tasks: [{ id: 'scavenge', count: 3 }] },
-  { id: 'lumber', tasks: [{ id: 'chop', count: 2 }] },
-]
-const tasks = [
-  { id: 'chop', duration: 60, effect: { id: 'wood', value: 1 } },
-  { id: 'scavenge', duration: 30, effect: { id: 'food', value: 1 } },
-]
-const people = [{ id: 'a' }, { id: 'b' }, { id: 'c' }, { id: 'd' }, { id: 'e' }]
 
 export const reducer = (state = initalState, action) => {
   const sess = orm.session(state)

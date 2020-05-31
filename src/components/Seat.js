@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { DragList } from './DragList'
-import { finishTask } from '../utils/actions'
+import { finishTask } from '../actions'
 
 const INTERVAL = 100
 
@@ -14,14 +14,14 @@ const Seat = ({ seat }) => {
 
   useEffect(() => {
     const id = setInterval(() => {
-      setProgress((p) =>
-        // TODO: refactor
-        p >= task.duration * INTERVAL ? 0 : seat.person ? p + INTERVAL : p,
-      )
+      setProgress((p) => {
+        if (p >= task.duration * INTERVAL) {
+          return 0
+        }
+        return seat.person ? p + INTERVAL : p
+      })
     }, INTERVAL)
-    return () => {
-      clearInterval(id)
-    }
+    return () => clearInterval(id)
   }, [dispatch, setProgress, seat.person, task.duration])
 
   useEffect(() => {

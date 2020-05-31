@@ -1,12 +1,15 @@
 import React from 'react'
 import { DragList } from './DragList'
-import { Box } from '@material-ui/core'
+import { getPeople } from '../selectors'
+import { useSelector } from 'react-redux'
 
-export const People = (props) => (
-  <DragList
-    droppableId="people"
-    items={props.people
-      .filter((p) => !p.seat)
-      .sort((a, b) => a.index - b.index)}
-  />
-)
+export const People = () => {
+  const people = useSelector((state) => getPeople(state))
+
+  return (
+    <DragList
+      droppableId="people"
+      items={people.filter((p) => !p.seat).sort((a, b) => a.index - b.index)}
+    />
+  )
+}
