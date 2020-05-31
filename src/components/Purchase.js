@@ -1,24 +1,26 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
-import { getBuyables, getCities } from '../selectors'
+import { getBuyables, getCities, getResourceTotals } from '../selectors'
 import { updateResource } from '../actions'
 
 export const Purchase = ({ id, cityId, action }) => {
-  // TODO: needs to use nation resources if no cityId
   const dispatch = useDispatch()
   const city = useSelector(getCities).find((b) => b.id === cityId)
   const buyable = useSelector(getBuyables).find((b) => b.id === id)
+  const totals = useSelector(getResourceTotals)
+  const resources = city
+    ? city.resources
+    : Object.entries(totals).map(([key, value]) => ({
+        resourceId: key,
+        amount: value,
+      }))
+  const isAffordable = Object.entries(buyable.cost).every(([key, value]) => {
+    const targetResourceAmount = resources.find((r) => r.resourceId === key)
+      .amount
 
-  const isAffordable =
-    city &&
-    Object.entries(buyable.cost).every(([key, value]) => {
-      const targetResourceAmount = city.resources.find(
-        (r) => r.resourceId === key,
-      ).amount
-
-      return value <= targetResourceAmount
-    })
+    return value <= targetResourceAmount
+  })
   const label = buyable.label
   const cost = JSON.stringify(buyable.cost)
   return (
