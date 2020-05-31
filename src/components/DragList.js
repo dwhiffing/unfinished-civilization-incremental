@@ -9,7 +9,8 @@ export const DragList = ({ items, ...props }) => (
         style={{
           background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey',
           padding: 8,
-          width: 250,
+          width: 60,
+          minHeight: 55,
         }}
       >
         <Items items={items} />
@@ -21,7 +22,7 @@ export const DragList = ({ items, ...props }) => (
 
 const Items = React.memo(({ items }) =>
   items.map((item, index) => (
-    <Draggable key={item.id} draggableId={item.label} index={index}>
+    <Draggable key={item.id} draggableId={item.id} index={index}>
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
@@ -29,8 +30,13 @@ const Items = React.memo(({ items }) =>
           {...provided.dragHandleProps}
           style={{
             userSelect: 'none',
-            padding: 16,
-            margin: `0 0 8px 0`,
+            padding: 8,
+            marginTop: index > 0 ? 8 : 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: 40,
+            textAlign: 'center',
             background: snapshot.isDragging ? 'lightgreen' : 'grey',
             ...provided.draggableProps.style,
           }}
@@ -42,4 +48,4 @@ const Items = React.memo(({ items }) =>
   )),
 )
 
-const Item = React.memo((props) => <span>{props.item.label}</span>)
+const Item = React.memo((props) => <span>{props.item.id}</span>)

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Typography } from '@material-ui/core'
+import { Typography, Box } from '@material-ui/core'
 import { useDispatch } from 'react-redux'
 import { Seat } from './Seat'
 import { init } from '../utils/actions'
@@ -14,19 +14,21 @@ export const Buildings = ({ buildings }) => {
   return (
     <>
       {buildings.map((building) => (
-        <div key={building.label}>
-          <Typography>{building.label}</Typography>
+        <Box key={`building-${building.id}`}>
+          <Typography>{building.id}</Typography>
 
-          {building.seats.map((seat, index) => {
-            return (
-              <Seat
-                key={`task${index}-${seat.task.label}`}
-                index={index}
-                seat={seat}
-              />
-            )
-          })}
-        </div>
+          <Box display="flex" key={building.id}>
+            {building.seats.map((seat, index) => {
+              return (
+                <Seat
+                  key={`task${index}-${seat.task.id}`}
+                  index={index}
+                  seat={seat}
+                />
+              )
+            })}
+          </Box>
+        </Box>
       ))}
     </>
   )

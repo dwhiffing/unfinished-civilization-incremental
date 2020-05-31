@@ -1,5 +1,6 @@
 import React from 'react'
 import { DragList } from './DragList'
+import { Box } from '@material-ui/core'
 
 export const People = (props) => (
   <DragList

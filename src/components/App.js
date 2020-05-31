@@ -26,8 +26,8 @@ export default function App() {
         >
           <Box display="flex" flexDirection="row" minHeight="100vh">
             <Box display="flex" flexDirection="column" flex={1} p={1}>
-              <People people={people} />
               <Resources resources={resources} />
+              <People people={people} />
             </Box>
             <Box flex={3} p={1}>
               <Route

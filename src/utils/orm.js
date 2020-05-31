@@ -11,27 +11,27 @@ Seat.fields = {
 class Task extends Model {}
 Task.modelName = 'Task'
 Task.fields = {
-  label: attr(),
+  id: attr(),
 }
 
 class Building extends Model {}
 Building.modelName = 'Building'
 Building.fields = {
-  label: attr(),
+  id: attr(),
   seats: many('Seat', 'buildings'),
 }
 
 class Resource extends Model {}
 Resource.modelName = 'Resource'
 Resource.fields = {
-  label: attr(),
+  id: attr(),
   amount: attr(),
 }
 
 class Person extends Model {}
 Person.modelName = 'Person'
 Person.fields = {
-  label: attr(),
+  id: attr(),
   seat: attr(),
 }
 

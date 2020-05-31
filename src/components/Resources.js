@@ -3,11 +3,11 @@ import numeral from 'numeral'
 import { Box, Typography } from '@material-ui/core'
 
 export const Resources = ({ resources }) => (
-  <div className="flex flex-column">
+  <Box className="flex flex-column" my={1}>
     {resources.map((resource) => (
-      <Box key={resource.label} display="flex" flexDirection="row" mt={1}>
+      <Box key={resource.id} display="flex" flexDirection="row" mt={1}>
         <Box>
-          <Typography style={{ color: 'black' }}>{resource.label}:</Typography>
+          <Typography style={{ color: 'black' }}>{resource.id}:</Typography>
         </Box>
         <Box ml={1}>
           <Box display="flex" flexDirection="row" alignItems="center">
@@ -16,5 +16,5 @@ export const Resources = ({ resources }) => (
         </Box>
       </Box>
     ))}
-  </div>
+  </Box>
 )
