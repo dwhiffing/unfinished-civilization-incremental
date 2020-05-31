@@ -3,7 +3,7 @@ import {
   resources,
   tasks,
   buildingTypes,
-  cities,
+  nations,
   buyables,
   RESOURCE_MULTIPLIER,
 } from '../constants'
@@ -24,14 +24,25 @@ export const reducer = (state = initalState, action) => {
     City,
     Person,
     ResourceStockpile,
+    Nation,
   } = sess
 
+  const createNation = (nation = {}) => {
+    const nationInstance = Nation.create({
+      ...nation,
+      label: faker.address.city(),
+    })
+    createCity({ nationId: nationInstance.ref.id })
+  }
+
   const createCity = ({
+    nationId,
     label = faker.address.city(),
     people = [{}],
     resources = [],
     buildings = [],
   } = {}) => {
+    const nation = Nation.withId(nationId)
     const allResources = Resource.all().toModelArray()
     const allBuildings = BuildingType.all().toModelArray()
     const cityInstance = City.create({ label })
@@ -54,6 +65,10 @@ export const reducer = (state = initalState, action) => {
         ...(_building || {}),
       })
     })
+
+    nation.cities.add(cityInstance)
+
+    return cityInstance
   }
 
   const createBuilding = (cityId, building) => {
@@ -104,7 +119,11 @@ export const reducer = (state = initalState, action) => {
     buildingTypes.forEach(({ ...buildingType }) =>
       BuildingType.create({ ...buildingType }),
     )
-    cities.forEach(createCity)
+    nations.forEach(createNation)
+  }
+
+  if (action.type === 'CREATE_NATION') {
+    createNation(action.payload)
   }
 
   if (action.type === 'CREATE_CITY') {
@@ -194,6 +213,7 @@ export const reducer = (state = initalState, action) => {
   return sess.state
 }
 
+// TODO: needs to consider nationId to ensure that purchase comes from the correct city if cityId is not passed but nation is
 function updateResource(ResourceStockpile, City, resourceId, value, cityId) {
   if (typeof cityId === 'number') {
     let resource = ResourceStockpile.all()
@@ -240,11 +260,6 @@ function updateResource(ResourceStockpile, City, resourceId, value, cityId) {
         break
       }
     }
-    // }
-    // while amount to consume > 0
-    // find the city with the most of the selected resource
-    // subtract that from the total to consume
-    // repeat until total to consume === 0
   }
 
   return false

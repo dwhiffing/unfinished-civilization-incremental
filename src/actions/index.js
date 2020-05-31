@@ -10,11 +10,19 @@ export function createPerson(cityId) {
   }
 }
 
-export function createCity() {
+export function createCity({ nationId }) {
   return {
     type: 'CREATE_CITY',
+    payload: { nationId },
   }
 }
+
+export function createNation() {
+  return {
+    type: 'CREATE_NATION',
+  }
+}
+
 export function createSeat(building) {
   return {
     type: 'CREATE_SEAT',

@@ -1,6 +1,6 @@
-// TODO: these shouldn't be persisted
+// TODO: black list these from persist so that balance changes apply
 
-export const RESOURCE_MULTIPLIER = 10
+export const RESOURCE_MULTIPLIER = 50
 export const resources = [{ id: 'food' }, { id: 'wood' }]
 export const buyables = [
   {
@@ -18,7 +18,14 @@ export const buyables = [
     label: '+ person',
     cost: { food: 5 },
   },
+  {
+    id: 'buyNation',
+    label: '+ nation',
+    cost: { wood: 1000 },
+  },
 ]
+
+export const nations = [{}]
 export const cities = [{}]
 
 export const buildingTypes = [

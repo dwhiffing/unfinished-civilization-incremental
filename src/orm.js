@@ -43,6 +43,13 @@ City.fields = {
   people: many('Person', 'city'),
 }
 
+class Nation extends Model {}
+Nation.modelName = 'Nation'
+Nation.fields = {
+  id: attr(),
+  cities: many('City', 'nation'),
+}
+
 class Resource extends Model {}
 Resource.modelName = 'Resource'
 Resource.fields = {
@@ -83,6 +90,7 @@ orm.register(
   ResourceStockpile,
   City,
   Buyable,
+  Nation,
 )
 
 export default orm

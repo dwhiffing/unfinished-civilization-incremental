@@ -14,16 +14,23 @@ export const City = () => {
   if (!city) {
     return null
   }
+  const nationId = city.nation.id
 
   return (
     <Box display="flex" flexDirection="row" minHeight="100vh">
       <Box display="flex" flexDirection="column" flex={1} p={1}>
-        <a href={`#/city`}>City list</a>
-        <Resources resources={city.resources} />
-        <People cityId={city.id} people={city.people} />
+        <a href={`#/nation/${nationId}`}>Back to {city.nation.label}</a>
+        <br />
+        <span>{city.label}</span>
+        <Resources nationId={nationId} resources={city.resources} />
+        <People nationId={nationId} cityId={city.id} people={city.people} />
       </Box>
       <Box flex={3} p={1}>
-        <Buildings cityId={city.id} buildings={city.buildings} />
+        <Buildings
+          nationId={nationId}
+          cityId={city.id}
+          buildings={city.buildings}
+        />
       </Box>
     </Box>
   )
