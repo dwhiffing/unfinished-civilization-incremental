@@ -29,9 +29,9 @@ export function createSeat(building) {
     payload: { buildingId: building.id, task: building.seats[0].task },
   }
 }
-export function updateResource(resourceId, amount, cityId) {
+export function updateResource(resourceId, amount, cityId, nationId) {
   return {
     type: 'UPDATE_RESOURCE',
-    payload: { resourceId, amount, cityId },
+    payload: { resourceId, amount, cityId, nationId },
   }
 }

@@ -45,7 +45,7 @@ export const Purchase = ({ id, nationId, cityId, action }) => {
         if (isAffordable) {
           await Promise.all(
             Object.entries(buyable.cost).map(([key, value]) =>
-              dispatch(updateResource(key, -value, cityId)),
+              dispatch(updateResource(key, -value, cityId, nationId)),
             ),
           )
           await dispatch(action)

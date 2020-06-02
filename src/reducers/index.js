@@ -145,6 +145,7 @@ export const reducer = (state = initalState, action) => {
       action.payload.resourceId,
       action.payload.amount,
       action.payload.cityId,
+      action.payload.nationId,
     )
   }
 
@@ -214,7 +215,14 @@ export const reducer = (state = initalState, action) => {
 }
 
 // TODO: needs to consider nationId to ensure that purchase comes from the correct city if cityId is not passed but nation is
-function updateResource(ResourceStockpile, City, resourceId, value, cityId) {
+function updateResource(
+  ResourceStockpile,
+  City,
+  resourceId,
+  value,
+  cityId,
+  nationId,
+) {
   if (typeof cityId === 'number') {
     let resource = ResourceStockpile.all()
       .toModelArray()
@@ -237,7 +245,11 @@ function updateResource(ResourceStockpile, City, resourceId, value, cityId) {
     let amountToConsume = Math.abs(value)
 
     while (amountToConsume > 0) {
-      const cities = City.all().toModelArray()
+      const cities = City.all()
+        .toModelArray()
+        .filter((c) =>
+          nationId ? c.nation.all().toRefArray()[0].id === +nationId : true,
+        )
       const validResources = cities
         .map((city) => {
           const resource = city.resources
