@@ -214,7 +214,6 @@ export const reducer = (state = initalState, action) => {
   return sess.state
 }
 
-// TODO: needs to consider nationId to ensure that purchase comes from the correct city if cityId is not passed but nation is
 function updateResource(
   ResourceStockpile,
   City,
