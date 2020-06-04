@@ -1,4 +1,4 @@
-import orm from '../orm'
+import orm from '../models'
 import {
   resources,
   tasks,

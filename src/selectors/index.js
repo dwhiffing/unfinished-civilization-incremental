@@ -1,5 +1,5 @@
 import { createSelector } from 'redux-orm'
-import orm from '../orm'
+import orm from '../models'
 
 export const getNations = createSelector(orm, (session) =>
   session.Nation.all()
