@@ -14,7 +14,7 @@ export const People = ({ nationId, cityId, people }) => {
         nationId={nationId}
         cityId={cityId}
         id="buyPerson"
-        action={createPerson(cityId)}
+        action={createPerson({ cityId })}
       />
     </>
   )

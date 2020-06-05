@@ -1,37 +1,12 @@
-export const init = () => ({ type: 'INIT' })
-export const tick = () => ({ type: 'TICK' })
+import { createAction } from '@reduxjs/toolkit'
 
-export const drag = (payload) => ({ type: 'DRAG', payload })
-
-export function createPerson(cityId) {
-  return {
-    type: 'CREATE_PERSON',
-    payload: { cityId: cityId },
-  }
-}
-
-export function createCity({ nationId }) {
-  return {
-    type: 'CREATE_CITY',
-    payload: { nationId },
-  }
-}
-
-export function createNation() {
-  return {
-    type: 'CREATE_NATION',
-  }
-}
-
-export function createSeat(building) {
-  return {
-    type: 'CREATE_SEAT',
-    payload: { buildingId: building.id, task: building.seats[0].task },
-  }
-}
-export function updateResource(resourceId, amount, cityId, nationId) {
-  return {
-    type: 'UPDATE_RESOURCE',
-    payload: { resourceId, amount, cityId, nationId },
-  }
-}
+export const init = createAction('INIT')
+export const tick = createAction('TICK')
+export const drag = createAction('DRAG')
+export const updateResource = createAction('UPDATE_RESOURCE')
+export const createPerson = createAction('CREATE_PERSON')
+export const createNation = createAction('CREATE_NATION')
+export const createCity = createAction('CREATE_CITY')
+export const createSeat = createAction('CREATE_SEAT', (building) => ({
+  payload: { buildingId: building.id, task: building.seats[0].task },
+}))
