@@ -35,7 +35,7 @@ export const System = () => {
 }
 
 const PlanetItem = ({ planet }) => {
-  const totals = useSelector(getPlanetResourceTotals(`${planet.id}`))
+  const totals = useSelector(getPlanetResourceTotals(planet.id))
   return (
     <Box my={1} display="flex" alignItems="center">
       <a href={`#/planet/${planet.id}`} style={{ marginRight: 8 }}>

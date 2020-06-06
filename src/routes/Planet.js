@@ -14,7 +14,7 @@ import { Totals } from '../components/Totals'
 export const Planet = () => {
   const { id } = useParams()
   const planets = useSelector(getPlanets)
-  const totals = useSelector(getPlanetResourceTotals(id))
+  const totals = useSelector(getPlanetResourceTotals(+id))
   const planet = planets.find((c) => `${c.id}` === id)
   if (!planet) {
     return null
@@ -37,7 +37,7 @@ export const Planet = () => {
       </Box>
 
       <Purchase
-        planetId={id}
+        planetId={+id}
         id="buyContinent"
         action={createContinent({ planetId: planet.id })}
       />
@@ -46,7 +46,7 @@ export const Planet = () => {
 }
 
 const ContinentItem = ({ continent }) => {
-  const totals = useSelector(getContinentResourceTotals(`${continent.id}`))
+  const totals = useSelector(getContinentResourceTotals(continent.id))
   return (
     <Box my={1} display="flex" alignItems="center">
       <a href={`#/continent/${continent.id}`} style={{ marginRight: 8 }}>

@@ -11,7 +11,7 @@ import { Totals } from '../components/Totals'
 export const Continent = () => {
   const { id } = useParams()
   const continent = useSelector(getContinents).find((c) => `${c.id}` === id)
-  const totals = useSelector(getContinentResourceTotals(id))
+  const totals = useSelector(getContinentResourceTotals(+id))
 
   if (!continent) {
     return null
@@ -37,7 +37,7 @@ export const Continent = () => {
       </Box>
 
       <Purchase
-        continentId={id}
+        continentId={+id}
         id="buyCity"
         action={createCity({ continentId: continent.id })}
       />

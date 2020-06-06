@@ -37,9 +37,7 @@ export const getPlanetResourceTotals = (planetId) =>
     totalResources(
       getList(session.ResourceStockpile).filter(
         (r) =>
-          getFirst(
-            getFirst(getFirst(r.city).continent).planet,
-          ).id.toString() === planetId,
+          getFirst(getFirst(getFirst(r.city).continent).planet).id === planetId,
       ),
     ),
   )
@@ -48,8 +46,7 @@ export const getContinentResourceTotals = (continentId) =>
   createSelector(orm, (session) =>
     totalResources(
       getList(session.ResourceStockpile).filter(
-        (r) =>
-          getFirst(getFirst(r.city).continent).id.toString() === continentId,
+        (r) => getFirst(getFirst(r.city).continent).id === continentId,
       ),
     ),
   )
@@ -58,7 +55,7 @@ export const getCityResourceTotals = (cityId) =>
   createSelector(orm, (session) =>
     totalResources(
       getList(session.ResourceStockpile).filter(
-        (r) => getFirst(r.city).id.toString() === cityId,
+        (r) => getFirst(r.city).id === cityId,
       ),
     ),
   )

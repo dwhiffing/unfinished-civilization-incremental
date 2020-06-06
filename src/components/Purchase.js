@@ -3,7 +3,6 @@ import { Button } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   getBuyables,
-  getCities,
   getContinentResourceTotals,
   getPlanetResourceTotals,
   getCityResourceTotals,
@@ -11,65 +10,56 @@ import {
 } from '../selectors'
 import { updateResource } from '../actions'
 
-export const Purchase = ({ id, planetId, continentId, cityId, action }) => {
+export const Purchase = ({ id, action, ...ids }) => {
   const dispatch = useDispatch()
-  const city = useSelector(getCities).find((b) => b.id === cityId)
   const buyable = useSelector(getBuyables).find((b) => b.id === id)
-  const totals = useSelector((state) => {
-    if (cityId) {
-      return getCityResourceTotals(cityId)(state)
-    }
-    if (continentId) {
-      return getContinentResourceTotals(continentId)(state)
-    }
-    if (planetId) {
-      return getPlanetResourceTotals(planetId)(state)
-    }
-    return getResourceTotals(state)
-  })
-
-  if (!buyable) return null
-
-  const resources = city
-    ? city.resources
-    : Object.entries(totals).map(([key, value]) => ({
-        resourceId: key,
-        amount: value,
-      }))
-
-  const isAffordable = Object.entries(buyable.cost).every(([key, value]) => {
-    const targetResource = resources.find((r) => r.resourceId === key)
-    const targetResourceAmount = targetResource ? targetResource.amount : 0
-
-    return value <= targetResourceAmount
-  })
-  const label = buyable.label
+  const isAffordable = useGetIsAffordable({ buyable, ...ids })
   const cost = JSON.stringify(buyable.cost)
     .replace(/"/g, '')
     .replace(/\{|\}/g, '')
+
+  const attemptPurchase = async () => {
+    if (isAffordable) {
+      await Promise.all(
+        Object.entries(buyable.cost).map(([resourceId, value]) =>
+          dispatch(updateResource({ resourceId, value: -value, ...ids })),
+        ),
+      )
+      await dispatch(action)
+    }
+  }
+
   return (
     <Button
+      onClick={attemptPurchase}
       style={{ opacity: isAffordable ? 1 : 0.5 }}
-      onClick={async () => {
-        if (isAffordable) {
-          await Promise.all(
-            Object.entries(buyable.cost).map(([key, value]) =>
-              dispatch(
-                updateResource({
-                  resourceId: key,
-                  value: -value,
-                  cityId,
-                  continentId,
-                  planetId,
-                }),
-              ),
-            ),
-          )
-          await dispatch(action)
-        }
-      }}
     >
-      {label} ({cost})
+      {buyable.label} ({cost})
     </Button>
   )
 }
+
+const useGetIsAffordable = ({ buyable, ...ids }) => {
+  const totals = useGetTotals(ids)
+  return Object.entries(buyable.cost).every(([key, value]) => {
+    const targetResource = Object.entries(totals)
+      .map(([resourceId, amount]) => ({ resourceId, amount }))
+      .find((r) => r.resourceId === key)
+
+    return value <= targetResource ? targetResource.amount : 0
+  })
+}
+
+const useGetTotals = ({ cityId, continentId, planetId }) =>
+  useSelector((state) => {
+    if (typeof +cityId === 'number') {
+      return getCityResourceTotals(+cityId)(state)
+    }
+    if (typeof +continentId === 'number') {
+      return getContinentResourceTotals(+continentId)(state)
+    }
+    if (typeof +planetId === 'number') {
+      return getPlanetResourceTotals(+planetId)(state)
+    }
+    return getResourceTotals(state)
+  })
