@@ -1,12 +1,12 @@
 import { createSelector } from 'redux-orm'
 import orm from '../models'
 
-export const getNations = createSelector(orm, (session) =>
-  session.Nation.all()
+export const getContinents = createSelector(orm, (session) =>
+  session.Continent.all()
     .toModelArray()
-    .map((nation) => ({
-      ...nation.ref,
-      cities: nation.cities.all().toModelArray().map(makeGetCity),
+    .map((continent) => ({
+      ...continent.ref,
+      cities: continent.cities.all().toModelArray().map(makeGetCity),
     })),
 )
 
@@ -14,7 +14,7 @@ export const getCities = createSelector(orm, (session) =>
   session.City.all().toModelArray().map(makeGetCity),
 )
 
-const getResourceStockpilesForNation = (session, nationId) =>
+const getResourceStockpilesForContinent = (session, continentId) =>
   session.ResourceStockpile.all()
     .toModelArray()
     .filter(
@@ -22,19 +22,21 @@ const getResourceStockpilesForNation = (session, nationId) =>
         r.city
           .all()
           .toModelArray()[0]
-          .nation.all()
+          .continent.all()
           .toModelArray()[0]
-          .id.toString() === nationId,
+          .id.toString() === continentId,
     )
 
-export const getNationResourceTotals = (nationId) =>
+export const getContinentResourceTotals = (continentId) =>
   createSelector(orm, (session) => {
     let resources = {}
-    getResourceStockpilesForNation(session, nationId).forEach((resource) => {
-      const { ref } = resource
-      resources[ref.resourceId] = resources[ref.resourceId] || 0
-      resources[ref.resourceId] += ref.amount
-    })
+    getResourceStockpilesForContinent(session, continentId).forEach(
+      (resource) => {
+        const { ref } = resource
+        resources[ref.resourceId] = resources[ref.resourceId] || 0
+        resources[ref.resourceId] += ref.amount
+      },
+    )
 
     return resources
   })
@@ -60,7 +62,7 @@ const makeGetCity = (city) => ({
   ...city.ref,
   people: city.people.toRefArray(),
   resources: city.resources.toRefArray(),
-  nation: city.nation.all().toRefArray()[0],
+  continent: city.continent.all().toRefArray()[0],
   buildings: city.buildings.toModelArray().map((building) => ({
     ...building.ref,
     label: building.buildingId,

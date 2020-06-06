@@ -1,25 +1,25 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
-import { getNations, getNationResourceTotals } from '../selectors'
+import { getContinents, getContinentResourceTotals } from '../selectors'
 import { Purchase } from '../components/Purchase'
 import { createCity } from '../actions'
 import { useParams } from 'react-router'
 
-export const Nation = () => {
+export const Continent = () => {
   const { id } = useParams()
-  const nations = useSelector(getNations)
-  const totals = useSelector(getNationResourceTotals(id))
-  const nation = nations.find((c) => `${c.id}` === id)
-  if (!nation) {
+  const continents = useSelector(getContinents)
+  const totals = useSelector(getContinentResourceTotals(id))
+  const continent = continents.find((c) => `${c.id}` === id)
+  if (!continent) {
     return null
   }
-  const cities = nation.cities
+  const cities = continent.cities
 
   return (
     <Box>
       <a href={`#/`}>Back to Planet</a>
-      <p>Nation: {nation.label}</p>
+      <p>Continent: {continent.label}</p>
       <p>
         Resource Totals:
         {Object.entries(totals).reduce(
@@ -49,9 +49,9 @@ export const Nation = () => {
       </Box>
 
       <Purchase
-        nationId={id}
+        continentId={id}
         id="buyCity"
-        action={createCity({ nationId: nation.id })}
+        action={createCity({ continentId: continent.id })}
       />
     </Box>
   )

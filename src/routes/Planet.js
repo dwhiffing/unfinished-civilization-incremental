@@ -1,12 +1,12 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
-import { getNations, getPlanetResourceTotals } from '../selectors'
-import { createNation } from '../actions'
+import { getContinents, getPlanetResourceTotals } from '../selectors'
+import { createContinent } from '../actions'
 import { Purchase } from '../components/Purchase'
 
 export const Planet = () => {
-  const nations = useSelector(getNations)
+  const continents = useSelector(getContinents)
   const totals = useSelector(getPlanetResourceTotals)
   return (
     <Box>
@@ -20,14 +20,14 @@ export const Planet = () => {
         )}
       </p>
       <br />
-      <span>Nations:</span>
+      <span>Continents:</span>
 
       <Box display="flex" flexDirection="column">
-        {nations.map((c) => {
+        {continents.map((c) => {
           const things = c.cities.map((c) => c.resources).flat()
           return (
             <Box my={1} key={c.id} display="flex" alignItems="center">
-              <a href={`#/nation/${c.id}`} style={{ marginRight: 8 }}>
+              <a href={`#/continent/${c.id}`} style={{ marginRight: 8 }}>
                 {c.label}
               </a>
               <span key={`resource-${c.id}`}>
@@ -44,7 +44,7 @@ export const Planet = () => {
         })}
       </Box>
 
-      <Purchase id="buyNation" action={createNation()} />
+      <Purchase id="buyContinent" action={createContinent()} />
     </Box>
   )
 }

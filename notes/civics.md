@@ -9,31 +9,39 @@
 - Civic(E) - Urban Planning: +City Production
 - Civic(E) - God King: +Gold/Faith
 
-### Craftsmanship
+### Craftsmanship (Requires Code of Laws)
 
 - Civic(M) - Agoge: +Military Production
 - Civic(E) - Ilkum: +City/Builder Production
 
-### Foreign Trade
+### Foreign Trade (Requires Code of Laws)
 
 - Enable Trade
 - Civic(M) - Maritime Industries: +Naval Production
 - Civic(E) - Caravansaries: +Gold when trading
 
-### Early Empire
+### Early Empire (Requires Trade)
 
 - Enables borders
 - Civic(E) - Colonization: +Settler Production
 - Civic(E) - Land Surveyors: -Tile Purchase cost
 
-### Mysticism
+### Mysticism (Requires Trade)
 
 - Building - Oracle: +Culture/Faith
 - +1 Envoy
 
-### Military Tradition
+### Military Tradition (Requires Craftmanship)
 
-### State Workforce
+- Civic(M) - Manuver: +Military Production
+- Civic(W) - Strategos: +Culture
+
+### State Workforce (Requires Craftmanship)
+
+- Civic(M) - Conscription: -Unit gold cost
+- Civic(E) - Corvee: +Production
+- District - Government Plaza
+- Building - Ancestral Hall +Settlers
 
 ## Classical Era
 

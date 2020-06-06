@@ -3,7 +3,7 @@ import { DragList } from './DragList'
 import { Purchase } from './Purchase'
 import { createPerson } from '../actions'
 
-export const People = ({ nationId, cityId, people }) => {
+export const People = ({ continentId, cityId, people }) => {
   return (
     <>
       <DragList
@@ -11,7 +11,7 @@ export const People = ({ nationId, cityId, people }) => {
         items={people.filter((p) => !p.seat).sort((a, b) => a.index - b.index)}
       />
       <Purchase
-        nationId={nationId}
+        continentId={continentId}
         cityId={cityId}
         id="buyPerson"
         action={createPerson({ cityId })}

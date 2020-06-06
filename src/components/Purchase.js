@@ -4,18 +4,18 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   getBuyables,
   getCities,
-  getNationResourceTotals,
+  getContinentResourceTotals,
   getPlanetResourceTotals,
 } from '../selectors'
 import { updateResource } from '../actions'
 
-export const Purchase = ({ id, nationId, cityId, action }) => {
+export const Purchase = ({ id, continentId, cityId, action }) => {
   const dispatch = useDispatch()
   const city = useSelector(getCities).find((b) => b.id === cityId)
   const buyable = useSelector(getBuyables).find((b) => b.id === id)
   const totals = useSelector((state) =>
-    nationId
-      ? getNationResourceTotals(nationId)(state)
+    continentId
+      ? getContinentResourceTotals(continentId)(state)
       : getPlanetResourceTotals(state),
   )
 
@@ -50,7 +50,7 @@ export const Purchase = ({ id, nationId, cityId, action }) => {
                   resourceId: key,
                   value: -value,
                   cityId,
-                  nationId,
+                  continentId,
                 }),
               ),
             ),

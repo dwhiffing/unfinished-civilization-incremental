@@ -19,13 +19,13 @@ export const buyables = [
     cost: { food: 5 },
   },
   {
-    id: 'buyNation',
-    label: '+ nation',
+    id: 'buyContinent',
+    label: '+ continent',
     cost: { wood: 1000 },
   },
 ]
 
-export const nations = [{}]
+export const continents = [{}]
 export const cities = [{}]
 
 export const buildingTypes = [

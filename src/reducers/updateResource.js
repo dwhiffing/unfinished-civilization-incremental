@@ -1,5 +1,8 @@
 import clamp from 'lodash/clamp'
-export function updateResource(sess, { resourceId, value, cityId, nationId }) {
+export function updateResource(
+  sess,
+  { resourceId, value, cityId, continentId },
+) {
   if (typeof cityId === 'number') {
     let resource = sess.ResourceStockpile.all()
       .toModelArray()
@@ -24,7 +27,9 @@ export function updateResource(sess, { resourceId, value, cityId, nationId }) {
       const cities = sess.City.all()
         .toModelArray()
         .filter((c) =>
-          nationId ? c.nation.all().toRefArray()[0].id === +nationId : true,
+          continentId
+            ? c.continent.all().toRefArray()[0].id === +continentId
+            : true,
         )
       const validResources = cities
         .map((city) => {

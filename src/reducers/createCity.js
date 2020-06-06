@@ -3,14 +3,14 @@ import { createPerson } from './createPerson'
 import { createBuilding } from './createBuilding'
 export const createCity = (sess, payload) => {
   const {
-    nationId,
+    continentId,
     label = faker.address.city(),
     people = [{}],
     resources = [],
     buildings = [],
   } = payload
 
-  const nation = sess.Nation.withId(nationId)
+  const continent = sess.Continent.withId(continentId)
   const allResources = sess.Resource.all().toModelArray()
   const allBuildings = sess.BuildingType.all().toModelArray()
   const cityInstance = sess.City.create({ label })
@@ -28,7 +28,7 @@ export const createCity = (sess, payload) => {
     const _building = buildings.find((r) => r.buildingId === id) || {}
     createBuilding(sess, { cityId, building: { buildingId: id, ..._building } })
   })
-  nation.cities.add(cityInstance)
+  continent.cities.add(cityInstance)
 
   return sess.state
 }

@@ -4,7 +4,7 @@ import { Seat } from './Seat'
 import { Purchase } from './Purchase'
 import { createSeat } from '../actions'
 
-export const Buildings = ({ nationId, cityId, buildings }) => {
+export const Buildings = ({ continentId, cityId, buildings }) => {
   return (
     <>
       {buildings.map((building) => (
@@ -22,7 +22,7 @@ export const Buildings = ({ nationId, cityId, buildings }) => {
               )
             })}
             <Purchase
-              nationId={nationId}
+              continentId={continentId}
               id="buySeat"
               cityId={cityId}
               action={createSeat(building)}

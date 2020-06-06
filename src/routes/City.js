@@ -14,20 +14,26 @@ export const City = () => {
   if (!city) {
     return null
   }
-  const nationId = city.nation.id
+  const continentId = city.continent.id
 
   return (
     <Box display="flex" flexDirection="row" minHeight="100vh">
       <Box display="flex" flexDirection="column" flex={1} p={1}>
-        <a href={`#/nation/${nationId}`}>Back to {city.nation.label}</a>
+        <a href={`#/continent/${continentId}`}>
+          Back to {city.continent.label}
+        </a>
         <br />
         <span>{city.label}</span>
-        <Resources nationId={nationId} resources={city.resources} />
-        <People nationId={nationId} cityId={city.id} people={city.people} />
+        <Resources continentId={continentId} resources={city.resources} />
+        <People
+          continentId={continentId}
+          cityId={city.id}
+          people={city.people}
+        />
       </Box>
       <Box flex={3} p={1}>
         <Buildings
-          nationId={nationId}
+          continentId={continentId}
           cityId={city.id}
           buildings={city.buildings}
         />

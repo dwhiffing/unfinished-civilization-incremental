@@ -4,7 +4,7 @@ import { Seat } from './Seat'
 import { BuildingType } from './BuildingType'
 import { Building } from './Building'
 import { City } from './City'
-import { Nation } from './Nation'
+import { Continent } from './Continent'
 import { Resource } from './Resource'
 import { Buyable } from './Buyable'
 import { ResourceStockpile } from './ResourceStockpile'
@@ -21,7 +21,7 @@ orm.register(
   ResourceStockpile,
   City,
   Buyable,
-  Nation,
+  Continent,
 )
 
 export default orm

@@ -1,16 +1,16 @@
 import orm from '../models'
-import { createInitialNation } from './createInitialNation'
+import { createInitialContinent } from './createInitialContinent'
 import { dragPerson } from './dragPerson'
 import { tickBuildings } from './tickBuildings'
 import { updateResource } from './updateResource'
 import { createSeat } from './createSeat'
 import { createPerson } from './createPerson'
 import { createCity } from './createCity'
-import { createNation } from './createNation'
+import { createContinent } from './createContinent'
 
 const reducers = {
-  INIT: createInitialNation,
-  CREATE_NATION: createNation,
+  INIT: createInitialContinent,
+  CREATE_CONTINENT: createContinent,
   CREATE_CITY: createCity,
   CREATE_SEAT: createSeat,
   CREATE_PERSON: createPerson,

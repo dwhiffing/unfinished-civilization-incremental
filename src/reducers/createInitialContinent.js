@@ -2,12 +2,12 @@ import {
   resources,
   tasks,
   buildingTypes,
-  nations,
+  continents,
   buyables,
 } from '../constants'
-import { createNation } from './createNation'
+import { createContinent } from './createContinent'
 
-export const createInitialNation = (sess) => {
+export const createInitialContinent = (sess) => {
   buyables.forEach((buyable) => sess.Buyable.create({ ...buyable }))
   resources.forEach((resource) =>
     sess.Resource.create({ ...resource, amount: 0 }),
@@ -16,6 +16,6 @@ export const createInitialNation = (sess) => {
   buildingTypes.forEach(({ ...buildingType }) =>
     sess.BuildingType.create({ ...buildingType }),
   )
-  nations.forEach((nation) => createNation(sess, nation))
+  continents.forEach((continent) => createContinent(sess, continent))
   return sess.state
 }
