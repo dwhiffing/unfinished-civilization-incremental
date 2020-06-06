@@ -1,10 +1,12 @@
-import faker from 'faker'
 import { createPerson } from './createPerson'
 import { createBuilding } from './createBuilding'
+import sample from 'lodash/sample'
+import { CITIES } from '../data'
+
 export const createCity = (sess, payload) => {
   const {
     continentId,
-    label = faker.address.city(),
+    label = sample(CITIES),
     people = [{}],
     resources = [],
     buildings = [],

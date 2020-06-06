@@ -18,7 +18,9 @@ export const Continent = () => {
 
   return (
     <Box>
-      <a href={`#/`}>Back to Planet</a>
+      <a href={`#/planet/${continent.planet.id}`}>
+        Back to {continent.planet.label}
+      </a>
       <p>Continent: {continent.label}</p>
       <p>
         Resource Totals:

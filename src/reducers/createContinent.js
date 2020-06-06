@@ -1,10 +1,11 @@
-import faker from 'faker'
 import { createCity } from './createCity'
-export const createContinent = (sess, continent = {}) => {
-  const continentInstance = sess.Continent.create({
-    ...continent,
-    label: faker.address.city(),
-  })
+import sample from 'lodash/sample'
+import { CONTINENTS } from '../data'
+export const createContinent = (sess, payload = {}) => {
+  const { planetId, label = sample(CONTINENTS), ...continent } = payload
+  const continentInstance = sess.Continent.create({ ...continent, label })
+  const planet = sess.Planet.withId(planetId)
+  planet.continents.add(continentInstance)
   createCity(sess, { continentId: continentInstance.ref.id })
   return sess.state
 }

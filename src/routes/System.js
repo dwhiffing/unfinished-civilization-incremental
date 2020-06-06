@@ -1,24 +1,17 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
-import { getPlanets, getPlanetResourceTotals } from '../selectors'
-import { createContinent } from '../actions'
+import { getPlanets, getResourceTotals } from '../selectors'
+import { createPlanet } from '../actions'
 import { Purchase } from '../components/Purchase'
-import { useParams } from 'react-router'
 
-export const Planet = () => {
-  const { id } = useParams()
+export const System = () => {
   const planets = useSelector(getPlanets)
-  const totals = useSelector(getPlanetResourceTotals(id))
-  const planet = planets.find((c) => `${c.id}` === id)
-  if (!planet) {
-    return null
-  }
+  const totals = useSelector(getResourceTotals)
   return (
     <Box>
-      <a href={`#/`}>Back to System</a>
       <br />
-      <p>Planet: {planet.label}</p>
+      <p>System: Solar</p>
       <p>
         Resource Totals:
         {Object.entries(totals).reduce(
@@ -27,14 +20,16 @@ export const Planet = () => {
         )}
       </p>
       <br />
-      <span>Continents:</span>
+      <span>Planets:</span>
 
       <Box display="flex" flexDirection="column">
-        {planet.continents.map((c) => {
-          const things = c.cities.map((c) => c.resources).flat()
+        {planets.map((c) => {
+          const things = c.continents
+            .map((c) => c.cities.map((c) => c.resources).flat())
+            .flat()
           return (
             <Box my={1} key={c.id} display="flex" alignItems="center">
-              <a href={`#/continent/${c.id}`} style={{ marginRight: 8 }}>
+              <a href={`#/planet/${c.id}`} style={{ marginRight: 8 }}>
                 {c.label}
               </a>
               <span key={`resource-${c.id}`}>
@@ -51,11 +46,7 @@ export const Planet = () => {
         })}
       </Box>
 
-      <Purchase
-        planetId={id}
-        id="buyContinent"
-        action={createContinent({ planetId: planet.id })}
-      />
+      <Purchase id="buyPlanet" action={createPlanet()} />
     </Box>
   )
 }

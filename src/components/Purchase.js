@@ -6,18 +6,27 @@ import {
   getCities,
   getContinentResourceTotals,
   getPlanetResourceTotals,
+  getCityResourceTotals,
+  getResourceTotals,
 } from '../selectors'
 import { updateResource } from '../actions'
 
-export const Purchase = ({ id, continentId, cityId, action }) => {
+export const Purchase = ({ id, planetId, continentId, cityId, action }) => {
   const dispatch = useDispatch()
   const city = useSelector(getCities).find((b) => b.id === cityId)
   const buyable = useSelector(getBuyables).find((b) => b.id === id)
-  const totals = useSelector((state) =>
-    continentId
-      ? getContinentResourceTotals(continentId)(state)
-      : getPlanetResourceTotals(state),
-  )
+  const totals = useSelector((state) => {
+    if (cityId) {
+      return getCityResourceTotals(cityId)(state)
+    }
+    if (continentId) {
+      return getContinentResourceTotals(continentId)(state)
+    }
+    if (planetId) {
+      return getPlanetResourceTotals(planetId)(state)
+    }
+    return getResourceTotals(state)
+  })
 
   if (!buyable) return null
 
@@ -51,6 +60,7 @@ export const Purchase = ({ id, continentId, cityId, action }) => {
                   value: -value,
                   cityId,
                   continentId,
+                  planetId,
                 }),
               ),
             ),

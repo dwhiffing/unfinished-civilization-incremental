@@ -1,68 +1,90 @@
 import { createSelector } from 'redux-orm'
 import orm from '../models'
 
+const getList = (model) => model.all().toModelArray()
+const getFirst = (model) => getList(model)[0]
+const totalResources = (list) => {
+  let resources = {}
+  list.forEach((resource) => {
+    const { ref } = resource
+    resources[ref.resourceId] = resources[ref.resourceId] || 0
+    resources[ref.resourceId] += ref.amount
+  })
+  return resources
+}
+
+export const getPlanets = createSelector(orm, (session) =>
+  getList(session.Planet).map((planet) => ({
+    ...planet.ref,
+    continents: planet.continents.all().toModelArray().map(makeGetContinent),
+  })),
+)
+
 export const getContinents = createSelector(orm, (session) =>
-  session.Continent.all()
-    .toModelArray()
-    .map((continent) => ({
-      ...continent.ref,
-      cities: continent.cities.all().toModelArray().map(makeGetCity),
-    })),
+  getList(session.Continent).map(makeGetContinent),
 )
 
 export const getCities = createSelector(orm, (session) =>
-  session.City.all().toModelArray().map(makeGetCity),
+  getList(session.City).map(makeGetCity),
 )
-
-const getResourceStockpilesForContinent = (session, continentId) =>
-  session.ResourceStockpile.all()
-    .toModelArray()
-    .filter(
-      (r) =>
-        r.city
-          .all()
-          .toModelArray()[0]
-          .continent.all()
-          .toModelArray()[0]
-          .id.toString() === continentId,
-    )
-
-export const getContinentResourceTotals = (continentId) =>
-  createSelector(orm, (session) => {
-    let resources = {}
-    getResourceStockpilesForContinent(session, continentId).forEach(
-      (resource) => {
-        const { ref } = resource
-        resources[ref.resourceId] = resources[ref.resourceId] || 0
-        resources[ref.resourceId] += ref.amount
-      },
-    )
-
-    return resources
-  })
-
-export const getPlanetResourceTotals = createSelector(orm, (session) => {
-  let resources = {}
-  session.ResourceStockpile.all()
-    .toModelArray()
-    .forEach((resource) => {
-      const { ref } = resource
-      resources[ref.resourceId] = resources[ref.resourceId] || 0
-      resources[ref.resourceId] += ref.amount
-    })
-
-  return resources
-})
 
 export const getBuyables = createSelector(orm, (session) =>
   session.Buyable.all().toRefArray(),
 )
 
+export const getPlanetResourceTotals = (planetId) =>
+  createSelector(orm, (session) =>
+    totalResources(
+      getList(session.ResourceStockpile).filter(
+        (r) =>
+          getFirst(
+            getFirst(getFirst(r.city).continent).planet,
+          ).id.toString() === planetId,
+      ),
+    ),
+  )
+
+export const getContinentResourceTotals = (continentId) =>
+  createSelector(orm, (session) =>
+    totalResources(
+      getList(session.ResourceStockpile).filter(
+        (r) =>
+          getFirst(getFirst(r.city).continent).id.toString() === continentId,
+      ),
+    ),
+  )
+
+export const getCityResourceTotals = (cityId) =>
+  createSelector(orm, (session) =>
+    totalResources(
+      getList(session.ResourceStockpile).filter(
+        (r) => getFirst(r.city).id.toString() === cityId,
+      ),
+    ),
+  )
+
+export const getResourceTotals = createSelector(orm, (session) => {
+  let resources = {}
+  getList(session.ResourceStockpile).forEach((resource) => {
+    const { ref } = resource
+    resources[ref.resourceId] = resources[ref.resourceId] || 0
+    resources[ref.resourceId] += ref.amount
+  })
+
+  return resources
+})
+
+const makeGetContinent = (continent) => ({
+  ...continent.ref,
+  planet: getFirst(continent.planet.all()).ref,
+  cities: getList(continent.cities).map(makeGetCity),
+})
+
 const makeGetCity = (city) => ({
   ...city.ref,
   people: city.people.toRefArray(),
   resources: city.resources.toRefArray(),
-  continent: city.continent.all().toRefArray()[0],
+  continent: getFirst(city.continent).ref,
   buildings: city.buildings.toModelArray().map((building) => ({
     ...building.ref,
     label: building.buildingId,

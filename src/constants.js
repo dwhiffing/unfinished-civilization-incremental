@@ -4,6 +4,11 @@ export const RESOURCE_MULTIPLIER = 50
 export const resources = [{ id: 'food' }, { id: 'wood' }]
 export const buyables = [
   {
+    id: 'buyPlanet',
+    label: '+ planet',
+    cost: { wood: 10000 },
+  },
+  {
     id: 'buyCity',
     label: '+ city',
     cost: { wood: 100 },
@@ -25,6 +30,7 @@ export const buyables = [
   },
 ]
 
+export const planets = [{}]
 export const continents = [{}]
 export const cities = [{}]
 

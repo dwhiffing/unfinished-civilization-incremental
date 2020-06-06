@@ -1,7 +1,7 @@
 import clamp from 'lodash/clamp'
 export function updateResource(
   sess,
-  { resourceId, value, cityId, continentId },
+  { resourceId, value, cityId, continentId, planetId },
 ) {
   if (typeof cityId === 'number') {
     let resource = sess.ResourceStockpile.all()
@@ -26,11 +26,18 @@ export function updateResource(
     while (amountToConsume > 0) {
       const cities = sess.City.all()
         .toModelArray()
-        .filter((c) =>
-          continentId
-            ? c.continent.all().toRefArray()[0].id === +continentId
-            : true,
-        )
+        .filter((c) => {
+          if (planetId) {
+            return (
+              c.continent.toModelArray()[0].planet.toRefArray()[0].id ===
+              +planetId
+            )
+          }
+          if (continentId) {
+            return c.continent.toRefArray()[0].id === +continentId
+          }
+          return true
+        })
       const validResources = cities
         .map((city) => {
           const resource = city.resources

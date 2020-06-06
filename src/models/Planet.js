@@ -1,7 +1,7 @@
 import { Model, many, attr } from 'redux-orm'
-export class Continent extends Model {}
-Continent.modelName = 'Continent'
-Continent.fields = {
+export class Planet extends Model {}
+Planet.modelName = 'Planet'
+Planet.fields = {
   id: attr(),
-  cities: many('City', 'continent'),
+  continents: many('Continent', 'planet'),
 }

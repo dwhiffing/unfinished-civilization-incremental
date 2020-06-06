@@ -9,6 +9,7 @@ import { Resource } from './Resource'
 import { Buyable } from './Buyable'
 import { ResourceStockpile } from './ResourceStockpile'
 import { Person } from './Person'
+import { Planet } from './Planet'
 
 const orm = new ORM({ stateSelector: (state) => state.root })
 orm.register(
@@ -16,6 +17,7 @@ orm.register(
   Building,
   Resource,
   Person,
+  Planet,
   Seat,
   BuildingType,
   ResourceStockpile,
