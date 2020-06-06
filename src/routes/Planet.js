@@ -1,10 +1,15 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
-import { getPlanets, getPlanetResourceTotals } from '../selectors'
+import {
+  getPlanets,
+  getPlanetResourceTotals,
+  getContinentResourceTotals,
+} from '../selectors'
 import { createContinent } from '../actions'
 import { Purchase } from '../components/Purchase'
 import { useParams } from 'react-router'
+import { Totals } from '../components/Totals'
 
 export const Planet = () => {
   const { id } = useParams()
@@ -19,36 +24,16 @@ export const Planet = () => {
       <a href={`#/`}>Back to System</a>
       <br />
       <p>Planet: {planet.label}</p>
-      <p>
-        Resource Totals:
-        {Object.entries(totals).reduce(
-          (sum, [key, value]) => sum + ` ${key}: ${value} `,
-          '',
-        )}
-      </p>
+
+      <Totals totals={totals} />
+
       <br />
       <span>Continents:</span>
 
       <Box display="flex" flexDirection="column">
-        {planet.continents.map((c) => {
-          const things = c.cities.map((c) => c.resources).flat()
-          return (
-            <Box my={1} key={c.id} display="flex" alignItems="center">
-              <a href={`#/continent/${c.id}`} style={{ marginRight: 8 }}>
-                {c.label}
-              </a>
-              <span key={`resource-${c.id}`}>
-                {Object.entries(
-                  things.reduce((sum, r) => {
-                    sum[r.resourceId] = sum[r.resourceId] || 0
-                    sum[r.resourceId] += r.amount
-                    return sum
-                  }, {}),
-                ).reduce((sum, [key, value]) => sum + `${key}: ${value} `, '')}
-              </span>
-            </Box>
-          )
-        })}
+        {planet.continents.map((continent) => (
+          <ContinentItem key={continent.id} continent={continent} />
+        ))}
       </Box>
 
       <Purchase
@@ -56,6 +41,18 @@ export const Planet = () => {
         id="buyContinent"
         action={createContinent({ planetId: planet.id })}
       />
+    </Box>
+  )
+}
+
+const ContinentItem = ({ continent }) => {
+  const totals = useSelector(getContinentResourceTotals(`${continent.id}`))
+  return (
+    <Box my={1} display="flex" alignItems="center">
+      <a href={`#/continent/${continent.id}`} style={{ marginRight: 8 }}>
+        {continent.label}
+      </a>
+      <Totals totals={totals} />
     </Box>
   )
 }

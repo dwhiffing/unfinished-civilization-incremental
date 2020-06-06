@@ -5,16 +5,17 @@ import { getContinents, getContinentResourceTotals } from '../selectors'
 import { Purchase } from '../components/Purchase'
 import { createCity } from '../actions'
 import { useParams } from 'react-router'
+import { ResourceText } from '../components/Resources'
+import { Totals } from '../components/Totals'
 
 export const Continent = () => {
   const { id } = useParams()
-  const continents = useSelector(getContinents)
+  const continent = useSelector(getContinents).find((c) => `${c.id}` === id)
   const totals = useSelector(getContinentResourceTotals(id))
-  const continent = continents.find((c) => `${c.id}` === id)
+
   if (!continent) {
     return null
   }
-  const cities = continent.cities
 
   return (
     <Box>
@@ -22,31 +23,16 @@ export const Continent = () => {
         Back to {continent.planet.label}
       </a>
       <p>Continent: {continent.label}</p>
-      <p>
-        Resource Totals:
-        {Object.entries(totals).reduce(
-          (sum, [key, value]) => sum + ` ${key}: ${value} `,
-          '',
-        )}
-      </p>
+
+      <Totals totals={totals} />
 
       <br />
 
       <span>Cities:</span>
 
       <Box display="flex" flexDirection="column">
-        {cities.map((c) => (
-          <Box my={1} key={c.id} display="flex" alignItems="center">
-            <a href={`#/city/${c.id}`} style={{ marginRight: 8 }}>
-              {c.label}
-            </a>
-            <span>
-              {c.resources.reduce(
-                (sum, r) => sum + `${r.resourceId}: ${r.amount} `,
-                '',
-              )}
-            </span>
-          </Box>
+        {continent.cities.map((city) => (
+          <CityItem key={city.id} city={city} />
         ))}
       </Box>
 
@@ -58,3 +44,21 @@ export const Continent = () => {
     </Box>
   )
 }
+
+const CityItem = ({ city }) => (
+  <Box my={1} display="flex" alignItems="center">
+    <a
+      href={`#/city/${city.id}`}
+      style={{
+        marginRight: 8,
+      }}
+    >
+      {city.label}
+    </a>
+    <Box display="flex">
+      {city.resources.map((r, i) => (
+        <ResourceText key={i} resource={r} />
+      ))}
+    </Box>
+  </Box>
+)

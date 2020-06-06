@@ -12,15 +12,9 @@ export const Buildings = ({ continentId, cityId, buildings }) => {
           <Typography>{building.label}</Typography>
 
           <Box display="flex">
-            {building.seats.map((seat, index) => {
-              return (
-                <Seat
-                  key={`task${index}-${seat.task.id}`}
-                  index={index}
-                  seat={seat}
-                />
-              )
-            })}
+            {building.seats.map((seat, index) => (
+              <Seat key={`task${index}`} index={index} seat={seat} />
+            ))}
             <Purchase
               continentId={continentId}
               id="buySeat"
