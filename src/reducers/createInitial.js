@@ -1,14 +1,6 @@
-import {
-  resources,
-  tasks,
-  buildingTypes,
-  planets,
-  buyables,
-} from '../constants'
+import { resources, tasks, buildingTypes, buyables } from '../constants'
 import { createPlanet } from './createPlanet'
 
-// TODO: this should be called every start
-// TODO: but first they have to not be persisted
 export const createInitial = (sess) => {
   buyables.forEach((buyable) => sess.Buyable.create({ ...buyable }))
   resources.forEach((resource) =>
@@ -19,7 +11,9 @@ export const createInitial = (sess) => {
     sess.BuildingType.create({ ...buildingType }),
   )
 
-  // TODO: this should only be called if there is no planet
-  planets.forEach((planet) => createPlanet(sess, planet))
+  if (sess.Planet.all().toRefArray().length === 0) {
+    createPlanet(sess, {})
+  }
+
   return sess.state
 }

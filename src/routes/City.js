@@ -6,6 +6,7 @@ import { Buildings } from '../components/Buildings'
 import { People } from '../components/People'
 import { getCities } from '../selectors'
 import { useParams } from 'react-router'
+// TODO: Add actions to allow citizens to all be assigned/deassigned
 
 export const City = () => {
   const { id } = useParams()

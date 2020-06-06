@@ -15,6 +15,7 @@ const persistConfig = {
   storage,
   stateReconciler: autoMergeLevel2,
   transforms: [transformCircular],
+  blacklist: ['BuildingType'],
 }
 
 const persistedReducer = persistReducer(persistConfig, reducer)

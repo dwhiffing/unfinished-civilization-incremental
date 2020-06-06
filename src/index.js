@@ -6,7 +6,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
 import { Container, Button, Box } from '@material-ui/core'
 
-import { drag, init, tick } from './actions'
+import { drag, createInitial, tick } from './actions'
 import store, { persistor } from './store'
 
 import './index.css'
@@ -24,11 +24,7 @@ const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    const hasSession = localStorage.getItem('hasSession') === '1'
-    if (!hasSession) {
-      localStorage.setItem('hasSession', '1')
-      dispatch(init())
-    }
+    dispatch(createInitial())
   }, [dispatch])
 
   useEffect(() => {

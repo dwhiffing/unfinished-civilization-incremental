@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit'
 
-export const init = createAction('INIT')
+export const createInitial = createAction('INIT')
 export const tick = createAction('TICK')
 export const drag = createAction('DRAG')
 export const updateResource = createAction('UPDATE_RESOURCE')
