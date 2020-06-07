@@ -6,7 +6,7 @@ import {
   getResourceTotals,
   getPlanetResourceTotals,
 } from '../selectors'
-import { createPlanet } from '../actions'
+import { explore, settle } from '../actions'
 import { Purchase } from '../components/Purchase'
 import { Totals } from '../components/Totals'
 
@@ -15,21 +15,23 @@ export const System = () => {
   const totals = useSelector(getResourceTotals)
   return (
     <Box>
-      <br />
-      <p>System: Solar</p>
+      <Box my={2}>
+        <Totals label={`System: Solar`} totals={totals} />
+      </Box>
 
-      <Totals totals={totals} />
-
-      <br />
       <span>Planets:</span>
 
       <Box display="flex" flexDirection="column">
-        {planets.map((planet) => (
-          <PlanetItem key={planet.id} planet={planet} />
-        ))}
+        {planets
+          .filter((p) => p.explored)
+          .map((planet) => (
+            <PlanetItem key={planet.id} planet={planet} />
+          ))}
       </Box>
 
-      <Purchase id="buyPlanet" action={createPlanet()} />
+      {planets.filter((p) => !p.explored).length > 0 && (
+        <Purchase id="exploreContinent" action={explore()} />
+      )}
     </Box>
   )
 }
@@ -42,6 +44,9 @@ const PlanetItem = ({ planet }) => {
         {planet.label}
       </a>
       <Totals totals={totals} />
+      {!planet.settled && (
+        <Purchase id="settlePlanet" action={settle({ planetId: planet.id })} />
+      )}
     </Box>
   )
 }

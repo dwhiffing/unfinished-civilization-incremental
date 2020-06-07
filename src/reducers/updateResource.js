@@ -1,4 +1,5 @@
 import clamp from 'lodash/clamp'
+import { getFirstDeep } from '../selectors'
 export function updateResource(
   sess,
   { resourceId, value, cityId, continentId, planetId },
@@ -28,13 +29,12 @@ export function updateResource(
         .toModelArray()
         .filter((c) => {
           if (planetId) {
-            return (
-              c.continent.toModelArray()[0].planet.toRefArray()[0].id ===
-              +planetId
-            )
+            const planet = getFirstDeep(c, 'plot.continent.planet')
+            return planet.id === +planetId
           }
           if (continentId) {
-            return c.continent.toRefArray()[0].id === +continentId
+            const continent = getFirstDeep(c, 'plot.continent')
+            return continent.id === +continentId
           }
           return true
         })

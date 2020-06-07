@@ -1,8 +1,11 @@
 import { createSelector } from 'redux-orm'
 import orm from '../models'
 
-const getList = (model) => model.all().toModelArray()
-const getFirst = (model) => getList(model)[0]
+export const getList = (model) => {
+  if (!model) debugger
+  return model.all().toModelArray()
+}
+export const getFirst = (model) => getList(model)[0]
 const totalResources = (list) => {
   let resources = {}
   list.forEach((resource) => {
@@ -13,19 +16,38 @@ const totalResources = (list) => {
   return resources
 }
 
+export const getFirstDeep = (thing, path) => {
+  const paths = path.split('.')
+  let resolved = thing
+  while (paths.length > 0) {
+    const p = paths.shift()
+    resolved = getFirst(resolved[p])
+  }
+  return resolved
+}
+
 export const getPlanets = createSelector(orm, (session) =>
-  getList(session.Planet).map((planet) => ({
-    ...planet.ref,
-    continents: planet.continents.all().toModelArray().map(makeGetContinent),
-  })),
+  getList(session.Planet).map((planet) => {
+    const continents = planet.continents
+      .all()
+      .toModelArray()
+      .map((continent) => makeGetContinent(session, continent))
+    return {
+      ...planet.ref,
+      settled: continents.some((c) => c.settled),
+      continents,
+    }
+  }),
 )
 
 export const getContinents = createSelector(orm, (session) =>
-  getList(session.Continent).map(makeGetContinent),
+  getList(session.Continent).map((continent) =>
+    makeGetContinent(session, continent),
+  ),
 )
 
 export const getCities = createSelector(orm, (session) =>
-  getList(session.City).map(makeGetCity),
+  getList(session.City).map((city) => makeGetCity(session, city)),
 )
 
 export const getBuyables = createSelector(orm, (session) =>
@@ -36,8 +58,7 @@ export const getPlanetResourceTotals = (planetId) =>
   createSelector(orm, (session) =>
     totalResources(
       getList(session.ResourceStockpile).filter(
-        (r) =>
-          getFirst(getFirst(getFirst(r.city).continent).planet).id === planetId,
+        (r) => getFirstDeep(r, 'city.plot.continent.planet').id === planetId,
       ),
     ),
   )
@@ -46,7 +67,7 @@ export const getContinentResourceTotals = (continentId) =>
   createSelector(orm, (session) =>
     totalResources(
       getList(session.ResourceStockpile).filter(
-        (r) => getFirst(getFirst(r.city).continent).id === continentId,
+        (r) => getFirstDeep(r, 'city.plot.continent').id === continentId,
       ),
     ),
   )
@@ -71,23 +92,36 @@ export const getResourceTotals = createSelector(orm, (session) => {
   return resources
 })
 
-const makeGetContinent = (continent) => ({
+const makeGetContinent = (session, continent) => ({
+  explored: false,
   ...continent.ref,
   planet: getFirst(continent.planet.all()).ref,
-  cities: getList(continent.cities).map(makeGetCity),
+  plots: getList(continent.plots).map((p) => ({
+    id: p.id,
+    city: getFirst(p.cities),
+    ...p.ref,
+  })),
+  settled:
+    getList(continent.plots)
+      .map((p) => getFirst(p.cities))
+      .filter((p) => !!p).length > 0,
+  cities: getList(continent.plots)
+    .map((p) => getFirst(p.cities))
+    .filter((p) => !!p)
+    .map((city) => makeGetCity(session, city)),
 })
 
-const makeGetCity = (city) => ({
+const makeGetCity = (sess, city) => ({
   ...city.ref,
   people: city.people.toRefArray(),
   resources: city.resources.toRefArray(),
-  continent: getFirst(city.continent).ref,
+  continent: getFirst(getFirst(city.plot).continent).ref,
   buildings: city.buildings.toModelArray().map((building) => ({
     ...building.ref,
     label: building.buildingId,
     seats: building.seats.toRefArray().map((seat) => ({
       ...seat,
-      task: { ...seat.task._fields },
+      task: sess.Task.withId(seat.taskId),
       building: { ...building.ref, cityId: city.id },
       person: seat.person ? { ...seat.person._fields } : null,
     })),

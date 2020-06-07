@@ -22,9 +22,29 @@ export const buyables = [
     cost: { food: 5 },
   },
   {
-    id: 'buyContinent',
-    label: '+ continent',
-    cost: { wood: 1000 },
+    id: 'exploreSystem',
+    label: 'explore stars',
+    cost: { wood: 10 },
+  },
+  {
+    id: 'explorePlanet',
+    label: 'explore ocean',
+    cost: { wood: 10 },
+  },
+  {
+    id: 'exploreContinent',
+    label: 'explore',
+    cost: { wood: 10 },
+  },
+  {
+    id: 'settlePlanet',
+    label: 'settle planet',
+    cost: { wood: 10 },
+  },
+  {
+    id: 'settleContinent',
+    label: 'settle continent',
+    cost: { wood: 10 },
   },
 ]
 
@@ -33,6 +53,6 @@ export const buildingTypes = [
   { id: 'lumbermill', tasks: [{ id: 'chop' }] },
 ]
 export const tasks = [
-  { id: 'chop', duration: 5, effect: { id: 'wood', value: 1 } },
-  { id: 'scavenge', duration: 3, effect: { id: 'food', value: 1 } },
+  { id: 'chop', duration: 1, effect: { id: 'wood', value: 1 } },
+  { id: 'scavenge', duration: 1, effect: { id: 'food', value: 1 } },
 ]

@@ -47,8 +47,8 @@ const App = () => {
             onClick={() => {
               persistor.purge()
               localStorage.removeItem('hasSession')
-              window.location.reload()
               window.location = '/#/city/0'
+              window.location.reload()
             }}
           >
             Clear save

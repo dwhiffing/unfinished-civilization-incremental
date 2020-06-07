@@ -6,7 +6,7 @@ import {
   getPlanetResourceTotals,
   getContinentResourceTotals,
 } from '../selectors'
-import { createContinent } from '../actions'
+import { explore, settle } from '../actions'
 import { Purchase } from '../components/Purchase'
 import { useParams } from 'react-router'
 import { Totals } from '../components/Totals'
@@ -22,25 +22,27 @@ export const Planet = () => {
   return (
     <Box>
       <a href={`#/`}>Back to System</a>
-      <br />
-      <p>Planet: {planet.label}</p>
+      <Box my={2}>
+        <Totals label={`Planet: ${planet.label}`} totals={totals} />
+      </Box>
 
-      <Totals totals={totals} />
-
-      <br />
       <span>Continents:</span>
 
       <Box display="flex" flexDirection="column">
-        {planet.continents.map((continent) => (
-          <ContinentItem key={continent.id} continent={continent} />
-        ))}
+        {planet.continents
+          .filter((c) => c.explored)
+          .map((continent) => (
+            <ContinentItem key={continent.id} continent={continent} />
+          ))}
       </Box>
 
-      <Purchase
-        planetId={+id}
-        id="buyContinent"
-        action={createContinent({ planetId: planet.id })}
-      />
+      {planet.continents.filter((c) => !c.explored).length > 0 && (
+        <Purchase
+          planetId={+id}
+          id="explorePlanet"
+          action={explore({ planetId: planet.id })}
+        />
+      )}
     </Box>
   )
 }
@@ -53,6 +55,12 @@ const ContinentItem = ({ continent }) => {
         {continent.label}
       </a>
       <Totals totals={totals} />
+      {!continent.settled && (
+        <Purchase
+          id="settleContinent"
+          action={settle({ continentId: continent.id })}
+        />
+      )}
     </Box>
   )
 }

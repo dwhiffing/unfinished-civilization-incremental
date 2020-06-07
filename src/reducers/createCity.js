@@ -1,18 +1,18 @@
 import { createPerson } from './createPerson'
 import { createBuilding } from './createBuilding'
-import sample from 'lodash/sample'
-import { CITIES } from '../data'
+import { CITIES, getUniqueName } from '../data'
+import { getFirst } from '../selectors'
 
 export const createCity = (sess, payload) => {
   const {
-    continentId,
-    label = sample(CITIES),
+    plotId,
+    label = getUniqueName(sess.City, CITIES),
     people = [{}],
     resources = [],
     buildings = [],
   } = payload
 
-  const continent = sess.Continent.withId(continentId)
+  const plot = sess.Plot.withId(plotId)
   const allResources = sess.Resource.all().toModelArray()
   const allBuildings = sess.BuildingType.all().toModelArray()
   const cityInstance = sess.City.create({ label })
@@ -30,7 +30,12 @@ export const createCity = (sess, payload) => {
     const _building = buildings.find((r) => r.buildingId === id) || {}
     createBuilding(sess, { cityId, building: { buildingId: id, ..._building } })
   })
-  continent.cities.add(cityInstance)
+  const continent = getFirst(plot.continent)
+  const planet = getFirst(continent.planet)
+  plot.update({ explored: true })
+  continent.update({ explored: true })
+  planet.update({ explored: true })
+  plot.cities.add(cityInstance)
 
   return sess.state
 }

@@ -7,9 +7,10 @@ export const tickBuildings = (sess) => {
       const seats = building.seats.all().toModelArray()
       seats.forEach((seatModel) => {
         const seat = seatModel.ref
-        const effect = seat.task._fields.effect
+        const task = sess.Task.withId(seat.taskId)
+        const { effect, duration } = task.ref
         const cityId = building.city.all().toRefArray()[0].id
-        if (seat.progress >= seat.task._fields.duration) {
+        if (seat.progress >= duration) {
           const resourceId = effect.id
           const value = effect.value * RESOURCE_MULTIPLIER
           updateResource(sess, { resourceId, value, cityId })

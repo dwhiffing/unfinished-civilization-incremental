@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
 import { getContinents, getContinentResourceTotals } from '../selectors'
 import { Purchase } from '../components/Purchase'
-import { createCity } from '../actions'
+import { createCity, explore } from '../actions'
 import { useParams } from 'react-router'
 import { ResourceText } from '../components/Resources'
 import { Totals } from '../components/Totals'
@@ -22,11 +22,10 @@ export const Continent = () => {
       <a href={`#/planet/${continent.planet.id}`}>
         Back to {continent.planet.label}
       </a>
-      <p>Continent: {continent.label}</p>
 
-      <Totals totals={totals} />
-
-      <br />
+      <Box my={2}>
+        <Totals label={`Continent: ${continent.label}`} totals={totals} />
+      </Box>
 
       <span>Cities:</span>
 
@@ -36,11 +35,26 @@ export const Continent = () => {
         ))}
       </Box>
 
-      <Purchase
-        continentId={+id}
-        id="buyCity"
-        action={createCity({ continentId: continent.id })}
-      />
+      {continent.plots
+        .filter((p) => !p.city && p.explored)
+        .map((plot) => {
+          return (
+            <Purchase
+              key={`${plot.id}-explore`}
+              continentId={+id}
+              id="buyCity"
+              action={createCity({ plotId: plot.id })}
+            />
+          )
+        })}
+
+      {continent.plots.filter((p) => !p.city && !p.explored).length > 0 && (
+        <Purchase
+          continentId={+id}
+          id="exploreContinent"
+          action={explore({ continentId: continent.id })}
+        />
+      )}
     </Box>
   )
 }

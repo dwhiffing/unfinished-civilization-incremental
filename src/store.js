@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import { parse, stringify } from 'flatted'
 
+const CONSTANT_MODELS = ['BuildingType', 'Resource', 'Task', 'Buyable']
 const transformCircular = createTransform(
   (inboundState, key) => stringify(inboundState),
   (outboundState, key) => parse(outboundState),
@@ -15,7 +16,7 @@ const persistConfig = {
   storage,
   stateReconciler: autoMergeLevel2,
   transforms: [transformCircular],
-  blacklist: ['BuildingType'],
+  blacklist: CONSTANT_MODELS,
 }
 
 const persistedReducer = persistReducer(persistConfig, reducer)
