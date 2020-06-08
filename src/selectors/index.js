@@ -26,18 +26,22 @@ export const getFirstDeep = (thing, path) => {
   return resolved
 }
 
-export const getPlanets = createSelector(orm, (session) =>
-  getList(session.Planet).map((planet) => {
-    const continents = planet.continents
+export const getSystems = createSelector(orm, (session) =>
+  getList(session.System).map((system) => {
+    const planets = system.planets
       .all()
       .toModelArray()
-      .map((continent) => makeGetContinent(session, continent))
+      .map((planet) => makeGetPlanet(session, planet))
     return {
-      ...planet.ref,
-      settled: continents.some((c) => c.settled),
-      continents,
+      ...system.ref,
+      settled: planets.some((p) => p.settled),
+      planets,
     }
   }),
+)
+
+export const getPlanets = createSelector(orm, (session) =>
+  getList(session.Planet).map((planet) => makeGetPlanet(session, planet)),
 )
 
 export const getContinents = createSelector(orm, (session) =>
@@ -53,6 +57,16 @@ export const getCities = createSelector(orm, (session) =>
 export const getBuyables = createSelector(orm, (session) =>
   session.Buyable.all().toRefArray(),
 )
+
+export const getSystemResourceTotals = (systemId) =>
+  createSelector(orm, (session) =>
+    totalResources(
+      getList(session.ResourceStockpile).filter((r) => {
+        const value = getFirstDeep(r, 'city.plot.continent.planet.system')
+        return value.id === systemId
+      }),
+    ),
+  )
 
 export const getPlanetResourceTotals = (planetId) =>
   createSelector(orm, (session) =>
@@ -127,3 +141,16 @@ const makeGetCity = (sess, city) => ({
     })),
   })),
 })
+
+const makeGetPlanet = (session, planet) => {
+  const continents = planet.continents
+    .all()
+    .toModelArray()
+    .map((continent) => makeGetContinent(session, continent))
+  return {
+    ...planet.ref,
+    settled: continents.some((c) => c.settled),
+    system: getFirst(planet.system).ref,
+    continents,
+  }
+}

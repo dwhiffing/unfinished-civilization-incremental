@@ -1,0 +1,33 @@
+### Districts
+
+- City Center
+  - Buildings: Farm/Granary/Monument/Water Mill/Walls Sewer
+  - Resources: Food
+- Holy Site
+  - Buildings: Shrine/Temple
+  - Resources: faith
+  - Religion
+- Campus
+  - Buildings: Library/University/Research Lab
+  - Resources: science
+  - Science
+- Theatre Square
+  - Buildings: Amphitheatre/Gallary/Broadcast Center
+  - Resources: Culture
+  - Culture
+- Industrial Zone
+  - Buildings: Lumber Mill/Workshop/Factory/Power plant
+  - Resources: Wood, stone, iron, oil, steel,coal
+  - Production
+- Neighbourhood
+  - Buildings: House/Villa/Apartment
+  - Resources: population/happiness
+  - Housing
+- Commercial Hub
+  - Buildings: Market/Bank/Stock Exchange
+  - Resources: gold/everything
+  - Commerce/Trade
+- Encampment
+  - Buildings: Barracks or Stable Armory Military Academy
+  - Resources:
+  - Military

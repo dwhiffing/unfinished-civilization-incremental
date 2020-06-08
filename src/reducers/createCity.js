@@ -32,9 +32,11 @@ export const createCity = (sess, payload) => {
   })
   const continent = getFirst(plot.continent)
   const planet = getFirst(continent.planet)
+  const system = getFirst(planet.system)
   plot.update({ explored: true })
   continent.update({ explored: true })
   planet.update({ explored: true })
+  system.update({ explored: true })
   plot.cities.add(cityInstance)
 
   return sess.state

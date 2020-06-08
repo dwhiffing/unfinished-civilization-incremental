@@ -11,6 +11,7 @@ import { ResourceStockpile } from './ResourceStockpile'
 import { Person } from './Person'
 import { Plot } from './Plot'
 import { Planet } from './Planet'
+import { System } from './System'
 
 const orm = new ORM({ stateSelector: (state) => state.root })
 orm.register(
@@ -19,6 +20,7 @@ orm.register(
   Resource,
   Person,
   Planet,
+  System,
   Plot,
   Seat,
   BuildingType,

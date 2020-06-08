@@ -10,6 +10,7 @@ export const explore = createAction('EXPLORE')
 export const settle = createAction('SETTLE')
 export const createCity = createAction('CREATE_CITY')
 export const createPlanet = createAction('CREATE_PLANET')
+export const createSystem = createAction('CREATE_SYSTEM')
 export const createSeat = createAction('CREATE_SEAT', (building) => ({
   payload: { buildingId: building.id, task: building.seats[0].task },
 }))

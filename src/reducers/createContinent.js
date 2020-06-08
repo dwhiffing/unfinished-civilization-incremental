@@ -2,6 +2,7 @@ import times from 'lodash/times'
 import random from 'lodash/random'
 import { CONTINENTS, getUniqueName } from '../data'
 import { createPlot } from './createPlot'
+import { PLOT_COUNT_RANGE } from '../constants'
 
 export const createContinent = (sess, payload = {}) => {
   const {
@@ -16,6 +17,8 @@ export const createContinent = (sess, payload = {}) => {
   })
   const planet = sess.Planet.withId(planetId)
   planet.continents.add(continent)
-  times(random(3, 6), () => createPlot(sess, { continentId: continent.id }))
+  times(random(...PLOT_COUNT_RANGE), () =>
+    createPlot(sess, { continentId: continent.id }),
+  )
   return sess.state
 }

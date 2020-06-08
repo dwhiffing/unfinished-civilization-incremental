@@ -11,6 +11,7 @@ import { createContinent } from './createContinent'
 import { createPlot } from './createPlot'
 import { explore } from './explore'
 import { settle } from './settle'
+import { createSystem } from './createSystem'
 
 const reducers = {
   INIT: createInitial,
@@ -22,6 +23,7 @@ const reducers = {
   CREATE_PERSON: createPerson,
   CREATE_PLOT: createPlot,
   CREATE_PLANET: createPlanet,
+  CREATE_SYSTEM: createSystem,
   UPDATE_RESOURCE: updateResource,
   TICK: tickBuildings,
   DRAG: dragPerson,

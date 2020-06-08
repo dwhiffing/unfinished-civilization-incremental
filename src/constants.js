@@ -1,11 +1,10 @@
+export const SYSTEM_COUNT_RANGE = [3, 3]
+export const PLANET_COUNT_RANGE = [2, 5]
+export const CONTINENT_COUNT_RANGE = [2, 4]
+export const PLOT_COUNT_RANGE = [2, 6]
 export const RESOURCE_MULTIPLIER = 50
 export const resources = [{ id: 'food' }, { id: 'wood' }]
 export const buyables = [
-  {
-    id: 'buyPlanet',
-    label: '+ planet',
-    cost: { wood: 10000 },
-  },
   {
     id: 'buyCity',
     label: '+ city',
@@ -22,6 +21,11 @@ export const buyables = [
     cost: { food: 5 },
   },
   {
+    id: 'exploreGalaxy',
+    label: 'explore systems',
+    cost: { wood: 10 },
+  },
+  {
     id: 'exploreSystem',
     label: 'explore stars',
     cost: { wood: 10 },
@@ -34,6 +38,11 @@ export const buyables = [
   {
     id: 'exploreContinent',
     label: 'explore',
+    cost: { wood: 10 },
+  },
+  {
+    id: 'settleSystem',
+    label: 'settle system',
     cost: { wood: 10 },
   },
   {

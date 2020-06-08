@@ -21,7 +21,7 @@ export const Planet = () => {
   }
   return (
     <Box>
-      <a href={`#/`}>Back to System</a>
+      <a href={`#/system/${planet.system.id}`}>Back to System</a>
       <Box my={2}>
         <Totals label={`Planet: ${planet.label}`} totals={totals} />
       </Box>

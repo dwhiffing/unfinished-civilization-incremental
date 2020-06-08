@@ -7,6 +7,7 @@ import {
   getPlanetResourceTotals,
   getCityResourceTotals,
   getResourceTotals,
+  getSystemResourceTotals,
 } from '../selectors'
 import { updateResource } from '../actions'
 
@@ -59,7 +60,7 @@ const useGetIsAffordable = ({ buyable, ...ids }) => {
   })
 }
 
-const useGetTotals = ({ cityId, continentId, planetId }) =>
+const useGetTotals = ({ cityId, continentId, planetId, systemId }) =>
   useSelector((state) => {
     if (typeof cityId === 'number') {
       return getCityResourceTotals(+cityId)(state)
@@ -69,6 +70,9 @@ const useGetTotals = ({ cityId, continentId, planetId }) =>
     }
     if (typeof planetId === 'number') {
       return getPlanetResourceTotals(+planetId)(state)
+    }
+    if (typeof systemId === 'number') {
+      return getSystemResourceTotals(+systemId)(state)
     }
 
     return getResourceTotals(state)

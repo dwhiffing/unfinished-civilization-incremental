@@ -1,7 +1,13 @@
 import random from 'lodash/random'
 import times from 'lodash/times'
-import { resources, tasks, buildingTypes, buyables } from '../constants'
-import { createPlanet } from './createPlanet'
+import {
+  resources,
+  tasks,
+  buildingTypes,
+  buyables,
+  SYSTEM_COUNT_RANGE,
+} from '../constants'
+import { createSystem } from './createSystem'
 import { createCity } from './createCity'
 
 export const createInitial = (sess) => {
@@ -14,8 +20,8 @@ export const createInitial = (sess) => {
     sess.BuildingType.create({ ...buildingType }),
   )
 
-  if (sess.Planet.all().toRefArray().length === 0) {
-    times(random(6, 10), () => createPlanet(sess, {}))
+  if (sess.System.all().toRefArray().length === 0) {
+    times(random(...SYSTEM_COUNT_RANGE), () => createSystem(sess, {}))
     // create first city
     const plot = sess.Plot.all().toModelArray()[0]
     createCity(sess, { plotId: plot.id })

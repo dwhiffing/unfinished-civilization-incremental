@@ -1,6 +1,7 @@
 import sample from 'lodash/sample'
 export { CITIES } from './cities'
 export { PLANETS } from './planets'
+export { SYSTEMS } from './systems'
 export { CONTINENTS } from './continents'
 
 export const getUniqueName = (model, list) => {

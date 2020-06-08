@@ -2,7 +2,7 @@ import clamp from 'lodash/clamp'
 import { getFirstDeep } from '../selectors'
 export function updateResource(
   sess,
-  { resourceId, value, cityId, continentId, planetId },
+  { resourceId, value, cityId, continentId, planetId, systemId },
 ) {
   if (typeof cityId === 'number') {
     let resource = sess.ResourceStockpile.all()
@@ -28,6 +28,10 @@ export function updateResource(
       const cities = sess.City.all()
         .toModelArray()
         .filter((c) => {
+          if (systemId) {
+            const system = getFirstDeep(c, 'plot.continent.planet.system')
+            return system.id === +systemId
+          }
           if (planetId) {
             const planet = getFirstDeep(c, 'plot.continent.planet')
             return planet.id === +planetId
