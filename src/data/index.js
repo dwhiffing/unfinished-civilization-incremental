@@ -3,6 +3,10 @@ export { CITIES } from './cities'
 export { PLANETS } from './planets'
 export { SYSTEMS } from './systems'
 export { CONTINENTS } from './continents'
+export { buildingTypes } from './buildingTypes'
+export { tasks } from './tasks'
+export { buyables } from './buyables'
+export { resources } from './resources'
 
 export const getUniqueName = (model, list) => {
   const takenNames = model
@@ -11,3 +15,9 @@ export const getUniqueName = (model, list) => {
     .map((p) => p.label)
   return sample(list.filter((p) => !takenNames.includes(p)))
 }
+
+export const SYSTEM_COUNT_RANGE = [3, 3]
+export const PLANET_COUNT_RANGE = [2, 5]
+export const CONTINENT_COUNT_RANGE = [2, 4]
+export const PLOT_COUNT_RANGE = [2, 6]
+export const RESOURCE_MULTIPLIER = 50

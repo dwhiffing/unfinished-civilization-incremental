@@ -1,4 +1,4 @@
-import { RESOURCE_MULTIPLIER } from '../constants'
+import { RESOURCE_MULTIPLIER } from '../data'
 import { updateResource } from './updateResource'
 export const tickBuildings = (sess) => {
   sess.Building.all()

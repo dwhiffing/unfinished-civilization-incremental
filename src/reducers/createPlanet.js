@@ -1,8 +1,7 @@
 import random from 'lodash/random'
 import times from 'lodash/times'
 import { createContinent } from './createContinent'
-import { PLANETS, getUniqueName } from '../data'
-import { CONTINENT_COUNT_RANGE } from '../constants'
+import { PLANETS, getUniqueName, CONTINENT_COUNT_RANGE } from '../data'
 
 export const createPlanet = (sess, payload = {}) => {
   const { systemId, ...planet } = payload

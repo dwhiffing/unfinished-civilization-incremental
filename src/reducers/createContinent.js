@@ -2,7 +2,7 @@ import times from 'lodash/times'
 import random from 'lodash/random'
 import { CONTINENTS, getUniqueName } from '../data'
 import { createPlot } from './createPlot'
-import { PLOT_COUNT_RANGE } from '../constants'
+import { PLOT_COUNT_RANGE } from '../data'
 
 export const createContinent = (sess, payload = {}) => {
   const {

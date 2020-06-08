@@ -1,12 +1,7 @@
 import random from 'lodash/random'
 import times from 'lodash/times'
-import {
-  resources,
-  tasks,
-  buildingTypes,
-  buyables,
-  SYSTEM_COUNT_RANGE,
-} from '../constants'
+import { SYSTEM_COUNT_RANGE } from '../data'
+import { resources, tasks, buildingTypes, buyables } from '../data'
 import { createSystem } from './createSystem'
 import { createCity } from './createCity'
 
