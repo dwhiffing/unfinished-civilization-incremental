@@ -10,12 +10,13 @@ export const createContinent = (sess, payload = {}) => {
     label = getUniqueName(sess.Continent, CONTINENTS),
     ...continentOpts
   } = payload
+  const planet = sess.Planet.withId(planetId)
   const continent = sess.Continent.create({
     ...continentOpts,
     explored: false,
+    biomes: planet.type.biomes,
     label,
   })
-  const planet = sess.Planet.withId(planetId)
   planet.continents.add(continent)
   times(random(...PLOT_COUNT_RANGE), () =>
     createPlot(sess, { continentId: continent.id }),

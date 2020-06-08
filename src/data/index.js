@@ -1,6 +1,6 @@
 import sample from 'lodash/sample'
 export { CITIES } from './cities'
-export { PLANETS } from './planets'
+export { PLANETS, TYPES as PLANET_TYPES } from './planets'
 export { SYSTEMS } from './systems'
 export { CONTINENTS } from './continents'
 export { buildingTypes } from './buildingTypes'

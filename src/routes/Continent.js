@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Box } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { getContinents, getContinentResourceTotals } from '../selectors'
 import { Purchase } from '../components/Purchase'
 import { createCity, explore } from '../actions'
@@ -39,12 +39,14 @@ export const Continent = () => {
       {continent.plots
         .filter((p) => !p.city && p.explored)
         .map((plot) => (
-          <Purchase
-            key={`${plot.id}-explore`}
-            continentId={+id}
-            id="buyCity"
-            action={createCity({ plotId: plot.id })}
-          />
+          <Box key={`${plot.id}-explore`} display="flex" alignItems="center">
+            <Purchase
+              continentId={+id}
+              id="buyCity"
+              action={createCity({ plotId: plot.id })}
+            />
+            <Typography>{plot.biome}</Typography>
+          </Box>
         ))}
 
       {continent.plots.filter((p) => !p.city && !p.explored).length > 0 && (

@@ -12,11 +12,12 @@ export const Frame = ({ children, sidebar }) => (
   </Box>
 )
 
-export const Sidebar = ({ label, resources, linkText, uri }) => (
+export const Sidebar = ({ label, resources, linkText, uri, children }) => (
   <>
     {uri ? <a href={uri}>{linkText}</a> : <br />}
     <br />
     <span>{label}</span>
+    {children}
     <Resources resources={resources} />
   </>
 )

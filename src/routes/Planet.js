@@ -29,7 +29,9 @@ export const Planet = () => {
           linkText={`Back to ${planet.system.label}`}
           label={`Planet: ${planet.label}`}
           resources={resources}
-        />
+        >
+          <span>{planet.type.id}</span>
+        </Sidebar>
       }
     >
       <span>Continents:</span>

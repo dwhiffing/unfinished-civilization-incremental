@@ -24,7 +24,9 @@ export const City = () => {
           linkText={`Back to ${city.continent.label}`}
           label={`City: ${city.label}`}
           resources={city.resources}
-        />
+        >
+          <p>{city.plot.biome}</p>
+        </Sidebar>
       }
     >
       <People continentId={continentId} cityId={city.id} people={city.people} />

@@ -6,5 +6,5 @@ Task.fields = {
   // how long this task takes
   duration: attr(),
   // what resource change happens when this task is finished {id, value}
-  effect: attr(),
+  effects: attr(),
 }

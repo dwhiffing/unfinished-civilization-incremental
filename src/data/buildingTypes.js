@@ -2,10 +2,14 @@ export const buildingTypes = [
   {
     id: 'center',
     label: 'City Center',
-    tasks: [{ id: 'scavenge' }, { id: 'chop' }],
+    tasks: [{ id: 'scavenge' }],
   },
   { id: 'barracks', label: 'Encampment', tasks: [{ id: 'hunt' }] },
-  { id: 'industry', label: 'Industrial Zone', tasks: [{ id: 'mine' }] },
+  {
+    id: 'industry',
+    label: 'Industrial Zone',
+    tasks: [{ id: 'mine' }, { id: 'chop' }],
+  },
   { id: 'church', label: 'Holy Site', tasks: [{ id: 'pray' }] },
   { id: 'campus', label: 'Campus', tasks: [{ id: 'study' }] },
   { id: 'market', label: 'Commercial Hub', tasks: [{ id: 'trade' }] },

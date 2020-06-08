@@ -4,5 +4,6 @@ Continent.modelName = 'Continent'
 Continent.fields = {
   id: attr(),
   explored: attr(),
+  biomes: attr(),
   plots: many('Plot', 'continent'),
 }

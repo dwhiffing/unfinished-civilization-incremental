@@ -50,3 +50,14 @@ export const PLANETS = [
   'Chypso 75',
   'Lion 6S1Z',
 ]
+
+export const TYPES = [
+  { id: 'earthlike', biomes: ['forest', 'mountain', 'tundra', 'plain'] },
+]
+
+export const BIOMES = [
+  { id: 'forest' },
+  { id: 'mountain' },
+  { id: 'tundra' },
+  { id: 'plain' },
+]

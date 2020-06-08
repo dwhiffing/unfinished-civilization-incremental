@@ -138,6 +138,7 @@ const makeGetCity = (sess, city) => ({
       ? sess.Resource.withId(r.resourceId).ref.color
       : null,
   })),
+  plot: getFirst(city.plot).ref,
   continent: getFirst(getFirst(city.plot).continent).ref,
   buildings: city.buildings.toModelArray().map((building) => {
     const buildingType = sess.BuildingType.withId(building.buildingTypeId)

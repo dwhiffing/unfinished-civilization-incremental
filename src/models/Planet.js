@@ -3,5 +3,6 @@ export class Planet extends Model {}
 Planet.modelName = 'Planet'
 Planet.fields = {
   id: attr(),
+  type: attr(),
   continents: many('Continent', 'planet'),
 }
