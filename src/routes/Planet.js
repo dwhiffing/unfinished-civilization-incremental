@@ -9,23 +9,29 @@ import {
 import { explore, settle } from '../actions'
 import { Purchase } from '../components/Purchase'
 import { useParams } from 'react-router'
-import { Totals } from '../components/Totals'
+import { Frame, Sidebar } from '../components/Frame'
+import { Resources } from '../components/Resources'
 
 export const Planet = () => {
   const { id } = useParams()
   const planets = useSelector(getPlanets)
-  const totals = useSelector(getPlanetResourceTotals(+id))
+  const resources = useSelector(getPlanetResourceTotals(+id))
   const planet = planets.find((c) => `${c.id}` === id)
   if (!planet) {
     return null
   }
-  return (
-    <Box>
-      <a href={`#/system/${planet.system.id}`}>Back to System</a>
-      <Box my={2}>
-        <Totals label={`Planet: ${planet.label}`} totals={totals} />
-      </Box>
 
+  return (
+    <Frame
+      sidebar={
+        <Sidebar
+          uri={`#/system/${planet.system.id}`}
+          linkText={`Back to ${planet.system.label}`}
+          label={`Planet: ${planet.label}`}
+          resources={resources}
+        />
+      }
+    >
       <span>Continents:</span>
 
       <Box display="flex" flexDirection="column">
@@ -43,18 +49,18 @@ export const Planet = () => {
           action={explore({ planetId: planet.id })}
         />
       )}
-    </Box>
+    </Frame>
   )
 }
 
 const ContinentItem = ({ continent }) => {
-  const totals = useSelector(getContinentResourceTotals(continent.id))
+  const resources = useSelector(getContinentResourceTotals(continent.id))
   return (
     <Box my={1} display="flex" alignItems="center">
       <a href={`#/continent/${continent.id}`} style={{ marginRight: 8 }}>
         {continent.label}
       </a>
-      <Totals totals={totals} />
+      <Resources hide resources={resources} />
       {!continent.settled && (
         <Purchase
           id="settleContinent"

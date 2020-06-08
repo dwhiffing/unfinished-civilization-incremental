@@ -8,17 +8,14 @@ import {
 } from '../selectors'
 import { explore, settle } from '../actions'
 import { Purchase } from '../components/Purchase'
-import { Totals } from '../components/Totals'
+import { Frame, Sidebar } from '../components/Frame'
+import { Resources } from '../components/Resources'
 
 export const Galaxy = () => {
   const systems = useSelector(getSystems)
-  const totals = useSelector(getResourceTotals)
+  const resources = useSelector(getResourceTotals)
   return (
-    <Box>
-      <Box my={2}>
-        <Totals label={`Galaxy`} totals={totals} />
-      </Box>
-
+    <Frame sidebar={<Sidebar label="Galaxy" resources={resources} />}>
       <span>Systems:</span>
 
       <Box display="flex" flexDirection="column">
@@ -32,18 +29,18 @@ export const Galaxy = () => {
       {systems.filter((p) => !p.explored).length > 0 && (
         <Purchase id="exploreGalaxy" action={explore()} />
       )}
-    </Box>
+    </Frame>
   )
 }
 
 const SystemItem = ({ system }) => {
-  const totals = useSelector(getSystemResourceTotals(system.id))
+  const resources = useSelector(getSystemResourceTotals(system.id))
   return (
     <Box my={1} display="flex" alignItems="center">
       <a href={`#/system/${system.id}`} style={{ marginRight: 8 }}>
         {system.label}
       </a>
-      <Totals totals={totals} />
+      <Resources hide resources={resources} />
       {!system.settled && (
         <Purchase id="settleSystem" action={settle({ systemId: system.id })} />
       )}

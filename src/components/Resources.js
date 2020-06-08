@@ -13,10 +13,20 @@ export const ResourceText = ({ resource }) => (
   </>
 )
 
-export const Resources = ({ resources }) => {
+export const Resources = ({ hide, resources }) => {
+  if (hide) {
+    return null
+  }
+  let _resources = resources
+  if (!Array.isArray(resources)) {
+    _resources = Object.entries(resources).map(([k, v]) => ({
+      resourceId: k,
+      amount: v,
+    }))
+  }
   return (
     <Box className="flex flex-column" my={1}>
-      {resources.map((resource) => (
+      {_resources.map((resource) => (
         <Box
           key={resource.resourceId}
           display="flex"

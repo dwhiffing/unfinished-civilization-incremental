@@ -11,10 +11,6 @@ export const Buildings = ({ continentId, cityId, buildings }) => {
   const buildingTypes = useSelector(getBuildingTypes).filter(
     (b) => !buildings.map((b) => b.buildingTypeId).includes(b.id),
   )
-  // allBuildings.forEach(({ id }) => {
-  //   const _building = buildings.find((r) => r.buildingId === id) || {}
-  //   createBuilding(sess, { cityId, building: { buildingId: id, ..._building } })
-  // })
   return (
     <Box>
       {buildings.map((building) => (

@@ -2,28 +2,32 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
 import {
-  getPlanetResourceTotals,
   getSystems,
   getSystemResourceTotals,
+  getPlanetResourceTotals,
 } from '../selectors'
 import { explore, settle } from '../actions'
 import { Purchase } from '../components/Purchase'
-import { Totals } from '../components/Totals'
 import { useParams } from 'react-router'
+import { Sidebar, Frame } from '../components/Frame'
+import { Resources } from '../components/Resources'
 
 export const System = () => {
   const { id } = useParams()
   const systems = useSelector(getSystems)
   const system = systems.find((c) => `${c.id}` === id)
-  const totals = useSelector(getSystemResourceTotals(+id))
+  const resources = useSelector(getSystemResourceTotals(+id))
   return (
-    <Box>
-      <a href={`#/`}>Back to Galaxy</a>
-
-      <Box my={2}>
-        <Totals label={`System: ${system.label}`} totals={totals} />
-      </Box>
-
+    <Frame
+      sidebar={
+        <Sidebar
+          uri={`#/`}
+          linkText={`Back to Galaxy`}
+          label={`System: ${system.label}`}
+          resources={resources}
+        />
+      }
+    >
       <span>Planets:</span>
 
       <Box display="flex" flexDirection="column">
@@ -41,18 +45,18 @@ export const System = () => {
           action={explore({ systemId: system.id })}
         />
       )}
-    </Box>
+    </Frame>
   )
 }
 
 const PlanetItem = ({ planet }) => {
-  const totals = useSelector(getPlanetResourceTotals(planet.id))
+  const resources = useSelector(getPlanetResourceTotals(planet.id))
   return (
     <Box my={1} display="flex" alignItems="center">
       <a href={`#/planet/${planet.id}`} style={{ marginRight: 8 }}>
         {planet.label}
       </a>
-      <Totals totals={totals} />
+      <Resources hide resources={resources} />
       {!planet.settled && (
         <Purchase
           systemId={planet.system.id}

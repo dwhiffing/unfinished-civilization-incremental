@@ -1,11 +1,10 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Box } from '@material-ui/core'
-import { Resources } from '../components/Resources'
 import { Buildings } from '../components/Buildings'
 import { People } from '../components/People'
 import { getCities } from '../selectors'
 import { useParams } from 'react-router'
+import { Sidebar, Frame } from '../components/Frame'
 // TODO: Add actions to allow citizens to all be assigned/deassigned
 
 export const City = () => {
@@ -18,27 +17,23 @@ export const City = () => {
   const continentId = city.continent.id
 
   return (
-    <Box display="flex" flexDirection="row" minHeight="100vh">
-      <Box display="flex" flexDirection="column" flex={1} p={1}>
-        <a href={`#/continent/${continentId}`}>
-          Back to {city.continent.label}
-        </a>
-        <br />
-        <span>{city.label}</span>
-        <Resources continentId={continentId} resources={city.resources} />
-        <People
-          continentId={continentId}
-          cityId={city.id}
-          people={city.people}
+    <Frame
+      sidebar={
+        <Sidebar
+          uri={`#/continent/${continentId}`}
+          linkText={`Back to ${city.continent.label}`}
+          label={`City: ${city.label}`}
+          resources={city.resources}
         />
-      </Box>
-      <Box flex={3} p={1}>
-        <Buildings
-          continentId={continentId}
-          cityId={city.id}
-          buildings={city.buildings}
-        />
-      </Box>
-    </Box>
+      }
+    >
+      <People continentId={continentId} cityId={city.id} people={city.people} />
+
+      <Buildings
+        continentId={continentId}
+        cityId={city.id}
+        buildings={city.buildings}
+      />
+    </Frame>
   )
 }

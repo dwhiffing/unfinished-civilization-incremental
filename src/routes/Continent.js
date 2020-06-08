@@ -5,28 +5,29 @@ import { getContinents, getContinentResourceTotals } from '../selectors'
 import { Purchase } from '../components/Purchase'
 import { createCity, explore } from '../actions'
 import { useParams } from 'react-router'
-import { ResourceText } from '../components/Resources'
-import { Totals } from '../components/Totals'
+import { Sidebar, Frame } from '../components/Frame'
+import { Resources } from '../components/Resources'
 
 export const Continent = () => {
   const { id } = useParams()
   const continent = useSelector(getContinents).find((c) => `${c.id}` === id)
-  const totals = useSelector(getContinentResourceTotals(+id))
+  const resources = useSelector(getContinentResourceTotals(+id))
 
   if (!continent) {
     return null
   }
 
   return (
-    <Box>
-      <a href={`#/planet/${continent.planet.id}`}>
-        Back to {continent.planet.label}
-      </a>
-
-      <Box my={2}>
-        <Totals label={`Continent: ${continent.label}`} totals={totals} />
-      </Box>
-
+    <Frame
+      sidebar={
+        <Sidebar
+          uri={`#/planet/${continent.planet.id}`}
+          linkText={`Back to ${continent.planet.label}`}
+          label={`Continent: ${continent.label}`}
+          resources={resources}
+        />
+      }
+    >
       <span>Cities:</span>
 
       <Box display="flex" flexDirection="column">
@@ -37,16 +38,14 @@ export const Continent = () => {
 
       {continent.plots
         .filter((p) => !p.city && p.explored)
-        .map((plot) => {
-          return (
-            <Purchase
-              key={`${plot.id}-explore`}
-              continentId={+id}
-              id="buyCity"
-              action={createCity({ plotId: plot.id })}
-            />
-          )
-        })}
+        .map((plot) => (
+          <Purchase
+            key={`${plot.id}-explore`}
+            continentId={+id}
+            id="buyCity"
+            action={createCity({ plotId: plot.id })}
+          />
+        ))}
 
       {continent.plots.filter((p) => !p.city && !p.explored).length > 0 && (
         <Purchase
@@ -55,7 +54,7 @@ export const Continent = () => {
           action={explore({ continentId: continent.id })}
         />
       )}
-    </Box>
+    </Frame>
   )
 }
 
@@ -69,10 +68,6 @@ const CityItem = ({ city }) => (
     >
       {city.label}
     </a>
-    <Box display="flex">
-      {city.resources.map((r, i) => (
-        <ResourceText key={i} resource={r} />
-      ))}
-    </Box>
+    <Resources hide resources={city.resources} />
   </Box>
 )

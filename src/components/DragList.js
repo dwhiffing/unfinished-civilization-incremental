@@ -9,7 +9,8 @@ export const DragList = ({ items, ...props }) => (
         style={{
           background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey',
           padding: 8,
-          width: 60,
+          minWidth: 60,
+          display: 'flex',
           minHeight: 55,
         }}
       >
@@ -31,7 +32,7 @@ const Items = React.memo(({ items }) =>
           style={{
             userSelect: 'none',
             padding: 8,
-            marginTop: index > 0 ? 8 : 0,
+            marginRight: 8,
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
