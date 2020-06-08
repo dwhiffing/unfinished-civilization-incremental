@@ -132,7 +132,12 @@ const makeGetContinent = (session, continent) => ({
 const makeGetCity = (sess, city) => ({
   ...city.ref,
   people: city.people.toRefArray(),
-  resources: city.resources.toRefArray(),
+  resources: city.resources.toModelArray().map((r) => ({
+    ...r.ref,
+    color: sess.Resource.withId(r.resourceId)
+      ? sess.Resource.withId(r.resourceId).ref.color
+      : null,
+  })),
   continent: getFirst(getFirst(city.plot).continent).ref,
   buildings: city.buildings.toModelArray().map((building) => {
     const buildingType = sess.BuildingType.withId(building.buildingTypeId)
