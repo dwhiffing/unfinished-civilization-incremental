@@ -9,7 +9,7 @@ export const createBuilding = (sess, { cityId, building }) => {
   buildingType.tasks.forEach((task) => {
     let i = building.seatCount || 1
     while (i-- > 0) {
-      createSeat(sess, { buildingId: buildingInstance.id, task })
+      createSeat(sess, { buildingId: buildingInstance.id, taskId: task.id })
     }
   })
   city.buildings.add(buildingInstance)

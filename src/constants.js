@@ -58,8 +58,7 @@ export const buyables = [
 ]
 
 export const buildingTypes = [
-  { id: 'camp', tasks: [{ id: 'scavenge' }] },
-  { id: 'lumbermill', tasks: [{ id: 'chop' }] },
+  { id: 'center', tasks: [{ id: 'scavenge' }, { id: 'chop' }] },
 ]
 export const tasks = [
   { id: 'chop', duration: 1, effect: { id: 'wood', value: 1 } },

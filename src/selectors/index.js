@@ -135,7 +135,9 @@ const makeGetCity = (sess, city) => ({
     label: building.buildingId,
     seats: building.seats.toRefArray().map((seat) => ({
       ...seat,
-      task: sess.Task.withId(seat.taskId),
+      task: sess.Task.withId(seat.taskId)
+        ? sess.Task.withId(seat.taskId).ref
+        : null,
       building: { ...building.ref, cityId: city.id },
       person: seat.person ? { ...seat.person._fields } : null,
     })),
