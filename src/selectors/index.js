@@ -58,6 +58,10 @@ export const getBuyables = createSelector(orm, (session) =>
   session.Buyable.all().toRefArray(),
 )
 
+export const getBuildingTypes = createSelector(orm, (session) =>
+  session.BuildingType.all().toModelArray(),
+)
+
 export const getSystemResourceTotals = (systemId) =>
   createSelector(orm, (session) =>
     totalResources(
@@ -130,18 +134,21 @@ const makeGetCity = (sess, city) => ({
   people: city.people.toRefArray(),
   resources: city.resources.toRefArray(),
   continent: getFirst(getFirst(city.plot).continent).ref,
-  buildings: city.buildings.toModelArray().map((building) => ({
-    ...building.ref,
-    label: building.buildingId,
-    seats: building.seats.toRefArray().map((seat) => ({
-      ...seat,
-      task: sess.Task.withId(seat.taskId)
-        ? sess.Task.withId(seat.taskId).ref
-        : null,
-      building: { ...building.ref, cityId: city.id },
-      person: seat.person ? { ...seat.person._fields } : null,
-    })),
-  })),
+  buildings: city.buildings.toModelArray().map((building) => {
+    const buildingType = sess.BuildingType.withId(building.buildingTypeId)
+    return {
+      ...building.ref,
+      label: buildingType ? buildingType.label : null,
+      seats: building.seats.toRefArray().map((seat) => ({
+        ...seat,
+        task: sess.Task.withId(seat.taskId)
+          ? sess.Task.withId(seat.taskId).ref
+          : null,
+        building: { ...building.ref, cityId: city.id },
+        person: seat.person ? { ...seat.person._fields } : null,
+      })),
+    }
+  }),
 })
 
 const makeGetPlanet = (session, planet) => {

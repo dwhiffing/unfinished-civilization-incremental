@@ -2,37 +2,80 @@ import React from 'react'
 import { Typography, Box } from '@material-ui/core'
 import { Seat } from './Seat'
 import { Purchase } from './Purchase'
-import { createSeat } from '../actions'
+import { createSeat, createBuilding } from '../actions'
 import groupBy from 'lodash/groupBy'
+import { useSelector } from 'react-redux'
+import { getBuildingTypes } from '../selectors'
 
-export const Buildings = ({ continentId, cityId, buildings }) =>
-  buildings.map((building) => (
-    <Box mb={3} key={`building-${building.id}`}>
-      <Typography>{building.label}</Typography>
-
-      <Box>
-        <Box>
-          {Object.entries(
-            groupBy(
-              building.seats.filter((s) => !!s.task),
-              (seat) => seat.task.id,
-            ),
-          ).map(([key, value], index) => {
-            return (
-              <Box key={key} display="flex">
-                {value.map((seat) => (
-                  <Seat key={`task${seat.id}`} index={index} seat={seat} />
-                ))}
-                <Purchase
-                  continentId={+continentId}
-                  id="buySeat"
-                  cityId={+cityId}
-                  action={createSeat({ buildingId: building.id, taskId: key })}
-                />
-              </Box>
-            )
-          })}
-        </Box>
-      </Box>
+export const Buildings = ({ continentId, cityId, buildings }) => {
+  const buildingTypes = useSelector(getBuildingTypes).filter(
+    (b) => !buildings.map((b) => b.buildingTypeId).includes(b.id),
+  )
+  // allBuildings.forEach(({ id }) => {
+  //   const _building = buildings.find((r) => r.buildingId === id) || {}
+  //   createBuilding(sess, { cityId, building: { buildingId: id, ..._building } })
+  // })
+  return (
+    <Box>
+      {buildings.map((building) => (
+        <BuildingItem
+          key={`building-${building.id}`}
+          building={building}
+          continentId={continentId}
+          cityId={cityId}
+        />
+      ))}
+      {buildingTypes.map((buildingType) => (
+        <Purchase
+          key={buildingType.id}
+          id="createBuilding"
+          label={`buy ${buildingType.label}`}
+          cityId={+cityId}
+          action={createBuilding({ cityId, buildingTypeId: buildingType.id })}
+        />
+      ))}
     </Box>
-  ))
+  )
+}
+
+const BuildingItem = (props) => {
+  const taskGroups = groupBy(
+    props.building.seats.filter((s) => !!s.task),
+    (seat) => seat.task.id,
+  )
+  return (
+    <Box mb={3}>
+      <Typography>{props.building.label}</Typography>
+
+      {Object.entries(taskGroups).map(([taskId, seats], index) => (
+        <BuildingTaskGroupItem
+          key={taskId}
+          taskId={taskId}
+          seats={seats}
+          index={index}
+          id={props.building.id}
+          continentId={props.continentId}
+          cityId={props.cityId}
+        />
+      ))}
+    </Box>
+  )
+}
+
+const BuildingTaskGroupItem = (props) => (
+  <Box display="flex">
+    {props.seats.map((seat) => (
+      <Seat key={`task${seat.id}`} index={props.index} seat={seat} />
+    ))}
+
+    <Purchase
+      continentId={+props.continentId}
+      id="buySeat"
+      cityId={+props.cityId}
+      action={createSeat({
+        buildingId: props.id,
+        taskId: props.taskId,
+      })}
+    />
+  </Box>
+)

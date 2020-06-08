@@ -11,7 +11,7 @@ import {
 } from '../selectors'
 import { updateResource } from '../actions'
 
-export const Purchase = ({ id, action, disabled, ...ids }) => {
+export const Purchase = ({ id, label, action, disabled, ...ids }) => {
   const dispatch = useDispatch()
   const buyables = useSelector(getBuyables)
   const buyable = buyables.find((b) => b.id === id)
@@ -39,7 +39,7 @@ export const Purchase = ({ id, action, disabled, ...ids }) => {
       onClick={attemptPurchase}
       style={{ display: 'block', opacity: !disabled && isAffordable ? 1 : 0.5 }}
     >
-      {buyable.label} ({cost})
+      {label || buyable.label} ({cost})
     </Button>
   )
 }
