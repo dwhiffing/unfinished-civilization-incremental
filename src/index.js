@@ -42,7 +42,7 @@ const App = () => {
         }
       >
         <Routes />
-        <Box position="absolute" bottom={0} right={0}>
+        <Box position="fixed" bottom={0} right={0}>
           <Button
             onClick={() => {
               persistor.purge()
