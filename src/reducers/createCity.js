@@ -13,7 +13,7 @@ export const createCity = (sess, payload) => {
 
   const plot = sess.Plot.withId(plotId)
   const allResources = sess.Resource.all().toModelArray()
-  const cityInstance = sess.City.create({ label })
+  const cityInstance = sess.City.create({ label, housing: 5 })
   const cityId = cityInstance.ref.id
 
   allResources.forEach(({ id }) => {

@@ -18,7 +18,7 @@ if (process.env.NODE_ENV === 'development') {
   whyDidYouRender(React)
 }
 
-export const INTERVAL = 1000
+export const INTERVAL = 500
 
 const App = () => {
   const dispatch = useDispatch()

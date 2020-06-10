@@ -7,4 +7,5 @@ export const resources = [
   { id: 'gold', color: '#f1ba1a' },
   { id: 'science', color: '#090eb5' },
   { id: 'culture', color: '#ab16c5' },
+  { id: 'growth', color: '#000000' },
 ]

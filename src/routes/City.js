@@ -28,7 +28,10 @@ export const City = () => {
           label={`City: ${city.label}`}
           resources={city.resources}
         >
-          <p>{city.plot.biome}</p>
+          <span>biome: {city.plot.biome}</span>
+          <span>
+            housing: {city.people.length}/{city.housing}
+          </span>
         </Sidebar>
       }
     >

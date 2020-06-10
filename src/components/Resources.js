@@ -3,19 +3,20 @@ import numeral from 'numeral'
 import { Box, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { getUnlocks } from '../selectors'
+import ReactTooltip from 'react-tooltip'
 
 // TODO: needs to get color properly
 export const ResourceText = ({ resource }) => (
-  <>
+  <Box data-tip={resource.resourceId} display="flex">
     <Box>
       <Typography style={{ color: resource.color, fontWeight: 'bold' }}>
         {resource.resourceId}:
       </Typography>
     </Box>
     <Box ml={1} display="flex" flexDirection="row" alignItems="center">
-      <Typography>{numeral(resource.amount).format('0,0')}</Typography>
+      <Typography>{numeral(resource.amount).format('0,0.0')}</Typography>
     </Box>
-  </>
+  </Box>
 )
 
 export const Resources = ({ hide, resources }) => {
@@ -41,6 +42,7 @@ export const Resources = ({ hide, resources }) => {
             <ResourceText resource={resource} />
           </Box>
         ))}
+      <ReactTooltip></ReactTooltip>
     </Box>
   )
 }

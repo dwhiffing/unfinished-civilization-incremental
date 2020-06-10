@@ -4,6 +4,7 @@ import { SYSTEM_COUNT_RANGE } from '../data'
 import { resources, tasks, buildingTypes, buyables } from '../data'
 import { createSystem } from './createSystem'
 import { createCity } from './createCity'
+import { updateResource } from './updateResource'
 import { unlock } from './unlock'
 
 export const createInitial = (sess) => {
@@ -22,6 +23,7 @@ export const createInitial = (sess) => {
     const plot = sess.Plot.all().toModelArray()[0]
     createCity(sess, { plotId: plot.id })
     unlock(sess, 'center')
+    updateResource(sess, { resourceId: 'food', cityId: 0, value: 100 })
 
     // Unlock all
     // UNLOCKS.forEach((id) => unlock(sess, id))
