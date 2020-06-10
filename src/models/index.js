@@ -12,6 +12,7 @@ import { Person } from './Person'
 import { Plot } from './Plot'
 import { Planet } from './Planet'
 import { System } from './System'
+import { Unlock } from './Unlock'
 
 const orm = new ORM({ stateSelector: (state) => state.root })
 orm.register(
@@ -21,6 +22,7 @@ orm.register(
   Person,
   Planet,
   System,
+  Unlock,
   Plot,
   Seat,
   BuildingType,

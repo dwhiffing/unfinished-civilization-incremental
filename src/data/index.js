@@ -21,3 +21,33 @@ export const PLANET_COUNT_RANGE = [2, 5]
 export const CONTINENT_COUNT_RANGE = [2, 4]
 export const PLOT_COUNT_RANGE = [2, 6]
 export const RESOURCE_MULTIPLIER = 50
+
+export const UNLOCKS = [
+  'food',
+  'wood',
+  'fur',
+  'stone',
+  'faith',
+  'gold',
+  'science',
+  'culture',
+  'center',
+  'scavenge',
+  'barracks',
+  'hunt',
+  'industry',
+  'mine',
+  'chop',
+  'church',
+  'pray',
+  'campus',
+  'study',
+  'market',
+  'trade',
+  'theatre',
+  'perform',
+  'galaxy',
+  'system',
+  'planet',
+  'continent',
+]

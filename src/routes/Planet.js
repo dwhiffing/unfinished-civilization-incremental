@@ -5,6 +5,7 @@ import {
   getPlanets,
   getPlanetResourceTotals,
   getContinentResourceTotals,
+  getUnlocks,
 } from '../selectors'
 import { explore, settle } from '../actions'
 import { Purchase } from '../components/Purchase'
@@ -13,9 +14,10 @@ import { Frame, Sidebar } from '../components/Frame'
 import { Resources } from '../components/Resources'
 
 export const Planet = () => {
-  const { id } = useParams()
+  const { id = '0' } = useParams()
   const planets = useSelector(getPlanets)
   const resources = useSelector(getPlanetResourceTotals(+id))
+  const unlocks = useSelector(getUnlocks)
   const planet = planets.find((c) => `${c.id}` === id)
   if (!planet) {
     return null
@@ -25,8 +27,10 @@ export const Planet = () => {
     <Frame
       sidebar={
         <Sidebar
-          uri={`#/system/${planet.system.id}`}
-          linkText={`Back to ${planet.system.label}`}
+          uri={unlocks.includes('system') && `#/system/${planet.system.id}`}
+          linkText={
+            unlocks.includes('system') && `Back to ${planet.system.label}`
+          }
           label={`Planet: ${planet.label}`}
           resources={resources}
         >

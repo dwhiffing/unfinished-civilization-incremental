@@ -1,7 +1,11 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box, Typography } from '@material-ui/core'
-import { getContinents, getContinentResourceTotals } from '../selectors'
+import {
+  getContinents,
+  getContinentResourceTotals,
+  getUnlocks,
+} from '../selectors'
 import { Purchase } from '../components/Purchase'
 import { createCity, explore } from '../actions'
 import { useParams } from 'react-router'
@@ -9,9 +13,10 @@ import { Sidebar, Frame } from '../components/Frame'
 import { Resources } from '../components/Resources'
 
 export const Continent = () => {
-  const { id } = useParams()
+  const { id = '0' } = useParams()
   const continent = useSelector(getContinents).find((c) => `${c.id}` === id)
   const resources = useSelector(getContinentResourceTotals(+id))
+  const unlocks = useSelector(getUnlocks)
 
   if (!continent) {
     return null
@@ -21,8 +26,10 @@ export const Continent = () => {
     <Frame
       sidebar={
         <Sidebar
-          uri={`#/planet/${continent.planet.id}`}
-          linkText={`Back to ${continent.planet.label}`}
+          uri={unlocks.includes('planet') && `#/planet/${continent.planet.id}`}
+          linkText={
+            unlocks.includes('planet') && `Back to ${continent.planet.label}`
+          }
           label={`Continent: ${continent.label}`}
           resources={resources}
         />

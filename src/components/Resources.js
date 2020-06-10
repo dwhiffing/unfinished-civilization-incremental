@@ -1,6 +1,8 @@
 import React from 'react'
 import numeral from 'numeral'
 import { Box, Typography } from '@material-ui/core'
+import { useSelector } from 'react-redux'
+import { getUnlocks } from '../selectors'
 
 // TODO: needs to get color properly
 export const ResourceText = ({ resource }) => (
@@ -17,9 +19,12 @@ export const ResourceText = ({ resource }) => (
 )
 
 export const Resources = ({ hide, resources }) => {
+  const unlocks = useSelector(getUnlocks)
+
   if (hide) {
     return null
   }
+
   let _resources = resources
   if (!Array.isArray(resources)) {
     _resources = Object.entries(resources).map(([k, v]) => ({
@@ -29,11 +34,13 @@ export const Resources = ({ hide, resources }) => {
   }
   return (
     <Box className="flex flex-column" my={1}>
-      {_resources.map((resource) => (
-        <Box key={resource.resourceId} display="flex" flexDirection="row">
-          <ResourceText resource={resource} />
-        </Box>
-      ))}
+      {_resources
+        .filter((r) => unlocks.includes(r.resourceId))
+        .map((resource) => (
+          <Box key={resource.resourceId} display="flex" flexDirection="row">
+            <ResourceText resource={resource} />
+          </Box>
+        ))}
     </Box>
   )
 }

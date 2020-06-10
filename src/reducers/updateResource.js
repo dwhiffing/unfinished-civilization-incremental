@@ -1,5 +1,6 @@
 import clamp from 'lodash/clamp'
 import { getFirstDeep } from '../selectors'
+import { unlock } from './unlock'
 export function updateResource(
   sess,
   { resourceId, value, cityId, continentId, planetId, systemId },
@@ -17,6 +18,7 @@ export function updateResource(
         )
       })
     if (resource && resource.ref.amount + value >= 0) {
+      unlock(sess, resource.resourceId)
       resource.update({
         amount: resource.ref.amount + value,
       })
@@ -54,6 +56,7 @@ export function updateResource(
       const resource = validResources[0]
       if (resource) {
         let amt = resource.ref.amount
+        unlock(sess, resource.resourceId)
         resource.update({
           amount:
             resource.ref.amount -

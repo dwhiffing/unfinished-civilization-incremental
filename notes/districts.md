@@ -1,33 +1,44 @@
 ### Districts
 
+- A city can have 4 districts + a City center
 - City Center
   - Buildings: Farm/Granary/Monument/Water Mill/Walls Sewer
   - Resources: Food
+  - holds people to be dragged into other buildings
+  - Counts as small housing district
+  - Select government style/civics
+- Neighbourhood
+  - Buildings: House/Villa/Apartment
+  - Resources: population/happiness
+  - holds people to be dragged into other buildings
+  - Housing
 - Holy Site
   - Buildings: Shrine/Temple
   - Resources: faith
   - Religion
+  - Pick god to worship, gain faith which is used to cast spells based on god
 - Campus
   - Buildings: Library/University/Research Lab
   - Resources: science
   - Science
+  - Manage scientific development
 - Theatre Square
   - Buildings: Amphitheatre/Gallary/Broadcast Center
   - Resources: Culture
   - Culture
+  - Manage cultural development
 - Industrial Zone
   - Buildings: Lumber Mill/Workshop/Factory/Power plant
   - Resources: Wood, stone, iron, oil, steel,coal
+  - crafting interface: turn resources into more complicated resources, ui similar to factorio factories
   - Production
-- Neighbourhood
-  - Buildings: House/Villa/Apartment
-  - Resources: population/happiness
-  - Housing
 - Commercial Hub
   - Buildings: Market/Bank/Stock Exchange
   - Resources: gold/everything
+  - Trading interface: Stock exchange style, buy low sell high
   - Commerce/Trade
 - Encampment
   - Buildings: Barracks or Stable Armory Military Academy
   - Resources:
+  - war interface: scout opponent, select unit composition, select tactics
   - Military

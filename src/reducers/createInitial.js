@@ -4,6 +4,7 @@ import { SYSTEM_COUNT_RANGE } from '../data'
 import { resources, tasks, buildingTypes, buyables } from '../data'
 import { createSystem } from './createSystem'
 import { createCity } from './createCity'
+import { unlock } from './unlock'
 
 export const createInitial = (sess) => {
   buyables.forEach((buyable) => sess.Buyable.create({ ...buyable }))
@@ -20,6 +21,10 @@ export const createInitial = (sess) => {
     // create first city
     const plot = sess.Plot.all().toModelArray()[0]
     createCity(sess, { plotId: plot.id })
+    unlock(sess, 'center')
+
+    // Unlock all
+    // UNLOCKS.forEach((id) => unlock(sess, id))
   }
 
   return sess.state

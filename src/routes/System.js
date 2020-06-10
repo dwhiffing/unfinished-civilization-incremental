@@ -5,6 +5,7 @@ import {
   getSystems,
   getSystemResourceTotals,
   getPlanetResourceTotals,
+  getUnlocks,
 } from '../selectors'
 import { explore, settle } from '../actions'
 import { Purchase } from '../components/Purchase'
@@ -13,16 +14,17 @@ import { Sidebar, Frame } from '../components/Frame'
 import { Resources } from '../components/Resources'
 
 export const System = () => {
-  const { id } = useParams()
+  const { id = '0' } = useParams()
   const systems = useSelector(getSystems)
   const system = systems.find((c) => `${c.id}` === id)
   const resources = useSelector(getSystemResourceTotals(+id))
+  const unlocks = useSelector(getUnlocks)
   return (
     <Frame
       sidebar={
         <Sidebar
-          uri={`#/`}
-          linkText={`Back to Galaxy`}
+          uri={unlocks.includes('galaxy') && `#/`}
+          linkText={unlocks.includes('galaxy') && `Back to Galaxy`}
           label={`System: ${system.label}`}
           resources={resources}
         />

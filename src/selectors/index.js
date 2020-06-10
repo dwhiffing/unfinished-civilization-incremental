@@ -26,6 +26,10 @@ export const getFirstDeep = (thing, path) => {
   return resolved
 }
 
+export const getUnlocks = createSelector(orm, (session) =>
+  getList(session.Unlock).map((unlock) => unlock.ref.id),
+)
+
 export const getSystems = createSelector(orm, (session) =>
   getList(session.System).map((system) => {
     const planets = system.planets

@@ -5,31 +5,36 @@ import { Purchase } from './Purchase'
 import { createSeat, createBuilding } from '../actions'
 import groupBy from 'lodash/groupBy'
 import { useSelector } from 'react-redux'
-import { getBuildingTypes } from '../selectors'
+import { getBuildingTypes, getUnlocks } from '../selectors'
 
 export const Buildings = ({ continentId, cityId, buildings }) => {
+  const unlocks = useSelector(getUnlocks)
   const buildingTypes = useSelector(getBuildingTypes).filter(
     (b) => !buildings.map((b) => b.buildingTypeId).includes(b.id),
   )
   return (
     <Box>
-      {buildings.map((building) => (
-        <BuildingItem
-          key={`building-${building.id}`}
-          building={building}
-          continentId={continentId}
-          cityId={cityId}
-        />
-      ))}
-      {buildingTypes.map((buildingType) => (
-        <Purchase
-          key={buildingType.id}
-          id="createBuilding"
-          label={`buy ${buildingType.label}`}
-          cityId={+cityId}
-          action={createBuilding({ cityId, buildingTypeId: buildingType.id })}
-        />
-      ))}
+      {buildings
+        .filter((b) => unlocks.includes(b.buildingTypeId))
+        .map((building) => (
+          <BuildingItem
+            key={`building-${building.id}`}
+            building={building}
+            continentId={continentId}
+            cityId={cityId}
+          />
+        ))}
+      {buildingTypes
+        .filter((b) => unlocks.includes(b.buildingTypeId))
+        .map((buildingType) => (
+          <Purchase
+            key={buildingType.id}
+            id="createBuilding"
+            label={`buy ${buildingType.label}`}
+            cityId={+cityId}
+            action={createBuilding({ cityId, buildingTypeId: buildingType.id })}
+          />
+        ))}
     </Box>
   )
 }
