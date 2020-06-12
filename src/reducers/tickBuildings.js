@@ -6,43 +6,18 @@ import { createPerson } from './createPerson'
 export const tickBuildings = (sess) => {
   let updates = []
 
-  sess.Building.all()
-    .toModelArray()
-    .forEach((building) => {
-      const seats = building.seats.all().toModelArray()
-      seats.forEach((seatModel) => {
-        const seat = seatModel.ref
-        const { effects, duration } = sess.Task.withId(seat.taskId).ref
-        const cityId = building.city.all().toRefArray()[0].id
-        if (seat.progress >= duration) {
-          effects.forEach((effect) => {
-            const resourceId = effect.id
-            let value = effect.value
-            if (typeof value === 'function') {
-              value = value()
-            }
-            value = value * RESOURCE_MULTIPLIER
-            updates.push({ resourceId, value, cityId })
-          })
-          return seatModel.update({ progress: 0 })
-        }
-        seatModel.update({
-          progress: seat.person ? seat.progress + 1 : seat.progress,
-        })
-      })
-    })
+  tickSeats(sess, updates)
 
-  //TODO: this should reduce to array of cities being updated
-  sess.Person.all()
-    .toModelArray()
-    .forEach(({ city }) => {
-      updates.push({
-        resourceId: 'food',
-        cityId: getFirst(city).id,
-        value: -FOOD_DRAIN,
-      })
-    })
+  tickPeople(sess, updates)
 
+  tickCities(sess, updates)
+
+  updates.forEach((update) => updateResource(sess, update))
+
+  return sess.state
+}
+
+function tickCities(sess, updates) {
   sess.City.all()
     .toModelArray()
     .forEach((city) => {
@@ -67,8 +42,44 @@ export const tickBuildings = (sess) => {
         }
       }
     })
+}
 
-  updates.forEach((update) => updateResource(sess, update))
+function tickPeople(sess, updates) {
+  //TODO: this should reduce to array of cities being updated
 
-  return sess.state
+  sess.Person.all()
+    .toModelArray()
+    .forEach(({ city }) => {
+      updates.push({
+        resourceId: 'food',
+        cityId: getFirst(city).id,
+        value: -FOOD_DRAIN,
+      })
+    })
+}
+
+function tickSeats(sess, updates) {
+  sess.Seat.all()
+    .toModelArray()
+    .forEach((seatModel) => {
+      const seat = seatModel.ref
+      const building = getFirst(seatModel.buildings)
+      const { effects, duration } = sess.Task.withId(seat.taskId).ref
+      const cityId = building.city.all().toRefArray()[0].id
+      if (seat.progress >= duration) {
+        effects.forEach((effect) => {
+          const resourceId = effect.id
+          let value = effect.value
+          if (typeof value === 'function') {
+            value = value()
+          }
+          value = value * RESOURCE_MULTIPLIER
+          updates.push({ resourceId, value, cityId })
+        })
+        return seatModel.update({ progress: 0 })
+      }
+      seatModel.update({
+        progress: seat.person ? seat.progress + 1 : seat.progress,
+      })
+    })
 }

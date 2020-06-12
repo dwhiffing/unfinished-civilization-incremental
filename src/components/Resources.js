@@ -4,20 +4,26 @@ import { Box, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { getUnlocks } from '../selectors'
 import ReactTooltip from 'react-tooltip'
+import clamp from 'lodash/clamp'
 
 // TODO: needs to get color properly
-export const ResourceText = ({ resource }) => (
-  <Box data-tip={resource.resourceId} display="flex">
-    <Box>
-      <Typography style={{ color: resource.color, fontWeight: 'bold' }}>
-        {resource.resourceId}:
-      </Typography>
+export const ResourceText = ({ resource }) => {
+  const limit = resource.limit || 100
+  return (
+    <Box data-tip={resource.resourceId} display="flex">
+      <Box>
+        <Typography style={{ color: resource.color, fontWeight: 'bold' }}>
+          {resource.resourceId}:
+        </Typography>
+      </Box>
+      <Box ml={1} display="flex" flexDirection="row" alignItems="center">
+        <Typography>
+          {numeral(clamp(resource.amount, limit)).format('0,0.0')}/{limit}
+        </Typography>
+      </Box>
     </Box>
-    <Box ml={1} display="flex" flexDirection="row" alignItems="center">
-      <Typography>{numeral(resource.amount).format('0,0.0')}</Typography>
-    </Box>
-  </Box>
-)
+  )
+}
 
 export const Resources = ({ hide, resources }) => {
   const unlocks = useSelector(getUnlocks)
