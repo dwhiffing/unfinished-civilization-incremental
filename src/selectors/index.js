@@ -32,10 +32,9 @@ export const getUnlocks = createSelector(orm, (session) =>
 
 export const getSystems = createSelector(orm, (session) =>
   getList(session.System).map((system) => {
-    const planets = system.planets
-      .all()
-      .toModelArray()
-      .map((planet) => makeGetPlanet(session, planet))
+    const planets = getList(system.planets).map((planet) =>
+      makeGetPlanet(session, planet),
+    )
     return {
       ...system.ref,
       settled: planets.some((p) => p.settled),
@@ -63,7 +62,7 @@ export const getBuyables = createSelector(orm, (session) =>
 )
 
 export const getBuildingTypes = createSelector(orm, (session) =>
-  session.BuildingType.all().toModelArray(),
+  getList(session.BuildingType),
 )
 
 export const getSystemResourceTotals = (systemId) =>
@@ -136,7 +135,7 @@ const makeGetContinent = (session, continent) => ({
 const makeGetCity = (sess, city) => ({
   ...city.ref,
   people: city.people.toRefArray(),
-  resources: city.resources.toModelArray().map((r) => ({
+  resources: getList(city.resources).map((r) => ({
     ...r.ref,
     color: sess.Resource.withId(r.resourceId)
       ? sess.Resource.withId(r.resourceId).ref.color
@@ -144,7 +143,7 @@ const makeGetCity = (sess, city) => ({
   })),
   plot: getFirst(city.plot).ref,
   continent: getFirst(getFirst(city.plot).continent).ref,
-  buildings: city.buildings.toModelArray().map((building) => {
+  buildings: getList(city.buildings).map((building) => {
     const buildingType = sess.BuildingType.withId(building.buildingTypeId)
     return {
       ...building.ref,
@@ -162,10 +161,9 @@ const makeGetCity = (sess, city) => ({
 })
 
 const makeGetPlanet = (session, planet) => {
-  const continents = planet.continents
-    .all()
-    .toModelArray()
-    .map((continent) => makeGetContinent(session, continent))
+  const continents = getList(planet.continents).map((continent) =>
+    makeGetContinent(session, continent),
+  )
   return {
     ...planet.ref,
     settled: continents.some((c) => c.settled),

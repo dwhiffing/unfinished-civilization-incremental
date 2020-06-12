@@ -1,15 +1,17 @@
+import { getList } from '../selectors'
+
 export const dragPerson = (sess, { source, destination, draggableId }) => {
   // NICE: add swapping
   if (!destination) {
     return sess.state
   }
-  let draggedPerson = sess.Person.all()
-    .toModelArray()
-    .find((person) => `${person.id}` === draggableId)
+  let draggedPerson = getList(sess.Person).find(
+    (person) => `${person.id}` === draggableId,
+  )
   if (source.droppableId === destination.droppableId) {
-    let otherPerson = sess.Person.all()
-      .toModelArray()
-      .find((person) => person._fields.index === destination.index)
+    let otherPerson = getList(sess.Person).find(
+      (person) => person._fields.index === destination.index,
+    )
     draggedPerson &&
       draggedPerson.update({
         index: destination.index,

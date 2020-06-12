@@ -1,7 +1,7 @@
 import orm from '../models'
 import { createInitial } from './createInitial'
 import { dragPerson } from './dragPerson'
-import { tickBuildings } from './tickBuildings'
+import { applyTickEffects } from './applyTickEffects'
 import { updateResource } from './updateResource'
 import { createSeat } from './createSeat'
 import { createPerson } from './createPerson'
@@ -27,7 +27,7 @@ const reducers = {
   CREATE_PLANET: createPlanet,
   CREATE_SYSTEM: createSystem,
   UPDATE_RESOURCE: updateResource,
-  TICK: tickBuildings,
+  TICK: applyTickEffects,
   DRAG: dragPerson,
 }
 
