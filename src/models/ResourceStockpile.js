@@ -5,4 +5,5 @@ ResourceStockpile.fields = {
   id: attr(),
   resourceId: fk({ to: 'Resource', as: 'resource' }),
   amount: attr(),
+  limit: attr(),
 }

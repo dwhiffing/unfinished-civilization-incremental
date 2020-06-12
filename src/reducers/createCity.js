@@ -19,8 +19,9 @@ export const createCity = (sess, payload) => {
   allResources.forEach(({ id }) => {
     const _resource = resources.find((r) => r.resourceId === id)
     const amount = _resource ? _resource.amount : 0
+    const limit = _resource ? _resource.limit : 100
     cityInstance.resources.add(
-      sess.ResourceStockpile.create({ resourceId: id, amount }),
+      sess.ResourceStockpile.create({ resourceId: id, amount, limit }),
     )
   })
   people.forEach((person) => createPerson(sess, { cityId, person }))

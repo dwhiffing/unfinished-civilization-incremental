@@ -18,7 +18,7 @@ export const ResourceText = ({ resource }) => {
       </Box>
       <Box ml={1} display="flex" flexDirection="row" alignItems="center">
         <Typography>
-          {numeral(clamp(resource.amount, limit)).format('0,0.0')}/{limit}
+          {numeral(resource.amount).format('0,0.0')}/{limit}
         </Typography>
       </Box>
     </Box>

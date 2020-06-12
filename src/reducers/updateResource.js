@@ -1,57 +1,44 @@
 import clamp from 'lodash/clamp'
-import { getFirstDeep } from '../selectors'
+import { getFirstDeep, getFirst, getList } from '../selectors'
 import { unlock } from './unlock'
 export function updateResource(
   sess,
   { resourceId, value, cityId, continentId, planetId, systemId },
 ) {
   if (typeof cityId === 'number') {
-    let resource = sess.ResourceStockpile.all()
-      .toModelArray()
-      .find((r) => {
-        return (
-          r.resourceId === resourceId &&
-          r.city
-            .all()
-            .toRefArray()
-            .some((c) => c.id === cityId)
-        )
-      })
-    if (resource && resource.ref.amount + value >= 0) {
-      unlock(sess, resource.resourceId)
-      resource.update({
-        amount: resource.ref.amount + value,
-      })
-      return sess.state
-    }
+    // find resource stockpile for city
+    let resource = getList(sess.ResourceStockpile).find(
+      (r) => r.resourceId === resourceId && getFirst(r.city).id === cityId,
+    )
+    const { amount: baseAmount, limit } = resource.ref
+    const amount = clamp(baseAmount + value, 0, limit)
+    resource.update({ amount })
+    unlock(sess, resource.resourceId)
+    return sess.state
   } else {
     let amountToConsume = Math.abs(value)
     while (amountToConsume > 0) {
-      const cities = sess.City.all()
-        .toModelArray()
-        .filter((c) => {
-          if (systemId) {
-            const system = getFirstDeep(c, 'plot.continent.planet.system')
-            return system.id === +systemId
-          }
-          if (planetId) {
-            const planet = getFirstDeep(c, 'plot.continent.planet')
-            return planet.id === +planetId
-          }
-          if (continentId) {
-            const continent = getFirstDeep(c, 'plot.continent')
-            return continent.id === +continentId
-          }
-          return true
-        })
+      const cities = getList(sess.City).filter((c) => {
+        if (systemId) {
+          const system = getFirstDeep(c, 'plot.continent.planet.system')
+          return system.id === +systemId
+        }
+        if (planetId) {
+          const planet = getFirstDeep(c, 'plot.continent.planet')
+          return planet.id === +planetId
+        }
+        if (continentId) {
+          const continent = getFirstDeep(c, 'plot.continent')
+          return continent.id === +continentId
+        }
+        return true
+      })
       const validResources = cities
-        .map((city) => {
-          const resource = city.resources
-            .all()
-            .toModelArray()
-            .find((r) => r.ref.resourceId === resourceId && r.ref.amount > 0)
-          return resource
-        })
+        .map((city) =>
+          getList(city.resources).find(
+            ({ ref }) => ref.resourceId === resourceId && ref.amount > 0,
+          ),
+        )
         .filter((t) => !!t)
       const resource = validResources[0]
       if (resource) {
