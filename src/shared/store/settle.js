@@ -1,7 +1,7 @@
 import { createCityReducer } from '../../city/store'
-import { getFirst, getFirstDeep } from '../../shared/selectors'
+import { getFirst, getFirstDeep } from '../selectors'
 
-export const settle = (sess, payload = {}) => {
+export const settleReducer = (sess, payload = {}) => {
   const { systemId, planetId, continentId } = payload
   let plotId
   if (typeof systemId === 'number') {

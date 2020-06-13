@@ -5,15 +5,15 @@ import {
   getPlanets,
   getPlanetResourceTotals,
   getUnlocks,
-} from '../shared/selectors'
-import { getContinentResourceTotals } from '../continent/selectors'
-import { explore, settle } from '../shared/store'
-import { Purchase } from '../shared/components/Purchase'
+} from '../../shared/selectors'
+import { getContinentResourceTotals } from '../../continent/selectors'
+import { explore, settle } from '../../shared/store'
+import { Purchase } from '../../shared/components/Purchase'
 import { useParams } from 'react-router'
-import { Frame, Sidebar } from '../shared/components/Frame'
-import { Resources } from '../shared/components/Resources'
+import { Frame, Sidebar } from '../../shared/components/Frame'
+import { Resources } from '../../shared/components/Resources'
 
-export const Planet = () => {
+export const PlanetRoute = () => {
   const { id = '0' } = useParams()
   const planets = useSelector(getPlanets)
   const resources = useSelector(getPlanetResourceTotals(+id))

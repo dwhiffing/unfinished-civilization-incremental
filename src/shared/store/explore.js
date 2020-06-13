@@ -1,6 +1,6 @@
-import { getList } from '../../shared/selectors'
+import { getList } from '../selectors'
 
-export const explore = (sess, payload = {}) => {
+export const exploreReducer = (sess, payload = {}) => {
   const { systemId, planetId, continentId } = payload
   let explorable
   if (typeof systemId === 'number') {

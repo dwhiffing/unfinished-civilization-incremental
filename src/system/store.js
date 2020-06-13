@@ -1,8 +1,8 @@
 import random from 'lodash/random'
 import times from 'lodash/times'
-import { createPlanet } from './createPlanet'
-import { getUniqueName, PLANET_COUNT_RANGE } from '../../data'
-import { SYSTEM_NAMES } from '../../system/data'
+import { createPlanet } from '../planet/store'
+import { getUniqueName, PLANET_COUNT_RANGE } from '../data'
+import { SYSTEM_NAMES } from './data'
 
 export const createSystem = (sess, planet = {}) => {
   const systemInstance = sess.System.create({

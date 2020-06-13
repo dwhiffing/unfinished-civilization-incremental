@@ -1,11 +1,11 @@
 import clamp from 'lodash/clamp'
-import { getFirstDeep, getList } from '../../shared/selectors'
-import { unlock } from './unlock'
+import { getFirstDeep, getList } from '../selectors'
+import { unlockReducer } from './unlock'
 
-export function updateResource(sess, { resourceId: id, value, ...ids }) {
+export function updateResourceReducer(sess, { resourceId: id, value, ...ids }) {
   if (value === 0) return sess.state
 
-  unlock(sess, id)
+  unlockReducer(sess, id)
 
   let remaining = value
   getList(sess.City)

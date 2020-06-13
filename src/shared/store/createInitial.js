@@ -4,13 +4,13 @@ import { SYSTEM_COUNT_RANGE, UNLOCKS, UNLOCK_ALL } from '../../data'
 import { tasks } from '../../city/data'
 import { resources, buyables } from '../../data'
 import { districtTypes } from '../../city/data'
-import { createSystem } from './createSystem'
+import { createSystem } from '../../system/store'
 import { createCityReducer } from '../../city/store'
-import { updateResource } from './updateResource'
-import { unlock } from './unlock'
-import { getFirst } from '../../shared/selectors'
+import { updateResourceReducer } from './updateResource'
+import { unlockReducer } from './unlock'
+import { getFirst } from '../selectors'
 
-export const createInitial = (sess) => {
+export const createInitialReducer = (sess) => {
   buyables.forEach((buyable) => sess.Buyable.create({ ...buyable }))
   resources.forEach((resource) =>
     sess.Resource.create({ ...resource, amount: 0 }),
@@ -24,11 +24,11 @@ export const createInitial = (sess) => {
     times(random(...SYSTEM_COUNT_RANGE), () => createSystem(sess, {}))
     // create first city
     createCityReducer(sess, { plotId: getFirst(sess.Plot).id })
-    unlock(sess, 'center')
-    updateResource(sess, { resourceId: 'food', cityId: 0, value: 100 })
+    unlockReducer(sess, 'center')
+    updateResourceReducer(sess, { resourceId: 'food', cityId: 0, value: 100 })
 
     if (UNLOCK_ALL) {
-      UNLOCKS.forEach((id) => unlock(sess, id))
+      UNLOCKS.forEach((id) => unlockReducer(sess, id))
     }
   }
 

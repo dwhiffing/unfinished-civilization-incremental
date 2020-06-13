@@ -1,9 +1,9 @@
 import { RESOURCE_MULTIPLIER, FOOD_DRAIN } from '../../data'
-import { updateResource } from './updateResource'
-import { getFirst, getList } from '../../shared/selectors'
-import { createPerson } from './createPerson'
+import { updateResourceReducer } from './updateResource'
+import { getFirst, getList } from '../selectors'
+import { createPersonReducer } from '../../city/store'
 
-export const applyTickEffects = (sess) => {
+export const applyTickEffectsReducer = (sess) => {
   let updates = []
   tickPeople(sess, updates)
 
@@ -11,7 +11,7 @@ export const applyTickEffects = (sess) => {
 
   tickCities(sess, updates)
 
-  updates.forEach((update) => updateResource(sess, update))
+  updates.forEach((update) => updateResourceReducer(sess, update))
 
   return sess.state
 }
@@ -30,7 +30,7 @@ function tickCities(sess, updates) {
         value: 1,
       })
       if (growth && growth.amount >= 5) {
-        createPerson(sess, { cityId: city.id })
+        createPersonReducer(sess, { cityId: city.id })
         updates.push({
           resourceId: 'growth',
           cityId: city.id,

@@ -1,9 +1,9 @@
 import random from 'lodash/random'
 import sample from 'lodash/sample'
 import times from 'lodash/times'
-import { createContinentReducer } from '../../continent/store'
-import { getUniqueName, CONTINENT_COUNT_RANGE } from '../../data'
-import { PLANET_NAMES, TYPES } from '../../planet/data'
+import { createContinentReducer } from '../continent/store'
+import { getUniqueName, CONTINENT_COUNT_RANGE } from '../data'
+import { PLANET_NAMES, TYPES } from './data'
 
 export const createPlanet = (sess, payload = {}) => {
   const { systemId, ...planet } = payload
