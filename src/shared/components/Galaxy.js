@@ -1,11 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
-import {
-  getSystems,
-  getResourceTotals,
-  getSystemResourceTotals,
-} from '../selectors'
+import { getResourceTotals } from '../selectors'
+import { getSystems, getSystemResourceTotals } from '../../system/selectors'
 import { explore, settle } from '../store'
 import { Purchase } from './Purchase'
 import { Frame, Sidebar } from './Frame'

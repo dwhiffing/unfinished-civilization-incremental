@@ -1,11 +1,7 @@
 import { createSelector } from 'redux-orm'
 import orm from '../models'
-import {
-  getList,
-  getStockpiles,
-  totalResources,
-  getFirst,
-} from '../shared/selectors'
+import { getList, totalResources, getFirst } from '../shared/selectors'
+import { getStockpiles } from '../city/selectors'
 import { makeGetCity } from '../city/selectors'
 
 export const getContinents = createSelector(orm, (session) =>
@@ -21,7 +17,7 @@ export const getContinentResourceTotals = (continentId) =>
     ),
   )
 
-const makeGetContinent = (session, continent) => ({
+export const makeGetContinent = (session, continent) => ({
   explored: false,
   ...continent.ref,
   planet: getFirst(continent.planet.all()).ref,

@@ -5,7 +5,8 @@ import { Purchase } from '../../shared/components/Purchase'
 import { createSeat, createDistrict } from '../store'
 import groupBy from 'lodash/groupBy'
 import { useSelector } from 'react-redux'
-import { getDistrictTypes, getUnlocks } from '../../shared/selectors'
+import { getUnlocks } from '../../shared/selectors'
+import { getDistrictTypes } from '../selectors'
 
 export const Districts = ({ continentId, cityId, districts }) => {
   const unlocks = useSelector(getUnlocks)

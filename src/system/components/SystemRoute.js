@@ -1,12 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
-import {
-  getSystems,
-  getSystemResourceTotals,
-  getPlanetResourceTotals,
-  getUnlocks,
-} from '../../shared/selectors'
+import { getUnlocks } from '../../shared/selectors'
+import { getSystems, getSystemResourceTotals } from '../selectors'
+import { getPlanetResourceTotals } from '../../planet/selectors'
 import { explore, settle } from '../../shared/store'
 import { Purchase } from '../../shared/components/Purchase'
 import { useParams } from 'react-router'

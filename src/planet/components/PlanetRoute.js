@@ -1,11 +1,8 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
-import {
-  getPlanets,
-  getPlanetResourceTotals,
-  getUnlocks,
-} from '../../shared/selectors'
+import { getUnlocks } from '../../shared/selectors'
+import { getPlanets, getPlanetResourceTotals } from '../selectors'
 import { getContinentResourceTotals } from '../../continent/selectors'
 import { explore, settle } from '../../shared/store'
 import { Purchase } from '../../shared/components/Purchase'

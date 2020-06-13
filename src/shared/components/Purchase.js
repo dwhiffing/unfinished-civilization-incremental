@@ -2,12 +2,9 @@ import React from 'react'
 import { Button } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
 import { getContinentResourceTotals } from '../../continent/selectors'
-import {
-  getBuyables,
-  getPlanetResourceTotals,
-  getResourceTotals,
-  getSystemResourceTotals,
-} from '../selectors'
+import { getBuyables, getResourceTotals } from '../selectors'
+import { getPlanetResourceTotals } from '../../planet/selectors'
+import { getSystemResourceTotals } from '../../system/selectors'
 import { getCityResourceTotals } from '../../city/selectors'
 import { updateResource } from '../store'
 

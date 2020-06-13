@@ -1,11 +1,14 @@
 import { createSelector } from 'redux-orm'
 import orm from '../models'
-import {
-  getList,
-  getStockpiles,
-  totalResources,
-  getFirst,
-} from '../shared/selectors'
+import { getList, totalResources, getFirst } from '../shared/selectors'
+
+export const getDistrictTypes = createSelector(orm, (session) =>
+  getList(session.DistrictType),
+)
+
+export const getStockpiles = createSelector(orm, (session) =>
+  getList(session.ResourceStockpile),
+)
 
 export const getCities = createSelector(orm, (session) =>
   getList(session.City).map((city) => makeGetCity(session, city)),
