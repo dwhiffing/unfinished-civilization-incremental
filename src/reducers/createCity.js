@@ -1,12 +1,13 @@
 import { createPerson } from './createPerson'
 import { createDistrict } from './createDistrict'
-import { CITIES, getUniqueName, RESOURCE_MULTIPLIER } from '../data'
+import { CITY_NAMES } from '../city/data'
+import { getUniqueName, RESOURCE_MULTIPLIER } from '../data'
 import { getFirst } from '../selectors'
 
 export const createCity = (sess, payload) => {
   const {
     plotId,
-    label = getUniqueName(sess.City, CITIES),
+    label = getUniqueName(sess.City, CITY_NAMES),
     people = [{}],
   } = payload
 

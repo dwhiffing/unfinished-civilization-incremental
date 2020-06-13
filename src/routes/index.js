@@ -1,6 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
-import { City } from './City'
+import { CityRoute } from '../city/components/CityRoute'
 import { Continent } from './Continent'
 import { Planet } from './Planet'
 import { System } from './System'
@@ -22,7 +22,7 @@ export const Routes = () => {
       {unlocks.includes('continent') && (
         <Route exact path="/continent/:id" render={() => <Continent />} />
       )}
-      <Route exact path="/city/:id" render={() => <City />} />
+      <Route exact path="/city/:id" render={() => <CityRoute />} />
       <Route
         path="*"
         render={() => {
@@ -30,7 +30,7 @@ export const Routes = () => {
           if (unlocks.includes('system')) return <System />
           if (unlocks.includes('planet')) return <Planet />
           if (unlocks.includes('continent')) return <Continent />
-          return <City />
+          return <CityRoute />
         }}
       />
     </Switch>

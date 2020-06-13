@@ -13,7 +13,7 @@ export const getRefList = (model) => {
 
 export const getFirst = (model) => getList(model)[0]
 
-const totalResources = (list) => {
+export const totalResources = (list) => {
   let resources = {}
   list.forEach((stockpile) => {
     const { ref } = stockpile
@@ -65,10 +65,6 @@ export const getContinents = createSelector(orm, (session) =>
   ),
 )
 
-export const getCities = createSelector(orm, (session) =>
-  getList(session.City).map((city) => makeGetCity(session, city)),
-)
-
 export const getBuyables = createSelector(orm, (session) =>
   session.Buyable.all().toRefArray(),
 )
@@ -106,11 +102,6 @@ export const getContinentResourceTotals = (continentId) =>
     totalResources(
       stockpiles.filter((r) => r.city.first().continentId === continentId),
     ),
-  )
-
-export const getCityResourceTotals = (cityId) =>
-  createSelector(orm, getStockpiles, (_, stockpiles) =>
-    totalResources(stockpiles.filter((r) => r.city.first().id === cityId)),
   )
 
 const makeGetContinent = (session, continent) => ({

@@ -5,10 +5,10 @@ import {
   getBuyables,
   getContinentResourceTotals,
   getPlanetResourceTotals,
-  getCityResourceTotals,
   getResourceTotals,
   getSystemResourceTotals,
 } from '../selectors'
+import { getCityResourceTotals } from '../city/selectors'
 import { updateResource } from '../actions'
 
 export const Purchase = ({ id, label, action, disabled, ...ids }) => {
