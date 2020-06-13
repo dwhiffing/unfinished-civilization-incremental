@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Buildings } from '../components/Buildings'
+import { Districts } from '../components/Districts'
 import { People } from '../components/People'
 import { getCities, getUnlocks } from '../selectors'
 import { useParams } from 'react-router'
@@ -37,10 +37,10 @@ export const City = () => {
     >
       <People continentId={continentId} cityId={city.id} people={city.people} />
 
-      <Buildings
+      <Districts
         continentId={continentId}
         cityId={city.id}
-        buildings={city.buildings}
+        districts={city.districts}
       />
     </Frame>
   )

@@ -5,8 +5,8 @@ export const buyables = [
     cost: { wood: 10 },
   },
   {
-    id: 'createBuilding',
-    label: '+ building',
+    id: 'createDistrict',
+    label: '+ district',
     cost: { wood: 50 },
   },
   {

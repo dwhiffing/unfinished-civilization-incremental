@@ -5,7 +5,7 @@ import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import { parse, stringify } from 'flatted'
 
-const CONSTANT_MODELS = ['BuildingType', 'Resource', 'Task', 'Buyable']
+const CONSTANT_MODELS = ['DistrictType', 'Resource', 'Task', 'Buyable']
 const transformCircular = createTransform(
   (inboundState, key) => stringify(inboundState),
   (outboundState, key) => parse(outboundState),

@@ -3,7 +3,7 @@ export class City extends Model {}
 City.modelName = 'City'
 City.fields = {
   id: attr(),
-  buildings: many('Building', 'city'),
+  districts: many('District', 'city'),
   housing: attr(),
   resources: many('ResourceStockpile', 'city'),
   people: many('Person', 'city'),

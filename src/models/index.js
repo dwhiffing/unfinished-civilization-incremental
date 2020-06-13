@@ -1,8 +1,8 @@
 import { ORM } from 'redux-orm'
 import { Task } from './Task'
 import { Seat } from './Seat'
-import { BuildingType } from './BuildingType'
-import { Building } from './Building'
+import { DistrictType } from './DistrictType'
+import { District } from './District'
 import { City } from './City'
 import { Continent } from './Continent'
 import { Resource } from './Resource'
@@ -17,7 +17,7 @@ import { Unlock } from './Unlock'
 const orm = new ORM({ stateSelector: (state) => state.root })
 orm.register(
   Task,
-  Building,
+  District,
   Resource,
   Person,
   Planet,
@@ -25,7 +25,7 @@ orm.register(
   Unlock,
   Plot,
   Seat,
-  BuildingType,
+  DistrictType,
   ResourceStockpile,
   City,
   Buyable,

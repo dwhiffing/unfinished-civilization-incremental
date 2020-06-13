@@ -1,4 +1,4 @@
-export const buildingTypes = [
+export const districtTypes = [
   {
     id: 'center',
     label: 'City Center',

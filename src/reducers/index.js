@@ -8,7 +8,7 @@ import { createPerson } from './createPerson'
 import { createPlanet } from './createPlanet'
 import { createCity } from './createCity'
 import { createContinent } from './createContinent'
-import { createBuilding } from './createBuilding'
+import { createDistrict } from './createDistrict'
 import { createPlot } from './createPlot'
 import { explore } from './explore'
 import { settle } from './settle'
@@ -22,7 +22,7 @@ const reducers = {
   CREATE_CITY: createCity,
   CREATE_SEAT: createSeat,
   CREATE_PERSON: createPerson,
-  CREATE_BUILDING: createBuilding,
+  CREATE_BUILDING: createDistrict,
   CREATE_PLOT: createPlot,
   CREATE_PLANET: createPlanet,
   CREATE_SYSTEM: createSystem,

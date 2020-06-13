@@ -56,9 +56,9 @@ function tickPeople(sess, updates) {
 function tickSeats(sess, updates) {
   getList(sess.Seat).forEach((seatModel) => {
     const seat = seatModel.ref
-    const building = getFirst(seatModel.buildings)
+    const district = getFirst(seatModel.districts)
     const { effects, duration } = sess.Task.withId(seat.taskId).ref
-    const cityId = building.city.all().toRefArray()[0].id
+    const cityId = district.city.all().toRefArray()[0].id
     if (seat.progress >= duration) {
       effects.forEach((effect) => {
         const resourceId = effect.id

@@ -1,9 +1,9 @@
-export const createSeat = (sess, { buildingId, taskId }) => {
-  const building = sess.Building.withId(buildingId)
+export const createSeat = (sess, { districtId, taskId }) => {
+  const district = sess.District.withId(districtId)
   const seatInstance = sess.Seat.create({
     progress: 0,
     taskId,
   })
-  building.seats.add(seatInstance)
+  district.seats.add(seatInstance)
   return sess.state
 }

@@ -1,5 +1,5 @@
 import { createPerson } from './createPerson'
-import { createBuilding } from './createBuilding'
+import { createDistrict } from './createDistrict'
 import { CITIES, getUniqueName, RESOURCE_MULTIPLIER } from '../data'
 import { getFirst } from '../selectors'
 
@@ -34,7 +34,7 @@ export const createCity = (sess, payload) => {
     )
   })
   people.forEach((person) => createPerson(sess, { cityId, person }))
-  createBuilding(sess, { cityId, buildingTypeId: 'center' })
+  createDistrict(sess, { cityId, districtTypeId: 'center' })
 
   plot.update({ explored: true })
   continent.update({ explored: true })

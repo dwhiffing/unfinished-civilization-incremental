@@ -1,7 +1,7 @@
 import random from 'lodash/random'
 import times from 'lodash/times'
 import { SYSTEM_COUNT_RANGE, UNLOCKS, UNLOCK_ALL } from '../data'
-import { resources, tasks, buildingTypes, buyables } from '../data'
+import { resources, tasks, districtTypes, buyables } from '../data'
 import { createSystem } from './createSystem'
 import { createCity } from './createCity'
 import { updateResource } from './updateResource'
@@ -14,8 +14,8 @@ export const createInitial = (sess) => {
     sess.Resource.create({ ...resource, amount: 0 }),
   )
   tasks.forEach((task) => sess.Task.create({ ...task }))
-  buildingTypes.forEach(({ ...buildingType }) =>
-    sess.BuildingType.create({ ...buildingType }),
+  districtTypes.forEach(({ ...districtType }) =>
+    sess.DistrictType.create({ ...districtType }),
   )
 
   if (sess.System.all().toRefArray().length === 0) {

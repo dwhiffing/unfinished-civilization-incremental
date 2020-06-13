@@ -73,8 +73,8 @@ export const getBuyables = createSelector(orm, (session) =>
   session.Buyable.all().toRefArray(),
 )
 
-export const getBuildingTypes = createSelector(orm, (session) =>
-  getList(session.BuildingType),
+export const getDistrictTypes = createSelector(orm, (session) =>
+  getList(session.DistrictType),
 )
 
 export const getStockpiles = createSelector(orm, (session) =>
@@ -143,17 +143,17 @@ const makeGetCity = (sess, city) => ({
   })),
   plot: getFirst(city.plot).ref,
   continent: getFirst(getFirst(city.plot).continent).ref,
-  buildings: getList(city.buildings).map((building) => {
-    const buildingType = sess.BuildingType.withId(building.buildingTypeId)
+  districts: getList(city.districts).map((district) => {
+    const districtType = sess.DistrictType.withId(district.districtTypeId)
     return {
-      ...building.ref,
-      label: buildingType ? buildingType.label : null,
-      seats: building.seats.toRefArray().map((seat) => ({
+      ...district.ref,
+      label: districtType ? districtType.label : null,
+      seats: district.seats.toRefArray().map((seat) => ({
         ...seat,
         task: sess.Task.withId(seat.taskId)
           ? sess.Task.withId(seat.taskId).ref
           : null,
-        building: { ...building.ref, cityId: city.id },
+        district: { ...district.ref, cityId: city.id },
         person: seat.person ? { ...seat.person._fields } : null,
       })),
     }
