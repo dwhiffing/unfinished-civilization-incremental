@@ -59,12 +59,6 @@ export const getPlanets = createSelector(orm, (session) =>
   getList(session.Planet).map((planet) => makeGetPlanet(session, planet)),
 )
 
-export const getContinents = createSelector(orm, (session) =>
-  getList(session.Continent).map((continent) =>
-    makeGetContinent(session, continent),
-  ),
-)
-
 export const getBuyables = createSelector(orm, (session) =>
   session.Buyable.all().toRefArray(),
 )
@@ -94,13 +88,6 @@ export const getPlanetResourceTotals = (planetId) =>
   createSelector(orm, getStockpiles, (_, stockpiles) =>
     totalResources(
       stockpiles.filter((r) => r.city.first().planetId === planetId),
-    ),
-  )
-
-export const getContinentResourceTotals = (continentId) =>
-  createSelector(orm, getStockpiles, (_, stockpiles) =>
-    totalResources(
-      stockpiles.filter((r) => r.city.first().continentId === continentId),
     ),
   )
 

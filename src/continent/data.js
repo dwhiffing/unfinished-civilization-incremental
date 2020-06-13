@@ -1,4 +1,4 @@
-export const CONTINENTS = [
+export const CONTINENT_NAMES = [
   'Ihaes',
   'Clopath',
   'Prafica',

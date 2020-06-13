@@ -3,7 +3,7 @@ import times from 'lodash/times'
 import { SYSTEM_COUNT_RANGE, UNLOCKS, UNLOCK_ALL } from '../data'
 import { resources, tasks, districtTypes, buyables } from '../data'
 import { createSystem } from './createSystem'
-import { createCity } from './createCity'
+import { createCityReducer } from '../city/store'
 import { updateResource } from './updateResource'
 import { unlock } from './unlock'
 import { getFirst } from '../selectors'
@@ -21,7 +21,7 @@ export const createInitial = (sess) => {
   if (sess.System.all().toRefArray().length === 0) {
     times(random(...SYSTEM_COUNT_RANGE), () => createSystem(sess, {}))
     // create first city
-    createCity(sess, { plotId: getFirst(sess.Plot).id })
+    createCityReducer(sess, { plotId: getFirst(sess.Plot).id })
     unlock(sess, 'center')
     updateResource(sess, { resourceId: 'food', cityId: 0, value: 100 })
 

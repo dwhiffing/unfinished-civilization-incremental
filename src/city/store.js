@@ -1,10 +1,12 @@
-import { createPerson } from './createPerson'
-import { createDistrict } from './createDistrict'
-import { CITY_NAMES } from '../city/data'
+import { createPerson } from '../reducers/createPerson'
+import { createDistrict } from '../reducers/createDistrict'
+import { CITY_NAMES } from './data'
 import { getUniqueName, RESOURCE_MULTIPLIER } from '../data'
 import { getFirst } from '../selectors'
+import { createAction } from '@reduxjs/toolkit'
 
-export const createCity = (sess, payload) => {
+export const createCity = createAction('CREATE_CITY')
+export const createCityReducer = (sess, payload) => {
   const {
     plotId,
     label = getUniqueName(sess.City, CITY_NAMES),

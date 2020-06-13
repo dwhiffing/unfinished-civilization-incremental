@@ -1,4 +1,4 @@
-import { createCity } from './createCity'
+import { createCityReducer } from '../city/store'
 import { getFirst, getFirstDeep } from '../selectors'
 
 export const settle = (sess, payload = {}) => {
@@ -17,6 +17,6 @@ export const settle = (sess, payload = {}) => {
     const plot = getFirst(continent.plots)
     plotId = plot.id
   }
-  createCity(sess, { plotId })
+  createCityReducer(sess, { plotId })
   return sess.state
 }

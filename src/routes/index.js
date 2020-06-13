@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { CityRoute } from '../city/components/CityRoute'
-import { Continent } from './Continent'
+import { ContinentRoute } from '../continent/components/ContinentRoute'
 import { Planet } from './Planet'
 import { System } from './System'
 import { Galaxy } from './Galaxy'
@@ -20,7 +20,7 @@ export const Routes = () => {
         <Route exact path="/planet/:id" render={() => <Planet />} />
       )}
       {unlocks.includes('continent') && (
-        <Route exact path="/continent/:id" render={() => <Continent />} />
+        <Route exact path="/continent/:id" render={() => <ContinentRoute />} />
       )}
       <Route exact path="/city/:id" render={() => <CityRoute />} />
       <Route
@@ -29,7 +29,7 @@ export const Routes = () => {
           if (unlocks.includes('galaxy')) return <Galaxy />
           if (unlocks.includes('system')) return <System />
           if (unlocks.includes('planet')) return <Planet />
-          if (unlocks.includes('continent')) return <Continent />
+          if (unlocks.includes('continent')) return <ContinentRoute />
           return <CityRoute />
         }}
       />

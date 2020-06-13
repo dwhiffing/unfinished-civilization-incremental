@@ -1,18 +1,17 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box, Typography } from '@material-ui/core'
-import {
-  getContinents,
-  getContinentResourceTotals,
-  getUnlocks,
-} from '../selectors'
-import { Purchase } from '../components/Purchase'
-import { createCity, explore } from '../actions'
+import { getUnlocks } from '../../selectors'
+import { getContinents } from '../../continent/selectors'
+import { getContinentResourceTotals } from '../selectors'
+import { Purchase } from '../../components/Purchase'
+import { explore } from '../../actions'
+import { createCity } from '../../city/store'
 import { useParams } from 'react-router'
-import { Sidebar, Frame } from '../components/Frame'
-import { Resources } from '../components/Resources'
+import { Sidebar, Frame } from '../../components/Frame'
+import { Resources } from '../../components/Resources'
 
-export const Continent = () => {
+export const ContinentRoute = () => {
   const { id = '0' } = useParams()
   const continent = useSelector(getContinents).find((c) => `${c.id}` === id)
   const resources = useSelector(getContinentResourceTotals(+id))

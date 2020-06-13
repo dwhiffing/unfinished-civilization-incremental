@@ -6,8 +6,8 @@ import { updateResource } from './updateResource'
 import { createSeat } from './createSeat'
 import { createPerson } from './createPerson'
 import { createPlanet } from './createPlanet'
-import { createCity } from './createCity'
-import { createContinent } from './createContinent'
+import { createCityReducer } from '../city/store'
+import { createContinentReducer } from '../continent/store'
 import { createDistrict } from './createDistrict'
 import { createPlot } from './createPlot'
 import { explore } from './explore'
@@ -16,10 +16,10 @@ import { createSystem } from './createSystem'
 
 const reducers = {
   INIT: createInitial,
-  CREATE_CONTINENT: createContinent,
+  CREATE_CONTINENT: createContinentReducer,
   EXPLORE: explore,
   SETTLE: settle,
-  CREATE_CITY: createCity,
+  CREATE_CITY: createCityReducer,
   CREATE_SEAT: createSeat,
   CREATE_PERSON: createPerson,
   CREATE_BUILDING: createDistrict,

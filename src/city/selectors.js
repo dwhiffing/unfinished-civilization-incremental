@@ -11,7 +11,7 @@ export const getCityResourceTotals = (cityId) =>
     totalResources(stockpiles.filter((r) => r.city.first().id === cityId)),
   )
 
-const makeGetCity = (sess, city) => ({
+export const makeGetCity = (sess, city) => ({
   ...city.ref,
   people: city.people.toRefArray(),
   resources: getList(city.resources).map((r) => ({
