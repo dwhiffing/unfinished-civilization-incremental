@@ -12,7 +12,16 @@ export const createCity = (sess, payload) => {
 
   const plot = sess.Plot.withId(plotId)
   const allResources = sess.Resource.all().toModelArray()
-  const cityInstance = sess.City.create({ label, housing: 5 })
+  const continent = getFirst(plot.continent)
+  const planet = getFirst(continent.planet)
+  const system = getFirst(planet.system)
+  const cityInstance = sess.City.create({
+    label,
+    housing: 5,
+    continentId: continent.id,
+    planetId: planet.id,
+    systemId: system.id,
+  })
   const cityId = cityInstance.ref.id
 
   allResources.forEach(({ id }) => {
@@ -27,9 +36,6 @@ export const createCity = (sess, payload) => {
   people.forEach((person) => createPerson(sess, { cityId, person }))
   createBuilding(sess, { cityId, buildingTypeId: 'center' })
 
-  const continent = getFirst(plot.continent)
-  const planet = getFirst(continent.planet)
-  const system = getFirst(planet.system)
   plot.update({ explored: true })
   continent.update({ explored: true })
   planet.update({ explored: true })

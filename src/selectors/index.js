@@ -20,7 +20,7 @@ const totalResources = (list) => {
     resources[ref.resourceId] = resources[ref.resourceId] || {
       amount: 0,
       limit: 0,
-      color: stockpile.resource.color,
+      color: stockpile.resource && stockpile.resource.color,
     }
     resources[ref.resourceId].amount += ref.amount
     resources[ref.resourceId].limit += ref.limit
@@ -77,45 +77,40 @@ export const getBuildingTypes = createSelector(orm, (session) =>
   getList(session.BuildingType),
 )
 
-export const getResourceTotals = createSelector(orm, (session) =>
-  totalResources(getList(session.ResourceStockpile)),
+export const getStockpiles = createSelector(orm, (session) =>
+  getList(session.ResourceStockpile),
+)
+
+export const getResourceTotals = createSelector(
+  orm,
+  getStockpiles,
+  (_, stockpiles) => totalResources(stockpiles),
 )
 
 export const getSystemResourceTotals = (systemId) =>
-  createSelector(orm, (session) =>
+  createSelector(orm, getStockpiles, (_, stockpiles) =>
     totalResources(
-      getList(session.ResourceStockpile).filter((r) => {
-        const value = getFirstDeep(r, 'city.plot.continent.planet.system')
-        return value.id === systemId
-      }),
+      stockpiles.filter((r) => r.city.first().systemId === systemId),
     ),
   )
 
 export const getPlanetResourceTotals = (planetId) =>
-  createSelector(orm, (session) =>
+  createSelector(orm, getStockpiles, (_, stockpiles) =>
     totalResources(
-      getList(session.ResourceStockpile).filter(
-        (r) => getFirstDeep(r, 'city.plot.continent.planet').id === planetId,
-      ),
+      stockpiles.filter((r) => r.city.first().planetId === planetId),
     ),
   )
 
 export const getContinentResourceTotals = (continentId) =>
-  createSelector(orm, (session) =>
+  createSelector(orm, getStockpiles, (_, stockpiles) =>
     totalResources(
-      getList(session.ResourceStockpile).filter(
-        (r) => getFirstDeep(r, 'city.plot.continent').id === continentId,
-      ),
+      stockpiles.filter((r) => r.city.first().continentId === continentId),
     ),
   )
 
 export const getCityResourceTotals = (cityId) =>
-  createSelector(orm, (session) =>
-    totalResources(
-      getList(session.ResourceStockpile).filter(
-        (r) => getFirst(r.city).id === cityId,
-      ),
-    ),
+  createSelector(orm, getStockpiles, (_, stockpiles) =>
+    totalResources(stockpiles.filter((r) => r.city.first().id === cityId)),
   )
 
 const makeGetContinent = (session, continent) => ({
