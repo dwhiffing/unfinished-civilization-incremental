@@ -1,5 +1,5 @@
 export const resources = [
-  { id: 'food', limit: 100, color: '#f95757' },
+  { id: 'food', limit: 5000, color: '#f95757' },
   { id: 'wood', limit: 100, color: '#905100' },
   { id: 'fur', limit: 100, color: '#d0865b' },
   { id: 'stone', limit: 100, color: '#8a8a8a' },

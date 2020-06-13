@@ -4,11 +4,10 @@ import { Box, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { getUnlocks } from '../selectors'
 import ReactTooltip from 'react-tooltip'
-import clamp from 'lodash/clamp'
 
 // TODO: needs to get color properly
 export const ResourceText = ({ resource }) => {
-  const limit = resource.limit || 100
+  const limit = resource.limit
   return (
     <Box data-tip={resource.resourceId} display="flex">
       <Box>

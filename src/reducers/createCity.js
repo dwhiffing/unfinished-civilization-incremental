@@ -8,7 +8,6 @@ export const createCity = (sess, payload) => {
     plotId,
     label = getUniqueName(sess.City, CITIES),
     people = [{}],
-    resources = [],
   } = payload
 
   const plot = sess.Plot.withId(plotId)
@@ -17,9 +16,9 @@ export const createCity = (sess, payload) => {
   const cityId = cityInstance.ref.id
 
   allResources.forEach(({ id }) => {
-    const _resource = resources.find((r) => r.resourceId === id)
-    const amount = _resource ? _resource.amount : 0
-    const limit = _resource ? _resource.limit : 100
+    const _resource = sess.Resource.withId(id)
+    const amount = _resource ? _resource.ref.amount : 0
+    const limit = _resource ? _resource.ref.limit : 100
     cityInstance.resources.add(
       sess.ResourceStockpile.create({ resourceId: id, amount, limit }),
     )

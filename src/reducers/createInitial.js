@@ -1,6 +1,6 @@
 import random from 'lodash/random'
 import times from 'lodash/times'
-import { SYSTEM_COUNT_RANGE, UNLOCKS } from '../data'
+import { SYSTEM_COUNT_RANGE, UNLOCKS, UNLOCK_ALL } from '../data'
 import { resources, tasks, buildingTypes, buyables } from '../data'
 import { createSystem } from './createSystem'
 import { createCity } from './createCity'
@@ -25,8 +25,9 @@ export const createInitial = (sess) => {
     unlock(sess, 'center')
     updateResource(sess, { resourceId: 'food', cityId: 0, value: 100 })
 
-    // Unlock all
-    UNLOCKS.forEach((id) => unlock(sess, id))
+    if (UNLOCK_ALL) {
+      UNLOCKS.forEach((id) => unlock(sess, id))
+    }
   }
 
   return sess.state
