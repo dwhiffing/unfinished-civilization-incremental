@@ -1,6 +1,6 @@
 import faker from 'faker'
 import { CITY_NAMES } from './data'
-import { getUniqueName, RESOURCE_MULTIPLIER } from '../data'
+import { RESOURCE_MULTIPLIER, getUniqueName } from '../shared/data'
 import { createAction } from '@reduxjs/toolkit'
 import { getFirst, getList } from '../shared/selectors'
 

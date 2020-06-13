@@ -1,8 +1,13 @@
 import random from 'lodash/random'
 import times from 'lodash/times'
-import { SYSTEM_COUNT_RANGE, UNLOCKS, UNLOCK_ALL } from '../../data'
 import { tasks } from '../../city/data'
-import { resources, buyables } from '../../data'
+import {
+  SYSTEM_COUNT_RANGE,
+  UNLOCK_ALL,
+  resources,
+  buyables,
+  UNLOCKS,
+} from '../../shared/data'
 import { districtTypes } from '../../city/data'
 import { createSystem } from '../../system/store'
 import { createCityReducer } from '../../city/store'

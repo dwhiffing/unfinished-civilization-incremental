@@ -1,4 +1,4 @@
-import { RESOURCE_MULTIPLIER, FOOD_DRAIN } from '../../data'
+import { RESOURCE_MULTIPLIER, FOOD_DRAIN } from '../../shared/data'
 import { updateResourceReducer } from './updateResource'
 import { getFirst, getList } from '../selectors'
 import { createPersonReducer } from '../../city/store'

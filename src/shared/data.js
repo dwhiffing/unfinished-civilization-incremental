@@ -10,6 +10,14 @@ export const CONTINENT_COUNT_RANGE = [2, 4]
 export const PLOT_COUNT_RANGE = [2, 6]
 export const FOOD_DRAIN = 0.2
 
+export const getUniqueName = (model, list) => {
+  const takenNames = model
+    .all()
+    .toRefArray()
+    .map((p) => p.label)
+  return sample(list.filter((p) => !takenNames.includes(p)))
+}
+
 export const resources = [
   { id: 'food', limit: 500, color: '#f95757' },
   { id: 'wood', limit: 100, color: '#905100' },
@@ -74,14 +82,6 @@ export const buyables = [
     cost: { wood: 1000000 },
   },
 ]
-
-export const getUniqueName = (model, list) => {
-  const takenNames = model
-    .all()
-    .toRefArray()
-    .map((p) => p.label)
-  return sample(list.filter((p) => !takenNames.includes(p)))
-}
 
 export const UNLOCKS = [
   'food',
