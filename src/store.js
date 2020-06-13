@@ -3,7 +3,7 @@ import { persistStore, persistReducer, createTransform } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import { parse, stringify } from 'flatted'
-import orm from './models'
+import orm from './orm'
 import {
   createInitialReducer,
   applyTickEffectsReducer,

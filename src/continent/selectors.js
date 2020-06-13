@@ -1,5 +1,5 @@
 import { createSelector } from 'redux-orm'
-import orm from '../models'
+import orm from '../orm'
 import { getList, totalResources, getFirst } from '../shared/selectors'
 import { getStockpiles } from '../city/selectors'
 import { makeGetCity } from '../city/selectors'
