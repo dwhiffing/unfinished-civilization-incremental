@@ -15,11 +15,12 @@ export const getFirst = (model) => getList(model)[0]
 
 const totalResources = (list) => {
   let resources = {}
-  list.forEach((resource) => {
-    const { ref } = resource
+  list.forEach((stockpile) => {
+    const { ref } = stockpile
     resources[ref.resourceId] = resources[ref.resourceId] || {
       amount: 0,
       limit: 0,
+      color: stockpile.resource.color,
     }
     resources[ref.resourceId].amount += ref.amount
     resources[ref.resourceId].limit += ref.limit
