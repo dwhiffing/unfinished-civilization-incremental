@@ -1,15 +1,15 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box, Typography } from '@material-ui/core'
-import { getUnlocks } from '../../selectors'
+import { getUnlocks } from '../../shared/selectors'
 import { getContinents } from '../../continent/selectors'
 import { getContinentResourceTotals } from '../selectors'
-import { Purchase } from '../../components/Purchase'
-import { explore } from '../../actions'
+import { Purchase } from '../../shared/components/Purchase'
+import { explore } from '../../shared/store'
 import { createCity } from '../../city/store'
 import { useParams } from 'react-router'
-import { Sidebar, Frame } from '../../components/Frame'
-import { Resources } from '../../components/Resources'
+import { Sidebar, Frame } from '../../shared/components/Frame'
+import { Resources } from '../../shared/components/Resources'
 
 export const ContinentRoute = () => {
   const { id = '0' } = useParams()

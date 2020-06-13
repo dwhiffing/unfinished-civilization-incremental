@@ -1,9 +1,9 @@
-import { createPerson } from '../reducers/createPerson'
-import { createDistrict } from '../reducers/createDistrict'
+import { createPerson } from '../shared/reducers/createPerson'
 import { CITY_NAMES } from './data'
 import { getUniqueName, RESOURCE_MULTIPLIER } from '../data'
-import { getFirst } from '../selectors'
+import { getFirst } from '../shared/selectors'
 import { createAction } from '@reduxjs/toolkit'
+import { getList } from '../shared/selectors'
 
 export const createCity = createAction('CREATE_CITY')
 export const createCityReducer = (sess, payload) => {
@@ -37,7 +37,7 @@ export const createCityReducer = (sess, payload) => {
     )
   })
   people.forEach((person) => createPerson(sess, { cityId, person }))
-  createDistrict(sess, { cityId, districtTypeId: 'center' })
+  createDistrictReducer(sess, { cityId, districtTypeId: 'center' })
 
   plot.update({ explored: true })
   continent.update({ explored: true })
@@ -45,5 +45,38 @@ export const createCityReducer = (sess, payload) => {
   system.update({ explored: true })
   plot.cities.add(cityInstance)
 
+  return sess.state
+}
+
+export const createDistrict = createAction('CREATE_BUILDING')
+export const createDistrictReducer = (sess, payload) => {
+  const { cityId, districtTypeId, seatCount, ...district } = payload
+  const city = sess.City.withId(cityId)
+  const districtInstance = sess.District.create({ districtTypeId, ...district })
+  let districtType = getList(sess.DistrictType).find(
+    (b) => b.id === districtTypeId,
+  )
+  districtType.tasks.forEach((task) => {
+    let i = seatCount || 1
+    while (i-- > 0) {
+      createSeatReducer(sess, {
+        districtId: districtInstance.id,
+        taskId: task.id,
+      })
+    }
+  })
+  city.districts.add(districtInstance)
+
+  return sess.state
+}
+
+export const createSeat = createAction('CREATE_SEAT')
+export const createSeatReducer = (sess, { districtId, taskId }) => {
+  const district = sess.District.withId(districtId)
+  const seatInstance = sess.Seat.create({
+    progress: 0,
+    taskId,
+  })
+  district.seats.add(seatInstance)
   return sess.state
 }

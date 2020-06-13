@@ -6,7 +6,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux'
 import { Container, Button, Box } from '@material-ui/core'
 
-import { drag, createInitial, tick } from './actions'
+import { drag, createInitial, tick } from './shared/store'
 import store, { persistor } from './store'
 
 import './index.css'

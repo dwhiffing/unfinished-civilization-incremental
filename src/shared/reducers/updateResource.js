@@ -1,5 +1,5 @@
 import clamp from 'lodash/clamp'
-import { getFirstDeep, getList } from '../selectors'
+import { getFirstDeep, getList } from '../../shared/selectors'
 import { unlock } from './unlock'
 
 export function updateResource(sess, { resourceId: id, value, ...ids }) {

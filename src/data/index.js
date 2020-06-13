@@ -1,9 +1,4 @@
 import sample from 'lodash/sample'
-export { CITIES } from './cities'
-export { PLANETS, TYPES as PLANET_TYPES } from './planets'
-export { SYSTEMS } from './systems'
-export { districtTypes } from './districtTypes'
-export { tasks } from './tasks'
 export { buyables } from './buyables'
 export { resources } from './resources'
 
@@ -16,8 +11,8 @@ export const getUniqueName = (model, list) => {
 }
 
 export const INTERVAL = 500
-export const RESOURCE_MULTIPLIER = 1
-export const UNLOCK_ALL = false
+export const RESOURCE_MULTIPLIER = 500
+export const UNLOCK_ALL = true
 
 export const SYSTEM_COUNT_RANGE = [3, 3]
 export const PLANET_COUNT_RANGE = [2, 5]

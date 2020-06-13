@@ -6,12 +6,12 @@ import {
   getSystemResourceTotals,
   getPlanetResourceTotals,
   getUnlocks,
-} from '../selectors'
-import { explore, settle } from '../actions'
-import { Purchase } from '../components/Purchase'
+} from '../shared/selectors'
+import { explore, settle } from '../shared/store'
+import { Purchase } from '../shared/components/Purchase'
 import { useParams } from 'react-router'
-import { Sidebar, Frame } from '../components/Frame'
-import { Resources } from '../components/Resources'
+import { Sidebar, Frame } from '../shared/components/Frame'
+import { Resources } from '../shared/components/Resources'
 
 export const System = () => {
   const { id = '0' } = useParams()

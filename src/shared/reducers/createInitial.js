@@ -1,12 +1,14 @@
 import random from 'lodash/random'
 import times from 'lodash/times'
-import { SYSTEM_COUNT_RANGE, UNLOCKS, UNLOCK_ALL } from '../data'
-import { resources, tasks, districtTypes, buyables } from '../data'
+import { SYSTEM_COUNT_RANGE, UNLOCKS, UNLOCK_ALL } from '../../data'
+import { tasks } from '../../city/data'
+import { resources, buyables } from '../../data'
+import { districtTypes } from '../../city/data'
 import { createSystem } from './createSystem'
-import { createCityReducer } from '../city/store'
+import { createCityReducer } from '../../city/store'
 import { updateResource } from './updateResource'
 import { unlock } from './unlock'
-import { getFirst } from '../selectors'
+import { getFirst } from '../../shared/selectors'
 
 export const createInitial = (sess) => {
   buyables.forEach((buyable) => sess.Buyable.create({ ...buyable }))

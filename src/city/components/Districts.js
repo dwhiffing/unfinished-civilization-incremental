@@ -1,11 +1,11 @@
 import React from 'react'
 import { Typography, Box } from '@material-ui/core'
 import { Seat } from './Seat'
-import { Purchase } from './Purchase'
-import { createSeat, createDistrict } from '../actions'
+import { Purchase } from '../../shared/components/Purchase'
+import { createSeat, createDistrict } from '../store'
 import groupBy from 'lodash/groupBy'
 import { useSelector } from 'react-redux'
-import { getDistrictTypes, getUnlocks } from '../selectors'
+import { getDistrictTypes, getUnlocks } from '../../shared/selectors'
 
 export const Districts = ({ continentId, cityId, districts }) => {
   const unlocks = useSelector(getUnlocks)

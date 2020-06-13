@@ -1,3 +1,6 @@
+import random from 'lodash/random'
+import sample from 'lodash/sample'
+
 export const CITY_NAMES = [
   'Kilgate',
   'Dustfair',
@@ -49,4 +52,57 @@ export const CITY_NAMES = [
   'Steelvale',
   'Beachbury',
   'Springfront',
+]
+
+export const districtTypes = [
+  {
+    id: 'center',
+    label: 'City Center',
+    tasks: [{ id: 'scavenge' }],
+  },
+  { id: 'barracks', label: 'Encampment', tasks: [{ id: 'hunt' }] },
+  {
+    id: 'industry',
+    label: 'Industrial Zone',
+    tasks: [{ id: 'mine' }, { id: 'chop' }],
+  },
+  { id: 'church', label: 'Holy Site', tasks: [{ id: 'pray' }] },
+  { id: 'campus', label: 'Campus', tasks: [{ id: 'study' }] },
+  { id: 'market', label: 'Commercial Hub', tasks: [{ id: 'trade' }] },
+  { id: 'theatre', label: 'Theatre Square', tasks: [{ id: 'perform' }] },
+]
+
+export const tasks = [
+  {
+    id: 'scavenge',
+    duration: 1,
+    effects: [
+      { id: 'food', value: random(1, 4) },
+      { id: 'wood', value: () => sample([0, 0, 0, 0.1, 0.2]) },
+    ],
+  },
+  {
+    id: 'chop',
+    biome: ['forest'],
+    duration: 1,
+    effects: [{ id: 'wood', value: 1 }],
+  },
+  {
+    id: 'farm',
+    biome: ['plain'],
+    duration: 1,
+    effects: [{ id: 'food', value: 10 }],
+  },
+  {
+    id: 'mine',
+    biome: ['mountain'],
+    duration: 1,
+    effects: [{ id: 'stone', value: 1 }],
+  },
+  { id: 'pray', duration: 1, effects: [{ id: 'faith', value: 1 }] },
+  { id: 'hunt', duration: 1, effects: [{ id: 'fur', value: 1 }] },
+  { id: 'trade', duration: 1, effects: [{ id: 'gold', value: 1 }] },
+  { id: 'perform', duration: 1, effects: [{ id: 'culture', value: 1 }] },
+  { id: 'study', duration: 1, effects: [{ id: 'science', value: 1 }] },
+  1,
 ]

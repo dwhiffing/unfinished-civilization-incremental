@@ -2,7 +2,7 @@ import times from 'lodash/times'
 import random from 'lodash/random'
 import { CONTINENT_NAMES } from './data'
 import { getUniqueName } from '../data'
-import { createPlot } from '../reducers/createPlot'
+import { createPlot } from '../shared/reducers/createPlot'
 import { PLOT_COUNT_RANGE } from '../data'
 
 export const createContinentReducer = (sess, payload = {}) => {

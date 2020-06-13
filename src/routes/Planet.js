@@ -1,13 +1,17 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
-import { getPlanets, getPlanetResourceTotals, getUnlocks } from '../selectors'
+import {
+  getPlanets,
+  getPlanetResourceTotals,
+  getUnlocks,
+} from '../shared/selectors'
 import { getContinentResourceTotals } from '../continent/selectors'
-import { explore, settle } from '../actions'
-import { Purchase } from '../components/Purchase'
+import { explore, settle } from '../shared/store'
+import { Purchase } from '../shared/components/Purchase'
 import { useParams } from 'react-router'
-import { Frame, Sidebar } from '../components/Frame'
-import { Resources } from '../components/Resources'
+import { Frame, Sidebar } from '../shared/components/Frame'
+import { Resources } from '../shared/components/Resources'
 
 export const Planet = () => {
   const { id = '0' } = useParams()

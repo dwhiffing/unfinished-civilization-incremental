@@ -5,11 +5,11 @@ import {
   getSystems,
   getResourceTotals,
   getSystemResourceTotals,
-} from '../selectors'
-import { explore, settle } from '../actions'
-import { Purchase } from '../components/Purchase'
-import { Frame, Sidebar } from '../components/Frame'
-import { Resources } from '../components/Resources'
+} from '../shared/selectors'
+import { explore, settle } from '../shared/store'
+import { Purchase } from '../shared/components/Purchase'
+import { Frame, Sidebar } from '../shared/components/Frame'
+import { Resources } from '../shared/components/Resources'
 
 export const Galaxy = () => {
   const systems = useSelector(getSystems)

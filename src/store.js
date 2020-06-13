@@ -1,5 +1,5 @@
-import { createStore, combineReducers } from 'redux'
 import { reducer } from './reducers'
+import { createStore, combineReducers } from 'redux'
 import { persistStore, persistReducer, createTransform } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'

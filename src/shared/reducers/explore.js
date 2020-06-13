@@ -1,4 +1,4 @@
-import { getList } from '../selectors'
+import { getList } from '../../shared/selectors'
 
 export const explore = (sess, payload = {}) => {
   const { systemId, planetId, continentId } = payload

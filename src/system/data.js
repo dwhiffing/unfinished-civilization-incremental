@@ -1,4 +1,4 @@
-export const SYSTEMS = [
+export const SYSTEM_NAMES = [
   'Andromeda',
   'Antlia',
   'Apus',

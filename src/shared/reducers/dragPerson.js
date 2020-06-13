@@ -1,4 +1,4 @@
-import { getList } from '../selectors'
+import { getList } from '../../shared/selectors'
 
 export const dragPerson = (sess, { source, destination, draggableId }) => {
   // NICE: add swapping

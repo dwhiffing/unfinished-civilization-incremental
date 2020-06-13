@@ -1,11 +1,11 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Districts } from '../../components/Districts'
+import { Districts } from './Districts'
 import { People } from './People'
 import { getCities } from '../selectors'
-import { getUnlocks } from '../../selectors'
+import { getUnlocks } from '../../shared/selectors'
 import { useParams } from 'react-router'
-import { Sidebar, Frame } from '../../components/Frame'
+import { Sidebar, Frame } from '../../shared/components/Frame'
 // TODO: Add actions to allow citizens to all be assigned/deassigned
 
 export const CityRoute = () => {

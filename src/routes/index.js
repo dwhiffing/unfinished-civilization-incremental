@@ -6,7 +6,7 @@ import { Planet } from './Planet'
 import { System } from './System'
 import { Galaxy } from './Galaxy'
 import { useSelector } from 'react-redux'
-import { getUnlocks } from '../selectors'
+import { getUnlocks } from '../shared/selectors'
 
 export const Routes = () => {
   const unlocks = useSelector(getUnlocks)

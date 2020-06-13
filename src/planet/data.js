@@ -1,4 +1,4 @@
-export const PLANETS = [
+export const PLANET_NAMES = [
   'Uphavis',
   'Togrinus',
   'Canzarvis',

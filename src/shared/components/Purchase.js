@@ -1,15 +1,15 @@
 import React from 'react'
 import { Button } from '@material-ui/core'
 import { useSelector, useDispatch } from 'react-redux'
-import { getContinentResourceTotals } from '../continent/selectors'
+import { getContinentResourceTotals } from '../../continent/selectors'
 import {
   getBuyables,
   getPlanetResourceTotals,
   getResourceTotals,
   getSystemResourceTotals,
 } from '../selectors'
-import { getCityResourceTotals } from '../city/selectors'
-import { updateResource } from '../actions'
+import { getCityResourceTotals } from '../../city/selectors'
+import { updateResource } from '../store'
 
 export const Purchase = ({ id, label, action, disabled, ...ids }) => {
   const dispatch = useDispatch()

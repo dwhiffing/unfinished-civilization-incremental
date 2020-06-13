@@ -1,5 +1,5 @@
 import React from 'react'
-import { DragList } from '../../components/DragList'
+import { DragList } from './/DragList'
 
 export const People = ({ continentId, cityId, people }) => (
   <>

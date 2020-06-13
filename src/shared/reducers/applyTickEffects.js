@@ -1,6 +1,6 @@
-import { RESOURCE_MULTIPLIER, FOOD_DRAIN } from '../data'
+import { RESOURCE_MULTIPLIER, FOOD_DRAIN } from '../../data'
 import { updateResource } from './updateResource'
-import { getFirst, getList } from '../selectors'
+import { getFirst, getList } from '../../shared/selectors'
 import { createPerson } from './createPerson'
 
 export const applyTickEffects = (sess) => {

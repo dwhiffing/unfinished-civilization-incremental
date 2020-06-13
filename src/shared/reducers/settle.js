@@ -1,5 +1,5 @@
-import { createCityReducer } from '../city/store'
-import { getFirst, getFirstDeep } from '../selectors'
+import { createCityReducer } from '../../city/store'
+import { getFirst, getFirstDeep } from '../../shared/selectors'
 
 export const settle = (sess, payload = {}) => {
   const { systemId, planetId, continentId } = payload

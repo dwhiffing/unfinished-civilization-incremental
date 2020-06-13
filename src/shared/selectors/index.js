@@ -1,5 +1,5 @@
 import { createSelector } from 'redux-orm'
-import orm from '../models'
+import orm from '../../models'
 
 export const getList = (model) => {
   if (!model) debugger
