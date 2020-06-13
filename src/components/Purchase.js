@@ -49,7 +49,7 @@ const useGetIsAffordable = ({ buyable, ...ids }) => {
   if (!buyable) return false
   return Object.entries(buyable.cost).every(([key, value]) => {
     const targetResource = Object.entries(totals)
-      .map(([resourceId, amount]) => ({ resourceId, amount }))
+      .map(([resourceId, { amount }]) => ({ resourceId, amount: amount }))
       .find((r) => r.resourceId === key)
 
     if (!targetResource) {

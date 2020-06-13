@@ -16,12 +16,14 @@ export const getUniqueName = (model, list) => {
   return sample(list.filter((p) => !takenNames.includes(p)))
 }
 
+export const INTERVAL = 500
+export const RESOURCE_MULTIPLIER = 1
+export const UNLOCK_ALL = false
+
 export const SYSTEM_COUNT_RANGE = [3, 3]
 export const PLANET_COUNT_RANGE = [2, 5]
 export const CONTINENT_COUNT_RANGE = [2, 4]
 export const PLOT_COUNT_RANGE = [2, 6]
-export const RESOURCE_MULTIPLIER = 500
-export const UNLOCK_ALL = false
 export const FOOD_DRAIN = 0.2
 
 export const UNLOCKS = [

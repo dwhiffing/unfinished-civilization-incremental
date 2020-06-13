@@ -12,13 +12,12 @@ import store, { persistor } from './store'
 import './index.css'
 import { Routes } from './routes'
 import { PersistGate } from 'redux-persist/integration/react'
+import { INTERVAL } from './data'
 
 if (process.env.NODE_ENV === 'development') {
   const whyDidYouRender = require('@welldone-software/why-did-you-render')
   whyDidYouRender(React)
 }
-
-export const INTERVAL = 500
 
 const App = () => {
   const dispatch = useDispatch()

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { DragList } from './DragList'
-import { INTERVAL } from '..'
+import { INTERVAL } from '../data'
 
 const Seat = ({ seat }) => {
   const progressPercent = 1 - seat.progress / seat.task.duration

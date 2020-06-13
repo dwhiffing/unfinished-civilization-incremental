@@ -5,13 +5,24 @@ export const getList = (model) => {
   if (!model) debugger
   return model.all().toModelArray()
 }
+
+export const getRefList = (model) => {
+  if (!model) debugger
+  return model.all().toRefArray()
+}
+
 export const getFirst = (model) => getList(model)[0]
+
 const totalResources = (list) => {
   let resources = {}
   list.forEach((resource) => {
     const { ref } = resource
-    resources[ref.resourceId] = resources[ref.resourceId] || 0
-    resources[ref.resourceId] += ref.amount
+    resources[ref.resourceId] = resources[ref.resourceId] || {
+      amount: 0,
+      limit: 0,
+    }
+    resources[ref.resourceId].amount += ref.amount
+    resources[ref.resourceId].limit += ref.limit
   })
   return resources
 }
@@ -65,6 +76,10 @@ export const getBuildingTypes = createSelector(orm, (session) =>
   getList(session.BuildingType),
 )
 
+export const getResourceTotals = createSelector(orm, (session) =>
+  totalResources(getList(session.ResourceStockpile)),
+)
+
 export const getSystemResourceTotals = (systemId) =>
   createSelector(orm, (session) =>
     totalResources(
@@ -101,17 +116,6 @@ export const getCityResourceTotals = (cityId) =>
       ),
     ),
   )
-
-export const getResourceTotals = createSelector(orm, (session) => {
-  let resources = {}
-  getList(session.ResourceStockpile).forEach((resource) => {
-    const { ref } = resource
-    resources[ref.resourceId] = resources[ref.resourceId] || 0
-    resources[ref.resourceId] += ref.amount
-  })
-
-  return resources
-})
 
 const makeGetContinent = (session, continent) => ({
   explored: false,

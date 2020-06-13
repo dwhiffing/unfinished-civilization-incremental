@@ -7,7 +7,6 @@ import ReactTooltip from 'react-tooltip'
 
 // TODO: needs to get color properly
 export const ResourceText = ({ resource }) => {
-  const limit = resource.limit
   return (
     <Box data-tip={resource.resourceId} display="flex">
       <Box>
@@ -17,7 +16,8 @@ export const ResourceText = ({ resource }) => {
       </Box>
       <Box ml={1} display="flex" flexDirection="row" alignItems="center">
         <Typography>
-          {numeral(resource.amount).format('0,0.0')}/{limit}
+          {numeral(resource.amount).format('0,0.0')}/
+          {numeral(resource.limit).format('0,0')}
         </Typography>
       </Box>
     </Box>
@@ -35,7 +35,7 @@ export const Resources = ({ hide, resources }) => {
   if (!Array.isArray(resources)) {
     _resources = Object.entries(resources).map(([k, v]) => ({
       resourceId: k,
-      amount: v,
+      ...v,
     }))
   }
   return (

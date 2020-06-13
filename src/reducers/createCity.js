@@ -1,6 +1,6 @@
 import { createPerson } from './createPerson'
 import { createBuilding } from './createBuilding'
-import { CITIES, getUniqueName } from '../data'
+import { CITIES, getUniqueName, RESOURCE_MULTIPLIER } from '../data'
 import { getFirst } from '../selectors'
 
 export const createCity = (sess, payload) => {
@@ -18,7 +18,8 @@ export const createCity = (sess, payload) => {
   allResources.forEach(({ id }) => {
     const _resource = sess.Resource.withId(id)
     const amount = _resource ? _resource.ref.amount : 0
-    const limit = _resource ? _resource.ref.limit : 100
+    const _limit = _resource ? _resource.ref.limit : 100
+    const limit = _limit * RESOURCE_MULTIPLIER
     cityInstance.resources.add(
       sess.ResourceStockpile.create({ resourceId: id, amount, limit }),
     )
