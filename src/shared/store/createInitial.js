@@ -17,17 +17,12 @@ import { createAction } from '@reduxjs/toolkit'
 
 export const createInitial = createAction('INIT')
 export const createInitialReducer = (sess) => {
-  if (sess.System.all().toRefArray().length === 0) {
-    // TODO: these should update the stats of the loaded entities if already started
-    buyables.forEach((buyable) => sess.Buyable.create({ ...buyable }))
-    resources.forEach((resource) =>
-      sess.Resource.create({ ...resource, amount: 0 }),
-    )
-    tasks.forEach((task) => sess.Task.create({ ...task }))
-    districtTypes.forEach(({ ...districtType }) =>
-      sess.DistrictType.create({ ...districtType }),
-    )
+  buyables.forEach((b) => sess.Buyable.upsert(b))
+  tasks.forEach((t) => sess.Task.upsert(t))
+  resources.forEach((r) => sess.Resource.upsert({ ...r, amount: 0 }))
+  districtTypes.forEach((dt) => sess.DistrictType.upsert(dt))
 
+  if (sess.System.all().toRefArray().length === 0) {
     times(random(...SYSTEM_COUNT_RANGE), () => createSystemReducer(sess, {}))
     createCityReducer(sess, { plotId: sess.Plot.first().id })
     unlockReducer(sess, 'center')
