@@ -23,7 +23,6 @@ export const totalResources = (piles) => {
     resources[resourceId] = resources[resourceId] || {
       amount: 0,
       limit: 0,
-      //TODO
       color,
     }
     resources[resourceId].amount += amount

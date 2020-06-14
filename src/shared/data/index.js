@@ -4,8 +4,8 @@ export { resources } from './resources'
 export { buyables } from './buyables'
 
 export const INTERVAL = 500
-export const RESOURCE_MULTIPLIER = 10
-export const UNLOCK_ALL = true
+export const RESOURCE_MULTIPLIER = 1
+export const UNLOCK_ALL = false
 
 export const SYSTEM_COUNT_RANGE = [3, 3]
 export const PLANET_COUNT_RANGE = [2, 5]
