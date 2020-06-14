@@ -4,15 +4,13 @@ import storage from 'redux-persist/lib/storage'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2'
 import { parse, stringify } from 'flatted'
 import orm from './orm'
-import {
-  createInitialReducer,
-  applyTickEffectsReducer,
-  updateResourceReducer,
-  exploreReducer,
-  settleReducer,
-} from './shared/store'
-import { createPlanet } from './planet/store'
-import { createSystem } from './system/store'
+import { settleReducer } from './shared/store/settle'
+import { exploreReducer } from './shared/store/explore'
+import { updateResourceReducer } from './shared/store/updateResource'
+import { applyTickEffectsReducer } from './shared/store/applyTickEffects'
+import { createInitialReducer } from './shared/store/createInitial'
+import { createPlanetReducer } from './planet/store'
+import { createSystemReducer } from './system/store'
 import { createPlotReducer, createContinentReducer } from './continent/store'
 import {
   createCityReducer,
@@ -32,8 +30,8 @@ const reducers = {
   CREATE_PERSON: createPersonReducer,
   CREATE_BUILDING: createDistrictReducer,
   CREATE_PLOT: createPlotReducer,
-  CREATE_PLANET: createPlanet,
-  CREATE_SYSTEM: createSystem,
+  CREATE_PLANET: createPlanetReducer,
+  CREATE_SYSTEM: createSystemReducer,
   UPDATE_RESOURCE: updateResourceReducer,
   TICK: applyTickEffectsReducer,
   DRAG: dragReducer,

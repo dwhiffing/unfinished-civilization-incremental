@@ -1,5 +1,5 @@
 import { createSelector } from 'redux-orm'
-import { totalResources } from '../shared/utils'
+import { totalResources } from '../shared/selectors'
 import orm from '../orm'
 
 export const getPlanets = createSelector(orm.Planet)

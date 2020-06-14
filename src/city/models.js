@@ -42,6 +42,7 @@ ResourceStockpile.fields = {
   cityId: fk({ to: 'City', as: 'city', relatedName: 'stockpiles' }),
   id: attr(),
   amount: attr(),
+  color: attr(),
   limit: attr(),
 }
 

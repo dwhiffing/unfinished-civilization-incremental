@@ -1,0 +1,1 @@
+export { createPlanetReducer } from './createPlanet'

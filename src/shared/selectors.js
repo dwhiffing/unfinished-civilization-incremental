@@ -1,5 +1,4 @@
 import { createSelector } from 'redux-orm'
-import { totalResources } from './utils'
 import orm from '../orm'
 
 export const getBuyables = createSelector(orm.Buyable)
@@ -16,3 +15,19 @@ export const getResourceTotals = createSelector(
   getStockpiles,
   (_, stockpiles) => totalResources(stockpiles),
 )
+
+export const totalResources = (piles) => {
+  let resources = {}
+  piles.forEach((pile) => {
+    const { amount, limit, resourceId, color } = pile
+    resources[resourceId] = resources[resourceId] || {
+      amount: 0,
+      limit: 0,
+      //TODO
+      color,
+    }
+    resources[resourceId].amount += amount
+    resources[resourceId].limit += limit
+  })
+  return resources
+}

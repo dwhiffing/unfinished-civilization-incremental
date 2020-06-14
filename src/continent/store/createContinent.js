@@ -1,8 +1,8 @@
 import times from 'lodash/times'
-import sample from 'lodash/sample'
 import random from 'lodash/random'
-import { CONTINENT_NAMES } from './data'
-import { getUniqueName, PLOT_COUNT_RANGE } from '../shared/data'
+import { CONTINENT_NAMES } from '../data'
+import { getUniqueName, PLOT_COUNT_RANGE } from '../../shared/data'
+import { createPlotReducer } from './createPlot'
 
 export const createContinentReducer = (sess, payload = {}) => {
   const {
@@ -21,16 +21,5 @@ export const createContinentReducer = (sess, payload = {}) => {
   times(random(...PLOT_COUNT_RANGE), () =>
     createPlotReducer(sess, { continentId: continent.id }),
   )
-  return sess.state
-}
-
-export const createPlotReducer = (sess, payload = {}) => {
-  const { continentId, ...plot } = payload
-  const continent = sess.Continent.withId(continentId)
-  sess.Plot.create({
-    ...plot,
-    biome: sample(continent.biomes),
-    continentId,
-  })
   return sess.state
 }
