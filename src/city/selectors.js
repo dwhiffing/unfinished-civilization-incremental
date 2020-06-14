@@ -1,6 +1,11 @@
 import { createSelector } from 'redux-orm'
 import orm from '../orm'
-import { getList, totalResources, getFirst } from '../shared/selectors'
+import {
+  getList,
+  totalResources,
+  getFirst,
+  getFirstDeep,
+} from '../shared/selectors'
 
 export const getDistrictTypes = createSelector(orm, (session) =>
   getList(session.DistrictType),
@@ -46,3 +51,26 @@ export const makeGetCity = (sess, city) => ({
     }
   }),
 })
+
+export const getCitiesByIds = (
+  sess,
+  { systemId, planetId, continentId, cityId },
+) =>
+  getList(sess.City).filter((c) => {
+    if (systemId) {
+      const system = getFirstDeep(c, 'plot.continent.planet.system')
+      return system.id === +systemId
+    }
+    if (planetId) {
+      const planet = getFirstDeep(c, 'plot.continent.planet')
+      return planet.id === +planetId
+    }
+    if (continentId) {
+      const continent = getFirstDeep(c, 'plot.continent')
+      return continent.id === +continentId
+    }
+    if (cityId) {
+      return c.id === +cityId
+    }
+    return true
+  })
