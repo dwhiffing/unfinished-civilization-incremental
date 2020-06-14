@@ -30,7 +30,7 @@ export const Districts = ({ continentId, cityId, districts }) => {
           />
         ))}
       {districtTypes
-        .filter((b) => unlocks.includes(b.districtTypeId))
+        .filter((b) => unlocks.includes(b.id))
         .map((districtType) => (
           <Purchase
             key={districtType.id}

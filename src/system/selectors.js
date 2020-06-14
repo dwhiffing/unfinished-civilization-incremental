@@ -1,4 +1,5 @@
 import { createSelector } from 'redux-orm'
+import compact from 'lodash/compact'
 import { totalResources } from '../shared/selectors'
 import orm from '../orm'
 
@@ -21,4 +22,16 @@ export const getSystemResourceTotals = createSelector(
   orm,
   getSystemStockpiles,
   (_, stockpiles) => totalResources(stockpiles.flat(5).filter((t) => !!t)),
+)
+
+export const getSystemFull = createSelector(
+  orm,
+  getSystems,
+  getSystemPlanets,
+  getSystemStockpiles,
+  (_, system, planets, resources) => ({
+    ...system,
+    planets,
+    resources: resources ? compact(resources.flat(3)) : [],
+  }),
 )

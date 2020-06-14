@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
-import { getResourceTotals } from '../selectors'
 import {
   getSystems,
   getSystemResourceTotals,
@@ -9,14 +8,12 @@ import {
 } from '../../system/selectors'
 import { explore, settle } from '../store'
 import { Purchase } from './Purchase'
-import { Frame, Sidebar } from './Frame'
 import { Resources } from './Resources'
 
-export const Galaxy = () => {
+export const GalaxyRoute = () => {
   const systems = useSelector(getSystems)
-  const resources = useSelector(getResourceTotals)
   return (
-    <Frame sidebar={<Sidebar label="Galaxy" resources={resources} />}>
+    <>
       <span>Systems:</span>
 
       <Box display="flex" flexDirection="column">
@@ -30,7 +27,7 @@ export const Galaxy = () => {
       {systems.filter((p) => !p.explored).length > 0 && (
         <Purchase id="exploreGalaxy" action={explore()} />
       )}
-    </Frame>
+    </>
   )
 }
 

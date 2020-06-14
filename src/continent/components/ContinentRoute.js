@@ -1,58 +1,32 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box, Typography } from '@material-ui/core'
-import { getUnlocks } from '../../shared/selectors'
-import {
-  getContinentResourceTotals,
-  getContinentsPlanet,
-  getContinentsCities,
-  getContinentsPlots,
-  getContinents,
-} from '../selectors'
+import { getContinentFull } from '../selectors'
 import { Purchase } from '../../shared/components/Purchase'
 import { explore } from '../../shared/store'
 import { createCity } from '../../city/store'
 import { useParams } from 'react-router'
-import { Sidebar, Frame } from '../../shared/components/Frame'
 import { Resources } from '../../shared/components/Resources'
 
 export const ContinentRoute = () => {
   const { id = '0' } = useParams()
-  const continent = useSelector((state) => getContinents(state, +id))
-  const planet = useSelector((state) => getContinentsPlanet(state, +id))
-  const cities = useSelector((state) =>
-    getContinentsCities(state, +id).filter((t) => !!t),
-  )
-  const plots = useSelector((state) => getContinentsPlots(state, +id))
-  const resources = useSelector((state) =>
-    getContinentResourceTotals(state, +id),
-  )
-  const unlocks = useSelector(getUnlocks)
+  const continent = useSelector((state) => getContinentFull(state, +id))
 
-  if (!continent) {
+  if (!continent || !continent.planet) {
     return null
   }
 
   return (
-    <Frame
-      sidebar={
-        <Sidebar
-          uri={unlocks.includes('planet') && `#/planet/${planet.id}`}
-          linkText={unlocks.includes('planet') && `Back to ${planet.label}`}
-          label={`Continent: ${continent.label}`}
-          resources={resources}
-        />
-      }
-    >
+    <>
       <span>Cities:</span>
 
       <Box display="flex" flexDirection="column">
-        {cities.map((city) => (
+        {continent.cities.map((city) => (
           <CityItem key={city.id} city={city} />
         ))}
       </Box>
 
-      {plots
+      {continent.plots
         .filter((p) => typeof p.cityId !== 'number' && p.explored)
         .map((plot) => (
           <Box key={`${plot.id}-explore`} display="flex" alignItems="center">
@@ -65,14 +39,14 @@ export const ContinentRoute = () => {
           </Box>
         ))}
 
-      {plots.filter((p) => !p.city && !p.explored).length > 0 && (
+      {continent.plots.filter((p) => !p.city && !p.explored).length > 0 && (
         <Purchase
           continentId={+id}
           id="exploreContinent"
           action={explore({ continentId: continent.id })}
         />
       )}
-    </Frame>
+    </>
   )
 }
 

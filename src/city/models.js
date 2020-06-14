@@ -5,7 +5,6 @@ City.modelName = 'City'
 City.fields = {
   id: attr(),
   housing: attr(),
-  // plotId: oneToOne({ to: 'Plot', as: 'plot', relatedName: 'city' }),
 }
 
 export class DistrictType extends Model {}
