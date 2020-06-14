@@ -60,16 +60,16 @@ const useGetIsAffordable = ({ buyable, ...ids }) => {
 const useGetTotals = ({ cityId, continentId, planetId, systemId }) =>
   useSelector((state) => {
     if (typeof cityId === 'number') {
-      return getCityResourceTotals(+cityId)(state)
+      return getCityResourceTotals(state, +cityId)
     }
     if (typeof continentId === 'number') {
-      return getContinentResourceTotals(+continentId)(state)
+      return getContinentResourceTotals(state, +continentId)
     }
     if (typeof planetId === 'number') {
-      return getPlanetResourceTotals(+planetId)(state)
+      return getPlanetResourceTotals(state, +planetId)
     }
     if (typeof systemId === 'number') {
-      return getSystemResourceTotals(+systemId)(state)
+      return getSystemResourceTotals(state, +systemId)
     }
 
     return getResourceTotals(state)

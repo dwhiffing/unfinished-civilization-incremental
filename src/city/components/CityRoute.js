@@ -2,46 +2,56 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Districts } from './Districts'
 import { People } from './People'
-import { getCities } from '../selectors'
+import {
+  getCity,
+  getCityContinent,
+  getCityPlot,
+  getCityResources,
+  getCityDistricts,
+  getCityPeople,
+} from '../selectors'
 import { getUnlocks } from '../../shared/selectors'
 import { useParams } from 'react-router'
 import { Sidebar, Frame } from '../../shared/components/Frame'
-// TODO: Add actions to allow citizens to all be assigned/deassigned
 
 export const CityRoute = () => {
   const { id = '0' } = useParams()
-  const cities = useSelector(getCities)
+  const city = useSelector((state) => getCity(state, +id))
+  const continent = useSelector((state) => getCityContinent(state, +id))
+  const plot = useSelector((state) => getCityPlot(state, +id))
+  const people = useSelector((state) => getCityPeople(state, +id))
+  const resources = useSelector((state) => getCityResources(state, +id))
+  const districts = useSelector((state) => getCityDistricts(state, +id))
   const unlocks = useSelector(getUnlocks)
-  const city = cities.find((c) => `${c.id}` === id)
+
   if (!city) {
     return null
   }
-  const continentId = city.continent.id
 
   return (
     <Frame
       sidebar={
         <Sidebar
-          uri={unlocks.includes('continent') && `#/continent/${continentId}`}
+          uri={unlocks.includes('continent') && `#/continent/${continent.id}`}
           linkText={
-            unlocks.includes('continent') && `Back to ${city.continent.label}`
+            unlocks.includes('continent') && `Back to ${continent.label}`
           }
           label={`City: ${city.label}`}
-          resources={city.resources}
+          resources={resources}
         >
-          <span>biome: {city.plot.biome}</span>
+          <span>biome: {plot.biome}</span>
           <span>
-            housing: {city.people.length}/{city.housing}
+            housing: {people.length}/{city.housing}
           </span>
         </Sidebar>
       }
     >
-      <People continentId={continentId} cityId={city.id} people={city.people} />
+      <People people={people} />
 
       <Districts
-        continentId={continentId}
+        continentId={continent.id}
         cityId={city.id}
-        districts={city.districts}
+        districts={districts}
       />
     </Frame>
   )

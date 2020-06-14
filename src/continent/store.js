@@ -16,8 +16,8 @@ export const createContinentReducer = (sess, payload = {}) => {
     explored: false,
     biomes: planet.type.biomes,
     label,
+    planetId,
   })
-  planet.continents.add(continent)
   times(random(...PLOT_COUNT_RANGE), () =>
     createPlotReducer(sess, { continentId: continent.id }),
   )
@@ -27,10 +27,10 @@ export const createContinentReducer = (sess, payload = {}) => {
 export const createPlotReducer = (sess, payload = {}) => {
   const { continentId, ...plot } = payload
   const continent = sess.Continent.withId(continentId)
-  const plotInstance = sess.Plot.create({
+  sess.Plot.create({
     ...plot,
     biome: sample(continent.biomes),
+    continentId,
   })
-  continent.plots.add(plotInstance)
   return sess.state
 }

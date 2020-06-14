@@ -2,9 +2,15 @@ import React from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { DragList } from './DragList'
 import { INTERVAL } from '../../shared/data'
+import { useSelector } from 'react-redux'
+import { getTask, getPerson } from '../selectors'
 
 const Seat = ({ seat }) => {
-  const progressPercent = 1 - seat.progress / seat.task.duration
+  const task = useSelector((state) => getTask(state, seat.taskId))
+  const person = useSelector((state) =>
+    getPerson(state, typeof seat.personId === 'number' ? seat.personId : null),
+  )
+  const progressPercent = 1 - seat.progress / task.duration
   return (
     <Box display="flex" flexDirection="column" flex={1} maxWidth={90}>
       <Box
@@ -22,7 +28,7 @@ const Seat = ({ seat }) => {
             <Typography
               style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}
             >
-              {seat.task.id}
+              {task.id}
             </Typography>
 
             {typeof progressPercent === 'number' && (
@@ -58,8 +64,8 @@ const Seat = ({ seat }) => {
               />
               <DragList
                 droppableId={`seat-${seat.id}`}
-                isDropDisabled={!!seat.person}
-                items={seat.person ? [seat.person] : []}
+                isDropDisabled={!!person}
+                items={person ? [person] : []}
               />
             </Box>
           </Box>

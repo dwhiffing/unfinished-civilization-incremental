@@ -1,37 +1,19 @@
 import { createSelector } from 'redux-orm'
+import { totalResources } from '../shared/utils'
 import orm from '../orm'
-import { getList, totalResources, getFirst } from '../shared/selectors'
-import { getStockpiles } from '../city/selectors'
-import { makeGetCity } from '../city/selectors'
 
-export const getContinents = createSelector(orm, (session) =>
-  getList(session.Continent).map((continent) =>
-    makeGetContinent(session, continent),
-  ),
+export const getContinents = createSelector(orm.Continent)
+export const getContinentsPlanet = createSelector(orm.Continent.planet)
+export const getContinentsPlots = createSelector(orm.Continent.plots)
+export const getContinentsCities = createSelector(
+  orm.Continent.plots.map(orm.Plot.city),
+)
+export const getContinentResources = createSelector(
+  orm.Continent.plots.map(orm.Plot.city.stockpiles),
 )
 
-export const getContinentResourceTotals = (continentId) =>
-  createSelector(orm, getStockpiles, (_, stockpiles) =>
-    totalResources(
-      stockpiles.filter((r) => r.city.first().continentId === continentId),
-    ),
-  )
-
-export const makeGetContinent = (session, continent) => ({
-  explored: false,
-  ...continent.ref,
-  planet: getFirst(continent.planet.all()).ref,
-  plots: getList(continent.plots).map((p) => ({
-    id: p.id,
-    city: getFirst(p.cities),
-    ...p.ref,
-  })),
-  settled:
-    getList(continent.plots)
-      .map((p) => getFirst(p.cities))
-      .filter((p) => !!p).length > 0,
-  cities: getList(continent.plots)
-    .map((p) => getFirst(p.cities))
-    .filter((p) => !!p)
-    .map((city) => makeGetCity(session, city)),
-})
+export const getContinentResourceTotals = createSelector(
+  orm,
+  getContinentResources,
+  (_, stockpiles) => totalResources(stockpiles.flat(5).filter((t) => !!t)),
+)

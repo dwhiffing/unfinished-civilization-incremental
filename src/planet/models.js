@@ -1,8 +1,8 @@
-import { Model, many, attr } from 'redux-orm'
+import { Model, attr, fk } from 'redux-orm'
 export class Planet extends Model {}
 Planet.modelName = 'Planet'
 Planet.fields = {
   id: attr(),
   type: attr(),
-  continents: many('Continent', 'planet'),
+  systemId: fk({ to: 'System', as: 'system', relatedName: 'planets' }),
 }

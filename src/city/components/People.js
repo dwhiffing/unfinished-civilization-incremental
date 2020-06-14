@@ -1,7 +1,7 @@
 import React from 'react'
 import { DragList } from './/DragList'
 
-export const People = ({ continentId, cityId, people }) => (
+export const People = ({ people }) => (
   <>
     <DragList
       droppableId="people"

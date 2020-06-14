@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux'
 import { getUnlocks } from '../selectors'
 import ReactTooltip from 'react-tooltip'
 
-// TODO: needs to get color properly
 export const ResourceText = ({ resource }) => {
   return (
     <Box data-tip={resource.resourceId} display="flex">

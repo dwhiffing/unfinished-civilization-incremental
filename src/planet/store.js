@@ -11,9 +11,8 @@ export const createPlanet = (sess, payload = {}) => {
     ...planet,
     type: sample(TYPES),
     label: getUniqueName(sess.Planet, PLANET_NAMES),
+    systemId,
   })
-  const system = sess.System.withId(systemId)
-  system.planets.add(planetInstance)
   times(random(...CONTINENT_COUNT_RANGE), () =>
     createContinentReducer(sess, { planetId: planetInstance.ref.id }),
   )

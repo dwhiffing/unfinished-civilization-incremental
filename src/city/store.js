@@ -1,8 +1,8 @@
 import faker from 'faker'
+import sample from 'lodash/sample'
 import { CITY_NAMES } from './data'
 import { RESOURCE_MULTIPLIER, getUniqueName } from '../shared/data'
 import { createAction } from '@reduxjs/toolkit'
-import { getFirst, getList } from '../shared/selectors'
 import { FOOD_DRAIN } from '../shared/data'
 
 export const createCity = createAction('CREATE_CITY')
@@ -15,15 +15,12 @@ export const createCityReducer = (sess, payload) => {
 
   const plot = sess.Plot.withId(plotId)
   const allResources = sess.Resource.all().toModelArray()
-  const continent = getFirst(plot.continent)
-  const planet = getFirst(continent.planet)
-  const system = getFirst(planet.system)
   const cityInstance = sess.City.create({
     label,
     housing: 5,
-    continentId: continent.id,
-    planetId: planet.id,
-    systemId: system.id,
+    continentId: plot.continent.id,
+    planetId: plot.continent.planet.id,
+    systemId: plot.continent.planet.system.id,
   })
   const cityId = cityInstance.ref.id
 
@@ -32,18 +29,15 @@ export const createCityReducer = (sess, payload) => {
     const amount = _resource ? _resource.ref.amount : 0
     const _limit = _resource ? _resource.ref.limit : 100
     const limit = _limit * RESOURCE_MULTIPLIER
-    cityInstance.resources.add(
-      sess.ResourceStockpile.create({ resourceId: id, amount, limit }),
-    )
+    sess.ResourceStockpile.create({ resourceId: id, amount, limit, cityId })
   })
   people.forEach((person) => createPersonReducer(sess, { cityId, person }))
   createDistrictReducer(sess, { cityId, districtTypeId: 'center' })
 
-  plot.update({ explored: true })
-  continent.update({ explored: true })
-  planet.update({ explored: true })
-  system.update({ explored: true })
-  plot.cities.add(cityInstance)
+  plot.update({ explored: true, cityId })
+  plot.continent.update({ explored: true })
+  plot.continent.planet.update({ explored: true })
+  plot.continent.planet.system.update({ explored: true })
 
   return sess.state
 }
@@ -51,11 +45,14 @@ export const createCityReducer = (sess, payload) => {
 export const createDistrict = createAction('CREATE_BUILDING')
 export const createDistrictReducer = (sess, payload) => {
   const { cityId, districtTypeId, seatCount, ...district } = payload
-  const city = sess.City.withId(cityId)
-  const districtInstance = sess.District.create({ districtTypeId, ...district })
-  let districtType = getList(sess.DistrictType).find(
-    (b) => b.id === districtTypeId,
-  )
+  const districtInstance = sess.District.create({
+    districtTypeId,
+    cityId,
+    ...district,
+  })
+  let districtType = sess.DistrictType.all()
+    .toModelArray()
+    .find((b) => b.id === districtTypeId)
   districtType.tasks.forEach((task) => {
     let i = seatCount || 1
     while (i-- > 0) {
@@ -65,30 +62,19 @@ export const createDistrictReducer = (sess, payload) => {
       })
     }
   })
-  city.districts.add(districtInstance)
 
   return sess.state
 }
 
 export const createSeat = createAction('CREATE_SEAT')
 export const createSeatReducer = (sess, { districtId, taskId }) => {
-  const district = sess.District.withId(districtId)
-  const seatInstance = sess.Seat.create({
-    progress: 0,
-    taskId,
-  })
-  district.seats.add(seatInstance)
+  sess.Seat.create({ progress: 0, taskId, districtId })
   return sess.state
 }
 
 export const createPerson = createAction('CREATE_PERSON')
 export const createPersonReducer = (sess, { cityId, person }) => {
-  const city = sess.City.withId(cityId)
-  const personInstance = sess.Person.create({
-    label: faker.name.firstName(),
-    ...person,
-  })
-  city.people.add(personInstance)
+  sess.Person.create({ label: faker.name.firstName(), ...person, cityId })
   return sess.state
 }
 
@@ -98,13 +84,13 @@ export const dragReducer = (sess, { source, destination, draggableId }) => {
   if (!destination) {
     return sess.state
   }
-  let draggedPerson = getList(sess.Person).find(
-    (person) => `${person.id}` === draggableId,
-  )
+  let draggedPerson = sess.Person.all()
+    .toModelArray()
+    .find((person) => `${person.id}` === draggableId)
   if (source.droppableId === destination.droppableId) {
-    let otherPerson = getList(sess.Person).find(
-      (person) => person._fields.index === destination.index,
-    )
+    let otherPerson = sess.Person.all()
+      .toModelArray()
+      .find((person) => person._fields.index === destination.index)
     draggedPerson &&
       draggedPerson.update({
         index: destination.index,
@@ -114,75 +100,75 @@ export const dragReducer = (sess, { source, destination, draggableId }) => {
     let foundSeat = sess.Seat.withId(destination.droppableId.split('-')[1])
     if (draggedPerson.seat) {
       let currentSeat = sess.Seat.withId(draggedPerson.seat.id)
-      currentSeat.update({ person: undefined })
+      currentSeat.personId = null
     }
     if (foundSeat) {
-      draggedPerson.update({ seat: foundSeat })
-      foundSeat.update({ person: draggedPerson })
-    } else {
-      draggedPerson.update({ seat: undefined })
+      foundSeat.update({ personId: draggedPerson.id })
     }
   }
   return sess.state
 }
 
-// TODO: move to feature directory
 export function tickCities(sess, updates) {
-  getList(sess.City).forEach((city) => {
-    const pop = city.people.all().toRefArray().length
-    const growth = city.resources
-      .all()
-      .toRefArray()
-      .find((r) => r.resourceId === 'growth')
-    if (pop < city.housing) {
-      updates.push({
-        resourceId: 'growth',
-        cityId: city.id,
-        value: 1,
-      })
-      if (growth && growth.amount >= 5) {
-        createPersonReducer(sess, { cityId: city.id })
+  sess.City.all()
+    .toModelArray()
+    .forEach((city) => {
+      const pop = city.people.all().toRefArray().length
+      const growth = city.stockpiles
+        .all()
+        .toRefArray()
+        .find((s) => s.resourceId === 'growth')
+      if (pop < city.housing) {
         updates.push({
           resourceId: 'growth',
-          cityId: city.id,
-          value: -5,
+          id: city.id,
+          value: 1,
         })
+        if (growth && growth.amount >= 5) {
+          createPersonReducer(sess, { cityId: city.id })
+          updates.push({
+            resourceId: 'growth',
+            id: city.id,
+            value: -5,
+          })
+        }
       }
-    }
-  })
+    })
 }
 
 export function tickSeats(sess, updates) {
-  getList(sess.Seat).forEach((seatModel) => {
-    const seat = seatModel.ref
-    const district = getFirst(seatModel.districts)
-    const { effects, duration } = sess.Task.withId(seat.taskId).ref
-    const cityId = district.city.all().toRefArray()[0].id
-    if (seat.progress >= duration) {
-      effects.forEach((effect) => {
-        const resourceId = effect.id
-        let value = effect.value
-        if (typeof value === 'function') {
-          value = value()
-        }
-        value = value * RESOURCE_MULTIPLIER
-        updates.push({ resourceId, value, cityId })
+  // TODO: reduce the number of updates this pushes by combining all similar city id updates
+  sess.Seat.all()
+    .toModelArray()
+    .forEach((seat) => {
+      const { effects, duration } = seat.task
+      const id = seat.district.city.id
+      if (seat.progress >= duration) {
+        effects.forEach((effect) => {
+          const resourceId = effect.id
+          let value = effect.value
+          if (Array.isArray(value)) {
+            value = sample(value)
+          }
+          value = value * RESOURCE_MULTIPLIER
+          updates.push({ resourceId, value, id })
+        })
+        return seat.update({ progress: 0 })
+      }
+      seat.update({
+        progress: seat.person ? seat.progress + 1 : seat.progress,
       })
-      return seatModel.update({ progress: 0 })
-    }
-    seatModel.update({
-      progress: seat.person ? seat.progress + 1 : seat.progress,
     })
-  })
 }
 
 export function tickPeople(sess, updates) {
-  //TODO: this should reduce to array of cities being updated
-  getList(sess.Person).forEach(({ city }) => {
-    updates.push({
-      resourceId: 'food',
-      cityId: getFirst(city).id,
-      value: -FOOD_DRAIN,
+  sess.City.all()
+    .toModelArray()
+    .forEach((city) => {
+      updates.push({
+        resourceId: 'food',
+        id: city.id,
+        value: FOOD_DRAIN * -city.people.all().toModelArray().length,
+      })
     })
-  })
 }

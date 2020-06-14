@@ -47,7 +47,6 @@ const reducer = (state = orm.getEmptyState(), action) => {
   return state
 }
 
-const CONSTANT_MODELS = ['DistrictType', 'Resource', 'Task', 'Buyable']
 const transformCircular = createTransform(
   (inboundState, key) => stringify(inboundState),
   (outboundState, key) => parse(outboundState),
@@ -58,7 +57,6 @@ const persistConfig = {
   storage,
   stateReconciler: autoMergeLevel2,
   transforms: [transformCircular],
-  blacklist: CONSTANT_MODELS,
 }
 
 const persistedReducer = persistReducer(persistConfig, reducer)

@@ -2,8 +2,16 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
 import { getUnlocks } from '../../shared/selectors'
-import { getPlanets, getPlanetResourceTotals } from '../selectors'
-import { getContinentResourceTotals } from '../../continent/selectors'
+import {
+  getPlanets,
+  getPlanetsSystem,
+  getPlanetResourceTotals,
+  getPlanetsContinents,
+} from '../selectors'
+import {
+  getContinentResourceTotals,
+  getContinentsCities,
+} from '../../continent/selectors'
 import { explore, settle } from '../../shared/store'
 import { Purchase } from '../../shared/components/Purchase'
 import { useParams } from 'react-router'
@@ -12,10 +20,11 @@ import { Resources } from '../../shared/components/Resources'
 
 export const PlanetRoute = () => {
   const { id = '0' } = useParams()
-  const planets = useSelector(getPlanets)
-  const resources = useSelector(getPlanetResourceTotals(+id))
+  const planet = useSelector((state) => getPlanets(state, id))
+  const continents = useSelector((state) => getPlanetsContinents(state, id))
+  const resources = useSelector((state) => getPlanetResourceTotals(state, +id))
   const unlocks = useSelector(getUnlocks)
-  const planet = planets.find((c) => `${c.id}` === id)
+  const system = useSelector((state) => getPlanetsSystem(state, id))
   if (!planet) {
     return null
   }
@@ -24,10 +33,8 @@ export const PlanetRoute = () => {
     <Frame
       sidebar={
         <Sidebar
-          uri={unlocks.includes('system') && `#/system/${planet.system.id}`}
-          linkText={
-            unlocks.includes('system') && `Back to ${planet.system.label}`
-          }
+          uri={unlocks.includes('system') && `#/system/${system.id}`}
+          linkText={unlocks.includes('system') && `Back to ${system.label}`}
           label={`Planet: ${planet.label}`}
           resources={resources}
         >
@@ -38,14 +45,14 @@ export const PlanetRoute = () => {
       <span>Continents:</span>
 
       <Box display="flex" flexDirection="column">
-        {planet.continents
+        {continents
           .filter((c) => c.explored)
           .map((continent) => (
             <ContinentItem key={continent.id} continent={continent} />
           ))}
       </Box>
 
-      {planet.continents.filter((c) => !c.explored).length > 0 && (
+      {continents.filter((c) => !c.explored).length > 0 && (
         <Purchase
           planetId={+id}
           id="explorePlanet"
@@ -57,14 +64,19 @@ export const PlanetRoute = () => {
 }
 
 const ContinentItem = ({ continent }) => {
-  const resources = useSelector(getContinentResourceTotals(continent.id))
+  const resources = useSelector((state) =>
+    getContinentResourceTotals(state, continent.id),
+  )
+  const cities = useSelector((state) =>
+    getContinentsCities(state, continent.id).filter((t) => !!t),
+  )
   return (
     <Box my={1} display="flex" alignItems="center">
       <a href={`#/continent/${continent.id}`} style={{ marginRight: 8 }}>
         {continent.label}
       </a>
       <Resources hide resources={resources} />
-      {!continent.settled && (
+      {cities.length === 0 && (
         <Purchase
           id="settleContinent"
           action={settle({ continentId: continent.id })}

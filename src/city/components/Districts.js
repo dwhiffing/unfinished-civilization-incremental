@@ -6,7 +6,11 @@ import { createSeat, createDistrict } from '../store'
 import groupBy from 'lodash/groupBy'
 import { useSelector } from 'react-redux'
 import { getUnlocks } from '../../shared/selectors'
-import { getDistrictTypes } from '../selectors'
+import {
+  getDistrictType,
+  getDistrictTypes,
+  getDistrictSeats,
+} from '../selectors'
 
 export const Districts = ({ continentId, cityId, districts }) => {
   const unlocks = useSelector(getUnlocks)
@@ -16,11 +20,11 @@ export const Districts = ({ continentId, cityId, districts }) => {
   return (
     <Box>
       {districts
-        .filter((b) => unlocks.includes(b.districtTypeId))
+        .filter((d) => unlocks.includes(d.districtTypeId))
         .map((district) => (
           <DistrictItem
             key={`district-${district.id}`}
-            district={district}
+            districtId={district.id}
             continentId={continentId}
             cityId={cityId}
           />
@@ -40,14 +44,16 @@ export const Districts = ({ continentId, cityId, districts }) => {
   )
 }
 
-const DistrictItem = (props) => {
-  const taskGroups = groupBy(
-    props.district.seats.filter((s) => !!s.task),
-    (seat) => seat.task.id,
+const DistrictItem = ({ continentId, cityId, districtId }) => {
+  const districtType = useSelector((state) =>
+    getDistrictType(state, districtId),
   )
+  const seats = useSelector((state) => getDistrictSeats(state, districtId))
+
+  const taskGroups = groupBy(seats, (seat) => seat.taskId)
   return (
     <Box mb={3}>
-      <Typography>{props.district.label}</Typography>
+      <Typography>{districtType.label}</Typography>
 
       {Object.entries(taskGroups).map(([taskId, seats], index) => (
         <DistrictTaskGroupItem
@@ -55,9 +61,9 @@ const DistrictItem = (props) => {
           taskId={taskId}
           seats={seats}
           index={index}
-          id={props.district.id}
-          continentId={props.continentId}
-          cityId={props.cityId}
+          id={districtId}
+          continentId={continentId}
+          cityId={cityId}
         />
       ))}
     </Box>

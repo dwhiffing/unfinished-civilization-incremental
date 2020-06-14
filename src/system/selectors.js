@@ -1,25 +1,24 @@
 import { createSelector } from 'redux-orm'
+import { totalResources } from '../shared/utils'
 import orm from '../orm'
-import { getStockpiles } from '../city/selectors'
-import { getList, totalResources } from '../shared/selectors'
-import { makeGetPlanet } from '../planet/selectors'
 
-export const getSystems = createSelector(orm, (session) =>
-  getList(session.System).map((system) => {
-    const planets = getList(system.planets).map((planet) =>
-      makeGetPlanet(session, planet),
-    )
-    return {
-      ...system.ref,
-      settled: planets.some((p) => p.settled),
-      planets,
-    }
-  }),
+export const getSystems = createSelector(orm.System)
+export const getSystemPlanets = createSelector(orm.System.planets)
+export const getSystemsCities = createSelector(
+  orm.System.planets.map(
+    orm.Planet.continents.map(orm.Continent.plots.map(orm.Plot.city)),
+  ),
+)
+const getSystemStockpiles = createSelector(
+  orm.System.planets.map(
+    orm.Planet.continents.map(
+      orm.Continent.plots.map(orm.Plot.city.stockpiles),
+    ),
+  ),
 )
 
-export const getSystemResourceTotals = (systemId) =>
-  createSelector(orm, getStockpiles, (_, stockpiles) =>
-    totalResources(
-      stockpiles.filter((r) => r.city.first().systemId === systemId),
-    ),
-  )
+export const getSystemResourceTotals = createSelector(
+  orm,
+  getSystemStockpiles,
+  (_, stockpiles) => totalResources(stockpiles.flat(5).filter((t) => !!t)),
+)

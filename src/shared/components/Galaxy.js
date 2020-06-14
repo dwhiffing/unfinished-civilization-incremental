@@ -2,7 +2,11 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
 import { getResourceTotals } from '../selectors'
-import { getSystems, getSystemResourceTotals } from '../../system/selectors'
+import {
+  getSystems,
+  getSystemResourceTotals,
+  getSystemsCities,
+} from '../../system/selectors'
 import { explore, settle } from '../store'
 import { Purchase } from './Purchase'
 import { Frame, Sidebar } from './Frame'
@@ -31,14 +35,17 @@ export const Galaxy = () => {
 }
 
 const SystemItem = ({ system }) => {
-  const resources = useSelector(getSystemResourceTotals(system.id))
+  const resources = useSelector((state) =>
+    getSystemResourceTotals(state, system.id),
+  )
+  const cities = useSelector((state) => getSystemsCities(state, system.id))
   return (
     <Box my={1} display="flex" alignItems="center">
       <a href={`#/system/${system.id}`} style={{ marginRight: 8 }}>
         {system.label}
       </a>
       <Resources hide resources={resources} />
-      {!system.settled && (
+      {cities.length === 0 && (
         <Purchase id="settleSystem" action={settle({ systemId: system.id })} />
       )}
     </Box>

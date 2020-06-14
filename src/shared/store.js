@@ -1,9 +1,8 @@
 import { createAction } from '@reduxjs/toolkit'
 import { createCityReducer } from '../city/store'
-import { getFirst, getFirstDeep } from './selectors'
-import { getList } from './selectors'
 import { tickCities, tickPeople, tickSeats } from '../city/store'
 import random from 'lodash/random'
+import pickBy from 'lodash/pickBy'
 import times from 'lodash/times'
 import { tasks } from '../city/data'
 import {
@@ -16,24 +15,24 @@ import {
 import { districtTypes } from '../city/data'
 import { createSystem } from '../system/store'
 import clamp from 'lodash/clamp'
-import { getCitiesByIds } from '../city/selectors'
 
 export const createInitial = createAction('INIT')
 export const createInitialReducer = (sess) => {
-  buyables.forEach((buyable) => sess.Buyable.create({ ...buyable }))
-  resources.forEach((resource) =>
-    sess.Resource.create({ ...resource, amount: 0 }),
-  )
-  tasks.forEach((task) => sess.Task.create({ ...task }))
-  districtTypes.forEach(({ ...districtType }) =>
-    sess.DistrictType.create({ ...districtType }),
-  )
-
   if (sess.System.all().toRefArray().length === 0) {
+    // TODO: these should update the stats of the loaded entities if already started
+    buyables.forEach((buyable) => sess.Buyable.create({ ...buyable }))
+    resources.forEach((resource) =>
+      sess.Resource.create({ ...resource, amount: 0 }),
+    )
+    tasks.forEach((task) => sess.Task.create({ ...task }))
+    districtTypes.forEach(({ ...districtType }) =>
+      sess.DistrictType.create({ ...districtType }),
+    )
+
     times(random(...SYSTEM_COUNT_RANGE), () => createSystem(sess, {}))
-    createCityReducer(sess, { plotId: getFirst(sess.Plot).id })
+    createCityReducer(sess, { plotId: sess.Plot.first().id })
     unlockReducer(sess, 'center')
-    updateResourceReducer(sess, { resourceId: 'food', cityId: 0, value: 100 })
+    updateResourceReducer(sess, { resourceId: 'food', id: 0, value: 100 })
 
     if (UNLOCK_ALL) {
       UNLOCKS.forEach((id) => unlockReducer(sess, id))
@@ -65,21 +64,19 @@ export const applyTickEffectsReducer = (sess) => {
 }
 
 export const updateResource = createAction('UPDATE_RESOURCE')
-export function updateResourceReducer(sess, { resourceId: id, value, ...ids }) {
+export function updateResourceReducer(sess, { resourceId, value, ...ids }) {
   if (value === 0) return sess.state
 
-  unlockReducer(sess, id)
-
+  unlockReducer(sess, resourceId)
   let remaining = value
-  getCitiesByIds(sess, { ...ids }).forEach((city) => {
-    const resource = getList(city.resources).find(
-      ({ ref }) => ref.resourceId === id,
-    )
-    let { amount, limit } = resource.ref
-    const newAmount = clamp(amount + remaining, 0, limit)
-    remaining = amount + remaining - newAmount
-    resource.update({ amount: newAmount })
-  })
+  sess.City.filter(pickBy(ids, (v) => typeof v === 'number'))
+    .toModelArray()
+    .forEach((city) => {
+      const stockpile = city.stockpiles.filter({ resourceId }).first()
+      const newAmount = clamp(stockpile.amount + remaining, 0, stockpile.limit)
+      remaining = stockpile.amount + remaining - newAmount
+      stockpile.update({ amount: newAmount })
+    })
 
   return sess.state
 }
@@ -90,15 +87,15 @@ export const exploreReducer = (sess, payload = {}) => {
   let explorable
   if (typeof systemId === 'number') {
     const system = sess.System.withId(systemId)
-    explorable = getList(system.planets).filter((c) => !c.explored)[0]
+    explorable = system.planets.exclude({ explored: true }).first()
   } else if (typeof planetId === 'number') {
     const planet = sess.Planet.withId(planetId)
-    explorable = getList(planet.continents).filter((c) => !c.explored)[0]
+    explorable = planet.continents.exclude({ explored: true }).first()
   } else if (typeof continentId === 'number') {
     const continent = sess.Continent.withId(continentId)
-    explorable = getList(continent.plots).filter((p) => !p.explored)[0]
+    explorable = continent.plots.exclude({ explored: true }).first()
   } else {
-    explorable = getList(sess.System).filter((p) => !p.explored)[0]
+    explorable = sess.System.exclude({ explored: true }).first()
   }
   explorable.update({ explored: true })
   return sess.state
@@ -110,16 +107,13 @@ export const settleReducer = (sess, payload = {}) => {
   let plotId
   if (typeof systemId === 'number') {
     const system = sess.System.withId(systemId)
-    const plot = getFirstDeep(system, 'planets.continents.plots')
-    plotId = plot.id
+    plotId = system.planets.first().continents.first().plots.first().id
   } else if (typeof planetId === 'number') {
     const planet = sess.Planet.withId(planetId)
-    const plot = getFirstDeep(planet, 'continents.plots')
-    plotId = plot.id
+    plotId = planet.continents.first().plots.first().id
   } else if (typeof continentId === 'number') {
     const continent = sess.Continent.withId(continentId)
-    const plot = getFirst(continent.plots)
-    plotId = plot.id
+    plotId = continent.plots.first().id
   }
   createCityReducer(sess, { plotId })
   return sess.state

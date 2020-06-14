@@ -1,13 +1,11 @@
-import { Model, many, attr, fk } from 'redux-orm'
+import { Model, attr, fk, oneToOne } from 'redux-orm'
 
 export class City extends Model {}
 City.modelName = 'City'
 City.fields = {
   id: attr(),
-  districts: many('District', 'city'),
   housing: attr(),
-  resources: many('ResourceStockpile', 'city'),
-  people: many('Person', 'city'),
+  // plotId: oneToOne({ to: 'Plot', as: 'plot', relatedName: 'city' }),
 }
 
 export class DistrictType extends Model {}
@@ -22,22 +20,27 @@ export class District extends Model {}
 District.modelName = 'District'
 District.fields = {
   id: attr(),
-  districtTypeId: fk({ to: 'DistrictType', as: 'districtType' }),
-  seats: many('Seat', 'districts'),
+  districtTypeId: fk({
+    to: 'DistrictType',
+    as: 'districtType',
+    relatedName: 'districts',
+  }),
+  cityId: fk({ to: 'City', as: 'city', relatedName: 'districts' }),
 }
 
 export class Person extends Model {}
 Person.modelName = 'Person'
 Person.fields = {
   id: attr(),
-  seat: attr(),
+  cityId: fk({ to: 'City', as: 'city', relatedName: 'people' }),
 }
 
 export class ResourceStockpile extends Model {}
 ResourceStockpile.modelName = 'ResourceStockpile'
 ResourceStockpile.fields = {
+  resourceId: fk({ to: 'Resource', as: 'resource', relatedName: 'stockpiles' }),
+  cityId: fk({ to: 'City', as: 'city', relatedName: 'stockpiles' }),
   id: attr(),
-  resourceId: fk({ to: 'Resource', as: 'resource' }),
   amount: attr(),
   limit: attr(),
 }
@@ -45,9 +48,9 @@ ResourceStockpile.fields = {
 export class Seat extends Model {}
 Seat.modelName = 'Seat'
 Seat.fields = {
-  districtId: fk({ to: 'District', as: 'district' }),
-  taskId: fk({ to: 'Task', as: 'task' }),
-  personId: fk({ to: 'Person', as: 'person' }),
+  districtId: fk({ to: 'District', as: 'district', relatedName: 'seats' }),
+  taskId: fk({ to: 'Task', as: 'task', relatedName: 'seats' }),
+  personId: oneToOne({ to: 'Person', as: 'person', relatedName: 'seat' }),
 }
 
 export class Task extends Model {}

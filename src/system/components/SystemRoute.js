@@ -2,8 +2,15 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
 import { getUnlocks } from '../../shared/selectors'
-import { getSystems, getSystemResourceTotals } from '../selectors'
-import { getPlanetResourceTotals } from '../../planet/selectors'
+import {
+  getSystems,
+  getSystemPlanets,
+  getSystemResourceTotals,
+} from '../selectors'
+import {
+  getPlanetResourceTotals,
+  getPlanetsCities,
+} from '../../planet/selectors'
 import { explore, settle } from '../../shared/store'
 import { Purchase } from '../../shared/components/Purchase'
 import { useParams } from 'react-router'
@@ -12,9 +19,9 @@ import { Resources } from '../../shared/components/Resources'
 
 export const SystemRoute = () => {
   const { id = '0' } = useParams()
-  const systems = useSelector(getSystems)
-  const system = systems.find((c) => `${c.id}` === id)
-  const resources = useSelector(getSystemResourceTotals(+id))
+  const system = useSelector((state) => getSystems(state, +id))
+  const planets = useSelector((state) => getSystemPlanets(state, +id))
+  const resources = useSelector((state) => getSystemResourceTotals(state, +id))
   const unlocks = useSelector(getUnlocks)
   return (
     <Frame
@@ -30,14 +37,14 @@ export const SystemRoute = () => {
       <span>Planets:</span>
 
       <Box display="flex" flexDirection="column">
-        {system.planets
+        {planets
           .filter((p) => p.explored)
           .map((planet) => (
             <PlanetItem key={planet.id} planet={planet} />
           ))}
       </Box>
 
-      {system.planets.filter((p) => !p.explored).length > 0 && (
+      {planets.filter((p) => !p.explored).length > 0 && (
         <Purchase
           systemId={system.id}
           id="exploreContinent"
@@ -49,16 +56,23 @@ export const SystemRoute = () => {
 }
 
 const PlanetItem = ({ planet }) => {
-  const resources = useSelector(getPlanetResourceTotals(planet.id))
+  const resources = useSelector((state) =>
+    getPlanetResourceTotals(state, planet.id),
+  )
+  const cities = useSelector((state) =>
+    getPlanetsCities(state, planet.id)
+      .flat(5)
+      .filter((t) => !!t),
+  )
   return (
     <Box my={1} display="flex" alignItems="center">
       <a href={`#/planet/${planet.id}`} style={{ marginRight: 8 }}>
         {planet.label}
       </a>
       <Resources hide resources={resources} />
-      {!planet.settled && (
+      {cities.length === 0 && (
         <Purchase
-          systemId={planet.system.id}
+          systemId={planet.systemId}
           id="settlePlanet"
           action={settle({ planetId: planet.id })}
         />

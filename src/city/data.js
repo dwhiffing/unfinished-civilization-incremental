@@ -1,6 +1,3 @@
-import random from 'lodash/random'
-import sample from 'lodash/sample'
-
 export const CITY_NAMES = [
   'Kilgate',
   'Dustfair',
@@ -77,8 +74,8 @@ export const tasks = [
     id: 'scavenge',
     duration: 1,
     effects: [
-      { id: 'food', value: random(1, 4) },
-      { id: 'wood', value: () => sample([0, 0, 0, 0.1, 0.2]) },
+      { id: 'food', value: [1, 4] },
+      { id: 'wood', value: [0, 0, 0, 0.1, 0.2] },
     ],
   },
   {
