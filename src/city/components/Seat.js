@@ -3,13 +3,11 @@ import { Box, Typography } from '@material-ui/core'
 import { DragList } from './DragList'
 import { INTERVAL } from '../../shared/data'
 import { useSelector } from 'react-redux'
-import { getTask, getPerson } from '../selectors'
+import { getSeatTask, getSeatPerson } from '../selectors'
 
 const Seat = ({ seat }) => {
-  const task = useSelector((state) => getTask(state, seat.taskId))
-  const person = useSelector((state) =>
-    getPerson(state, typeof seat.personId === 'number' ? seat.personId : null),
-  )
+  const task = useSelector((state) => getSeatTask(state, seat.id))
+  const person = useSelector((state) => getSeatPerson(state, seat.id))
   const progressPercent = 1 - seat.progress / task.duration
   return (
     <Box display="flex" flexDirection="column" flex={1} maxWidth={90}>

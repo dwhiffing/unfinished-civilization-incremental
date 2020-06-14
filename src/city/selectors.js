@@ -4,14 +4,18 @@ import orm from '../orm'
 
 export const getCity = createSelector(orm.City)
 export const getCityPlot = createSelector(orm.City.plot)
+export const getCitySeats = createSelector(
+  orm.City.districts.map(orm.District.seats),
+)
 export const getCityDistricts = createSelector(orm.City.districts)
 export const getCityResources = createSelector(orm.City.stockpiles)
 export const getCityContinent = createSelector(orm.City.plot.continent)
 
+export const getSeatTask = createSelector(orm.Seat.task)
+export const getSeatPerson = createSelector(orm.Seat.person)
 export const getTask = createSelector(orm.Task)
 export const getPerson = createSelector(orm.Person)
 export const getDistrict = createSelector(orm.District)
-export const getPersonSeat = createSelector(orm.Person.seat)
 export const getDistrictTypes = createSelector(orm.DistrictType)
 export const getDistrictSeats = createSelector(orm.District.seats)
 export const getDistrictType = createSelector(orm.District.districtType)
