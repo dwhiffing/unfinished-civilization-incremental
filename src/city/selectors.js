@@ -19,7 +19,6 @@ export const getDistrict = createSelector(orm.District)
 export const getDistrictTypes = createSelector(orm.DistrictType)
 export const getDistrictSeats = createSelector(orm.District.seats)
 export const getDistrictType = createSelector(orm.District.districtType)
-
 export const getCityResourceTotals = createSelector(
   orm,
   getCityResources,
@@ -40,4 +39,24 @@ export const getCityPeople = createSelector(
             return { ...p, seat: seat ? seat.ref : null }
           })
       : [],
+)
+
+export const getCityFull = createSelector(
+  orm,
+  getCity,
+  getCityPlot,
+  getCitySeats,
+  getCityDistricts,
+  getCityResources,
+  getCityContinent,
+  getCityPeople,
+  (_, city, plot, seats, districts, resources, continent, people) => ({
+    ...city,
+    plot,
+    seats: seats ? seats.flat() : [],
+    people,
+    continent,
+    resources,
+    districts,
+  }),
 )
