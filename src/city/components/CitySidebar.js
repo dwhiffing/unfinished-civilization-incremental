@@ -8,6 +8,7 @@ export const CitySidebar = () => {
   const { id = '0' } = useParams()
   const unlocks = useSelector(getUnlocks)
   const city = useSelector((state) => getCityFull(state, id))
+  if (!city || !city.continent) return false
   return (
     <Sidebar
       uri={unlocks.includes('continent') && `#/continent/${city.continent.id}`}

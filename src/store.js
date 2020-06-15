@@ -12,13 +12,12 @@ import { createInitialReducer } from './shared/store/createInitial'
 import { createPlanetReducer } from './planet/store'
 import { createSystemReducer } from './system/store'
 import { createPlotReducer, createContinentReducer } from './continent/store'
+import { createCityReducer, createPersonReducer } from './city/store'
 import {
-  createCityReducer,
   createSeatReducer,
   createDistrictReducer,
   dragReducer,
-  createPersonReducer,
-} from './city/store'
+} from './district/store'
 
 const reducers = {
   INIT: createInitialReducer,

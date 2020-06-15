@@ -1,7 +1,6 @@
 import { createCityReducer } from '../../city/store/createCity'
 import random from 'lodash/random'
 import times from 'lodash/times'
-import { tasks } from '../../city/data'
 import {
   SYSTEM_COUNT_RANGE,
   UNLOCK_ALL,
@@ -9,7 +8,7 @@ import {
   buyables,
   resources,
 } from '../data'
-import { districtTypes } from '../../city/data'
+import { tasks, districtTypes } from '../../district/data'
 import { createSystemReducer } from '../../system/store/createSystem'
 import { unlockReducer } from './unlock'
 import { updateResourceReducer } from './updateResource'

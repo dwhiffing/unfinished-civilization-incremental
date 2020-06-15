@@ -1,7 +1,7 @@
 import { CITY_NAMES } from '../data'
 import { RESOURCE_MULTIPLIER, getUniqueName } from '../../shared/data'
 import { createPersonReducer } from './createPerson'
-import { createDistrictReducer } from './createDistrict'
+import { createDistrictReducer } from '../../district/store/createDistrict'
 import { createAction } from '@reduxjs/toolkit'
 
 export const createCity = createAction('CREATE_CITY')
@@ -16,7 +16,7 @@ export const createCityReducer = (sess, payload) => {
   const allResources = sess.Resource.all().toModelArray()
   const cityInstance = sess.City.create({
     label,
-    housing: 5,
+    housing: 1,
     continentId: plot.continent.id,
     planetId: plot.continent.planet.id,
     systemId: plot.continent.planet.system.id,

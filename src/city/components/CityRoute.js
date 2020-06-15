@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Districts } from './Districts'
-import { People } from './People'
+import { Districts } from '../../district/components/Districts'
 import { getCityFull } from '../selectors'
 import { useParams } from 'react-router'
 
@@ -15,8 +14,6 @@ export const CityRoute = () => {
 
   return (
     <>
-      <People people={city.people} />
-
       <Districts
         continentId={city.continent.id}
         cityId={city.id}

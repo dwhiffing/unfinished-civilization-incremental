@@ -1,5 +1,5 @@
 import React from 'react'
-import { DragList } from './/DragList'
+import { DragList } from './DragList'
 
 export const People = ({ people }) => (
   <>

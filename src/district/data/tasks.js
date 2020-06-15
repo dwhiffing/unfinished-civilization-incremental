@@ -4,7 +4,7 @@ export const tasks = [
     duration: 1,
     effects: [
       { id: 'food', value: [1, 4] },
-      { id: 'wood', value: [0, 0, 0, 0.1, 0.2] },
+      { id: 'wood', value: [0, 0.1, 0.2] },
     ],
   },
   {
