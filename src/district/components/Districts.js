@@ -11,6 +11,8 @@ import {
   getDistrictTypes,
   getDistrictSeats,
 } from '../selectors'
+import { People } from './People'
+import { getCityPeople } from '../../city/selectors'
 
 export const Districts = ({ continentId, cityId, districts }) => {
   const unlocks = useSelector(getUnlocks)
@@ -21,14 +23,20 @@ export const Districts = ({ continentId, cityId, districts }) => {
     <Box>
       {districts
         .filter((d) => unlocks.includes(d.districtTypeId))
-        .map((district) => (
-          <DistrictItem
-            key={`district-${district.id}`}
-            districtId={district.id}
-            continentId={continentId}
-            cityId={cityId}
-          />
-        ))}
+        .map((district) => {
+          const Component =
+            district.districtTypeId === 'center'
+              ? CityCenterDistrict
+              : DistrictItem
+          return (
+            <Component
+              key={`district-${district.id}`}
+              districtId={district.id}
+              continentId={continentId}
+              cityId={cityId}
+            />
+          )
+        })}
       {districtTypes
         .filter((b) => unlocks.includes(b.id))
         .map((districtType) => (
@@ -87,3 +95,32 @@ const DistrictTaskGroupItem = (props) => (
     />
   </Box>
 )
+
+const CityCenterDistrict = ({ continentId, cityId, districtId }) => {
+  const districtType = useSelector((state) =>
+    getDistrictType(state, districtId),
+  )
+  const seats = useSelector((state) => getDistrictSeats(state, districtId))
+  const people = useSelector((state) => getCityPeople(state, cityId))
+  const taskGroups = groupBy(seats, (seat) => seat.taskId)
+
+  return (
+    <Box mb={3}>
+      <Typography>{districtType.label}</Typography>
+
+      <People people={people} />
+
+      {Object.entries(taskGroups).map(([taskId, seats], index) => (
+        <DistrictTaskGroupItem
+          key={taskId}
+          taskId={taskId}
+          seats={seats}
+          index={index}
+          id={districtId}
+          continentId={continentId}
+          cityId={cityId}
+        />
+      ))}
+    </Box>
+  )
+}

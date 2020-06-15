@@ -8,6 +8,7 @@ export const getCitySeats = createSelector(
   orm.City.districts.map(orm.District.seats),
 )
 export const getCityDistricts = createSelector(orm.City.districts)
+export const getStockpiles = createSelector(orm.ResourceStockpile)
 export const getCityResources = createSelector(orm.City.stockpiles)
 export const getCityContinent = createSelector(orm.City.plot.continent)
 

@@ -2,7 +2,7 @@ export const districtTypes = [
   {
     id: 'center',
     label: 'City Center',
-    tasks: [{ id: 'scavenge' }],
+    tasks: [{ id: 'scavenge' }, { id: 'dream' }],
   },
   { id: 'barracks', label: 'Encampment', tasks: [{ id: 'hunt' }] },
   {

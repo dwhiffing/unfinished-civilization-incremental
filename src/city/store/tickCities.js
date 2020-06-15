@@ -7,25 +7,22 @@ export function tickCities(sess) {
   sess.City.all()
     .toModelArray()
     .forEach((city) => {
-      cityFoodDrain(sess, city)
       cityGrowth(sess, city)
+      cityFoodDrain(sess, city)
       citySeats(sess, city)
     })
 }
 
 function cityFoodDrain(sess, { id, people }) {
-  const totalDrain = FOOD_DRAIN * -people.all().toModelArray().length
+  const totalDrain = FOOD_DRAIN * -people.count()
   updateResource(sess, { resourceId: 'food', id, value: totalDrain })
 }
 
 function cityGrowth(sess, { id, people, housing, stockpiles }) {
-  if (people.count() < housing) {
-    updateResource(sess, { resourceId: 'growth', id, value: 1 })
-    const growth = stockpiles.filter({ resourceId: 'growth' }).first()
-    if (growth && growth.amount >= 5) {
-      createPersonReducer(sess, { cityId: id })
-      updateResource(sess, { resourceId: 'growth', id, value: -5 })
-    }
+  const food = stockpiles.filter({ resourceId: 'food' }).first()
+  if (food.amount >= food.limit) {
+    updateResource(sess, { resourceId: 'food', id, value: food.limit * -0.9 })
+    createPersonReducer(sess, { cityId: id })
   }
 }
 
@@ -41,7 +38,7 @@ function citySeats(sess, city) {
   const totalledEffects = completedSeats.reduce((obj, seat) => {
     seat.task.effects.forEach(({ id, value }) => {
       value = Array.isArray(value) ? sample(value) : value
-      obj[id] = (obj[id] || 0) + value * RESOURCE_MULTIPLIER
+      obj[id] = (obj[id] || 0) + applyResourceModifiers(value, id, city)
     })
     return obj
   }, {})
@@ -50,3 +47,25 @@ function citySeats(sess, city) {
     updateResource(sess, { resourceId, id: city.id, value })
   })
 }
+
+const applyResourceModifiers = (value, id, city) => {
+  let base = value * RESOURCE_MULTIPLIER
+  if (id === 'food') {
+    const { housing, people } = city
+    const remainingHousing = housing - people.count()
+    let foodModifier = 1
+    if (remainingHousing < 2) {
+      foodModifier = 0.5
+    }
+    if (remainingHousing < 1) {
+      foodModifier = 0.25
+    }
+    if (remainingHousing < -4) {
+      foodModifier = 0
+    }
+    base *= foodModifier
+  }
+  return base
+}
+
+const FOOD_MODIFIERS = [1, 0.5, 0.25, 0]

@@ -13,10 +13,10 @@ export const ResourceText = ({ resource }) => {
           {resource.resourceId}:
         </Typography>
       </Box>
-      <Box ml={1} display="flex" flexDirection="row" alignItems="center">
+      <Box mx={1} display="flex" flexDirection="row" alignItems="center">
         <Typography>
-          {numeral(resource.amount).format('0,0.0')}/
-          {numeral(resource.limit).format('0,0')}
+          {numeral(resource.amount).format('0,0.0')}
+          {resource.limit > 0 && '/' + numeral(resource.limit).format('0,0')}
         </Typography>
       </Box>
     </Box>
