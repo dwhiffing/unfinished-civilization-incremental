@@ -19,13 +19,13 @@ export const dragReducer = (sess, { source, destination, draggableId }) => {
       })
     otherPerson && otherPerson.update({ index: source.index })
   } else {
-    let foundSeat = sess.Seat.withId(destination.droppableId.split('-')[1])
-    if (draggedPerson.seat) {
-      let currentSeat = sess.Seat.withId(draggedPerson.seat.id)
-      currentSeat.personId = null
+    let foundTille = sess.Tile.withId(destination.droppableId.split('-')[1])
+    if (draggedPerson.tile) {
+      let currentTile = sess.Tile.withId(draggedPerson.tile.id)
+      currentTile.personId = null
     }
-    if (foundSeat) {
-      foundSeat.update({ personId: draggedPerson.id })
+    if (foundTille) {
+      foundTille.update({ personId: draggedPerson.id })
     }
   }
   return sess.state

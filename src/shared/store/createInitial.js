@@ -8,7 +8,7 @@ import {
   buyables,
   resources,
 } from '../data'
-import { tasks, science, districtTypes } from '../../district/data'
+import { science, districtTypes } from '../../city/data'
 import { createSystemReducer } from '../../system/store/createSystem'
 import { unlockReducer } from './unlock'
 import { updateResourceReducer } from './updateResource'
@@ -18,7 +18,6 @@ export const createInitial = createAction('INIT')
 export const createInitialReducer = (sess) => {
   buyables.forEach((b) => sess.Buyable.upsert(b))
   science.forEach((b) => sess.Buyable.upsert(b))
-  tasks.forEach((t) => sess.Task.upsert(t))
   resources.forEach((r) => sess.Resource.upsert({ ...r, amount: 0 }))
   districtTypes.forEach((dt) => sess.DistrictType.upsert(dt))
 

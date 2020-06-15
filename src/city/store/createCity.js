@@ -1,8 +1,10 @@
 import { CITY_NAMES } from '../data'
+import times from 'lodash/times'
 import { RESOURCE_MULTIPLIER, getUniqueName } from '../../shared/data'
 import { createPersonReducer } from './createPerson'
-import { createDistrictReducer } from '../../district/store/createDistrict'
+import { createDistrictReducer } from './createDistrict'
 import { createAction } from '@reduxjs/toolkit'
+import { createTileReducer } from './createTile'
 
 export const createCity = createAction('CREATE_CITY')
 export const createCityReducer = (sess, payload) => {
@@ -41,8 +43,11 @@ export const createCityReducer = (sess, payload) => {
       })
     })
   people.forEach((person) => createPersonReducer(sess, { cityId, person }))
+
+  times(5, () => createTileReducer(sess, { cityId }))
+
   createDistrictReducer(sess, {
-    cityId,
+    tileId: cityInstance.tiles.first().id,
     districtTypeId: 'center',
     seatCount: 3,
   })

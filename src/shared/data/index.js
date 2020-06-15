@@ -4,7 +4,7 @@ export { resources } from './resources'
 export { buyables } from './buyables'
 
 export const INTERVAL = 1000
-export const RESOURCE_MULTIPLIER = 500
+export const RESOURCE_MULTIPLIER = 1
 export const UNLOCK_ALL = false
 
 export const SYSTEM_COUNT_RANGE = [3, 3]

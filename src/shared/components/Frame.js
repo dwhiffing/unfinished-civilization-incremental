@@ -8,7 +8,6 @@ export const Frame = ({ children, sidebar }) => {
   const stockpiles = useSelector((state) => getStockpiles(state)).filter(
     (s) => s.type === 'global',
   )
-  console.log(stockpiles)
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex">
@@ -35,12 +34,19 @@ export const Frame = ({ children, sidebar }) => {
   )
 }
 
-export const Sidebar = ({ label, resources, linkText, uri, children }) => (
+export const Sidebar = ({
+  label,
+  resources,
+  resourceChange,
+  linkText,
+  uri,
+  children,
+}) => (
   <>
     {uri ? <a href={uri}>{linkText}</a> : <br />}
     <br />
     <span>{label}</span>
     {children}
-    <Resources resources={resources} />
+    <Resources resourceChange={resourceChange} resources={resources} />
   </>
 )

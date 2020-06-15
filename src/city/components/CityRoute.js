@@ -1,8 +1,9 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { Districts } from '../../district/components/Districts'
+import { Tiles } from './Tiles'
 import { getCityFull } from '../selectors'
 import { useParams } from 'react-router'
+import { People } from './People'
 
 export const CityRoute = () => {
   const { id = '0' } = useParams()
@@ -14,10 +15,11 @@ export const CityRoute = () => {
 
   return (
     <>
-      <Districts
+      <People people={city.people} />
+      <Tiles
         continentId={city.continent.id}
         cityId={city.id}
-        districts={city.districts}
+        tiles={city.tiles}
       />
     </>
   )

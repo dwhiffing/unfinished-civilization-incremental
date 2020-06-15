@@ -1,8 +1,7 @@
 import React from 'react'
 import { Typography, Box } from '@material-ui/core'
-import { Seat } from './Seat'
 import { Purchase } from '../../shared/components/Purchase'
-import { createSeat, createDistrict } from '../store'
+import { createSeat, createDistrict } from './store'
 import groupBy from 'lodash/groupBy'
 import { useSelector } from 'react-redux'
 import { getUnlocks } from '../../shared/selectors'
@@ -10,9 +9,9 @@ import {
   getDistrictType,
   getDistrictTypes,
   getDistrictSeats,
-} from '../selectors'
+} from './selectors'
 import { People } from './People'
-import { getCityPeople } from '../../city/selectors'
+import { getCityPeople } from '../selectors'
 
 export const Districts = ({ continentId, cityId, districts }) => {
   const unlocks = useSelector(getUnlocks)
@@ -80,9 +79,9 @@ const DistrictItem = ({ continentId, cityId, districtId }) => {
 
 const DistrictTaskGroupItem = (props) => (
   <Box display="flex">
-    {props.seats.map((seat) => (
+    {/* {props.seats.map((seat) => (
       <Seat key={`task${seat.id}`} index={props.index} seat={seat} />
-    ))}
+    ))} */}
 
     <Purchase
       continentId={+props.continentId}

@@ -1,14 +1,22 @@
 import React from 'react'
 import { Box, Typography } from '@material-ui/core'
 import { DragList } from './DragList'
-import { INTERVAL } from '../../shared/data'
 import { useSelector } from 'react-redux'
-import { getSeatTask, getSeatPerson } from '../selectors'
+import { getTilesDistrict, getTilesPerson } from '../selectors'
 
-const Seat = ({ seat }) => {
-  const task = useSelector((state) => getSeatTask(state, seat.id))
-  const person = useSelector((state) => getSeatPerson(state, seat.id))
-  const progressPercent = 1 - seat.progress / task.duration
+export const Tiles = ({ continentId, cityId, tiles }) => {
+  return (
+    <Box>
+      {tiles.map((tile) => {
+        return <Tile key={tile.id} tile={tile} />
+      })}
+    </Box>
+  )
+}
+
+const Tile = ({ tile }) => {
+  const person = useSelector((state) => getTilesPerson(state, tile.id))
+  const district = useSelector((state) => getTilesDistrict(state, tile.id))
   return (
     <Box display="flex" flexDirection="column" flex={1} maxWidth={90}>
       <Box
@@ -22,29 +30,7 @@ const Seat = ({ seat }) => {
         }}
       >
         <Box position="relative">
-          <Box position="relative" style={{ borderBottom: '1px solid #999' }}>
-            <Typography
-              style={{ textAlign: 'center', position: 'relative', zIndex: 2 }}
-            >
-              {task.id}
-            </Typography>
-
-            {typeof progressPercent === 'number' && (
-              <Box
-                position="absolute"
-                bgcolor="green"
-                top={0}
-                left={0}
-                bottom={0}
-                style={{
-                  transition: `right ${INTERVAL}ms`,
-                  transitionTimingFunction: 'linear',
-                  zIndex: 1,
-                }}
-                right={`${progressPercent * 100}%`}
-              />
-            )}
-          </Box>
+          {district && <Typography>{district.districtTypeId}</Typography>}
           <Box display="flex" justifyContent="center">
             <Box minHeight={56} position="relative" m={1}>
               <Box
@@ -61,7 +47,7 @@ const Seat = ({ seat }) => {
                 }}
               />
               <DragList
-                droppableId={`seat-${seat.id}`}
+                droppableId={`tile-${tile.id}`}
                 isDropDisabled={!!person}
                 items={person ? [person] : []}
               />
@@ -72,5 +58,3 @@ const Seat = ({ seat }) => {
     </Box>
   )
 }
-
-export { Seat }

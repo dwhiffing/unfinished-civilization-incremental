@@ -9,6 +9,7 @@ export const CitySidebar = () => {
   const unlocks = useSelector(getUnlocks)
   const city = useSelector((state) => getCityFull(state, id))
   if (!city || !city.continent) return false
+
   return (
     <Sidebar
       uri={unlocks.includes('continent') && `#/continent/${city.continent.id}`}
@@ -17,6 +18,7 @@ export const CitySidebar = () => {
       }
       label={`City: ${city.label}`}
       resources={city.resources}
+      resourceChange={city.resourceChange}
     >
       <span>biome: {city.plot.biome}</span>
       <span>
