@@ -3,7 +3,8 @@ import { Box, Typography } from '@material-ui/core'
 import { DragList } from './DragList'
 import { useSelector } from 'react-redux'
 import { getTilesDistrict, getTilesPerson } from '../selectors'
-
+// TOOD: need to add tile productivity based on features
+// need to add district based effects
 export const Tiles = ({ continentId, cityId, tiles }) => {
   return (
     <Box>
