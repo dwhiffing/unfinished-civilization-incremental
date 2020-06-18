@@ -7,7 +7,7 @@ export const DragList = ({ items, ...props }) => (
       <div
         ref={provided.innerRef}
         style={{
-          background: snapshot.isDraggingOver ? 'lightblue' : 'lightgrey',
+          background: snapshot.isDraggingOver ? '#888' : '#444',
           padding: 8,
           minWidth: 60,
           display: 'flex',
@@ -40,7 +40,7 @@ const Items = React.memo(({ items }) =>
             textAlign: 'center',
             position: 'relative',
             zIndex: snapshot.isDragging ? 20 : 1,
-            background: snapshot.isDragging ? 'lightgreen' : 'grey',
+            background: snapshot.isDragging ? '#888' : 'grey',
             ...provided.draggableProps.style,
           }}
         >

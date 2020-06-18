@@ -18,7 +18,7 @@ export const createCityReducer = (sess, payload) => {
   const allResources = sess.Resource.all().toModelArray()
   const cityInstance = sess.City.create({
     label,
-    housing: 3,
+    housing: 1,
     continentId: plot.continent.id,
     planetId: plot.continent.planet.id,
     systemId: plot.continent.planet.system.id,

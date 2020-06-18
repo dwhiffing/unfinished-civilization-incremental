@@ -17,6 +17,9 @@ export const getStockpiles = createSelector(orm.ResourceStockpile)
 export const getCityResources = createSelector(orm.City.stockpiles)
 export const getTiles = createSelector(orm.Tile)
 export const getTilesDistrict = createSelector(orm.Tile.district)
+export const getTilesDistrictType = createSelector(
+  orm.Tile.district.districtType,
+)
 export const getTilesPerson = createSelector(orm.Tile.person)
 export const getCityContinent = createSelector(orm.City.plot.continent)
 
@@ -24,12 +27,17 @@ export const getFullTile = createSelector(
   orm,
   getTiles,
   getTilesDistrict,
+  getTilesDistrictType,
   getTilesPerson,
-  (_, tile, district, person) => {
+  (_, tile, district, districtType, person) => {
     if (!tile) {
       return null
     }
-    const _tile = { ...tile, district, person }
+    const _tile = {
+      ...tile,
+      district: { ...(district || {}), districtType },
+      person,
+    }
 
     return { ..._tile, resourceChange: getTileResourceChange(_tile) }
   },

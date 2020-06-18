@@ -14,6 +14,7 @@ export function tickCities(sess) {
           id: city.id,
           value: food.limit * -0.9,
         })
+        food.update({ limit: Math.pow(food.limit, 1.15) })
         createPersonReducer(sess, { cityId: city.id })
       }
 

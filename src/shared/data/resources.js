@@ -4,6 +4,6 @@ export const resources = [
   { id: 'stone', type: 'local', limit: 100, color: '#8a8a8a' },
   { id: 'gold', type: 'local', limit: 100, color: '#f1ba1a' },
   { id: 'faith', type: 'global', limit: -1, color: '#9093ff' },
-  { id: 'science', type: 'global', limit: -1, color: '#090eb5' },
+  { id: 'science', type: 'global', limit: -1, color: '#494ddc' },
   { id: 'culture', type: 'global', limit: -1, color: '#ab16c5' },
 ]

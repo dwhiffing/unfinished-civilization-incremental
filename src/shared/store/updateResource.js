@@ -8,6 +8,7 @@ export function updateResourceReducer(sess, { resourceId, value, ...ids }) {
   if (value === 0) return sess.state
 
   if (/science|faith|culture/.test(resourceId)) {
+    console.log(value, resourceId)
     const stockpile = sess.ResourceStockpile.filter({ resourceId }).first()
     stockpile.update({ amount: getNewAmount(stockpile, value) })
     return sess.state
@@ -15,12 +16,13 @@ export function updateResourceReducer(sess, { resourceId, value, ...ids }) {
 
   unlockReducer(sess, resourceId)
   let remaining = value
-  sess.City.filter(pickBy(ids, (v) => typeof v === 'number'))
-    .toModelArray()
-    .forEach((city) => {
-      const stockpile = city.stockpiles.filter({ resourceId }).first()
-      stockpile.update({ amount: getNewAmount(stockpile, remaining) })
-    })
+  const cities = sess.City.filter(
+    pickBy(ids, (v) => typeof v === 'number'),
+  ).toModelArray()
+  cities.forEach((city) => {
+    const stockpile = city.stockpiles.filter({ resourceId }).first()
+    stockpile.update({ amount: getNewAmount(stockpile, remaining) })
+  })
 
   return sess.state
 }

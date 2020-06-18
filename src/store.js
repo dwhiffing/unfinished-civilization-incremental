@@ -13,16 +13,18 @@ import { createPlanetReducer } from './planet/store'
 import { createSystemReducer } from './system/store'
 import { createPlotReducer, createContinentReducer } from './continent/store'
 import { createCityReducer, createPersonReducer } from './city/store'
+import { createBuildingReducer } from './city/store'
 import { createDistrictReducer, dragReducer } from './city/store'
 
 const reducers = {
   INIT: createInitialReducer,
   CREATE_CONTINENT: createContinentReducer,
+  CREATE_BUILDING: createBuildingReducer,
   EXPLORE: exploreReducer,
   SETTLE: settleReducer,
   CREATE_CITY: createCityReducer,
   CREATE_PERSON: createPersonReducer,
-  CREATE_BUILDING: createDistrictReducer,
+  CREATE_DISTRICT: createDistrictReducer,
   CREATE_PLOT: createPlotReducer,
   CREATE_PLANET: createPlanetReducer,
   CREATE_SYSTEM: createSystemReducer,

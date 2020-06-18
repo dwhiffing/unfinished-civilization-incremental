@@ -24,7 +24,15 @@ export const Purchase = ({ id, label, action, disabled, ...ids }) => {
     if (!disabled && isAffordable) {
       await Promise.all(
         Object.entries(buyable.cost).map(([resourceId, value]) =>
-          dispatch(updateResource({ resourceId, value: -value, ...ids })),
+          dispatch(
+            updateResource({
+              resourceId,
+              value: -value,
+              id: ids.cityId,
+              ...ids,
+              cityId: null,
+            }),
+          ),
         ),
       )
       await dispatch(action)
@@ -33,6 +41,7 @@ export const Purchase = ({ id, label, action, disabled, ...ids }) => {
 
   return (
     <Button
+      color="primary"
       onClick={attemptPurchase}
       style={{ display: 'block', opacity: !disabled && isAffordable ? 1 : 0.5 }}
     >

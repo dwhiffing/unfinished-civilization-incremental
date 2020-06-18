@@ -1,6 +1,6 @@
 import { createAction } from '@reduxjs/toolkit'
 
-export const createDistrict = createAction('CREATE_BUILDING')
+export const createDistrict = createAction('CREATE_DISTRICT')
 export const createDistrictReducer = (sess, payload) => {
   const { cityId, tileId, districtTypeId, ...district } = payload
   sess.District.create({
