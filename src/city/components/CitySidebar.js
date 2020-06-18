@@ -4,6 +4,8 @@ import { getUnlocks } from '../../shared/selectors'
 import { Sidebar } from '../../shared/components/Frame'
 import { useParams } from 'react-router'
 import { getCityFull } from '../selectors'
+import { FOOD_DRAIN } from '../../shared/data'
+import { getResourceModifiers } from '../store/getCityResourceChange'
 export const CitySidebar = () => {
   const { id = '0' } = useParams()
   const unlocks = useSelector(getUnlocks)
@@ -23,6 +25,20 @@ export const CitySidebar = () => {
       <span>biome: {city.plot.biome}</span>
       <span>
         housing: {city.people.length}/{city.housing}
+      </span>
+      <span>food gain: {city.resourceChange.gain.food}/sec</span>
+      <span>food drain: -{city.people.length * FOOD_DRAIN}/sec</span>
+      <span>
+        subtotal:{' '}
+        {city.resourceChange.gain.food - city.people.length * FOOD_DRAIN}/sec
+      </span>
+      <span>
+        housing penalty: -
+        {(1 -
+          getResourceModifiers({ ...city, numPeople: city.people.length })
+            .food) *
+          100}
+        %
       </span>
     </Sidebar>
   )

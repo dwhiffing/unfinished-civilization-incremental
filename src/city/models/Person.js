@@ -1,4 +1,4 @@
-import { Model, attr, fk, oneToOne } from 'redux-orm'
+import { Model, attr, fk } from 'redux-orm'
 
 export class Person extends Model {}
 Person.modelName = 'Person'

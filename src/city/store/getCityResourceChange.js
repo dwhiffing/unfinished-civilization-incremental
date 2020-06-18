@@ -1,10 +1,7 @@
 import sample from 'lodash/sample'
 import mergeWith from 'lodash/mergeWith'
+import { BASE_EFFECTS, RESOURCE_EFFECTS } from '../models/Tile'
 import { FOOD_DRAIN, RESOURCE_MULTIPLIER } from '../../shared/data'
-
-// TODO: need a system for calculating effects of a worked tile
-// should be based on features and district + buildings on tile
-const EFFECTS = [{ id: 'food', value: 4 }]
 
 export const getCityResourceChange = (city) => {
   if (!city) {
@@ -52,7 +49,7 @@ const applyResourceModifiers = (value, id, city) => {
   return base
 }
 
-const getResourceModifiers = ({ housing, numPeople }) => {
+export const getResourceModifiers = ({ housing = 0, numPeople = 0 }) => {
   const remainingHousing = housing - numPeople
   let foodModifier = 1
   if (remainingHousing < 2) {
@@ -69,11 +66,28 @@ const getResourceModifiers = ({ housing, numPeople }) => {
 
 export const getTileResourceChange = (tile) => {
   let obj = {}
-  if (tile.person) {
-    EFFECTS.forEach(({ id, value }) => {
-      value = Array.isArray(value) ? sample(value) : value
-      obj[id] = (obj[id] || 0) + value
-    })
+  if (
+    tile.person ||
+    (tile.district && tile.district.districtTypeId === 'center')
+  ) {
+    let tileFeatureEffect = BASE_EFFECTS[tile.feature]
+    let tileResourceEffect = RESOURCE_EFFECTS[tile.resource]
+    if (tile.district && tile.district.districtTypeId === 'center') {
+      tile.feature = null
+      tileFeatureEffect = { resources: { food: 2 } }
+    }
+    if (tileFeatureEffect) {
+      Object.entries(tileFeatureEffect.resources).forEach(([id, value]) => {
+        value = Array.isArray(value) ? sample(value) : value
+        obj[id] = (obj[id] || 0) + value
+      })
+    }
+    if (tileResourceEffect) {
+      Object.entries(tileResourceEffect.resources).forEach(([id, value]) => {
+        value = Array.isArray(value) ? sample(value) : value
+        obj[id] = (obj[id] || 0) + value
+      })
+    }
   }
   return obj
 }

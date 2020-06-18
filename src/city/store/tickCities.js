@@ -17,8 +17,6 @@ export function tickCities(sess) {
         createPersonReducer(sess, { cityId: city.id })
       }
 
-      // TODO: need to use this functionality to display stats on resource totals
-      // and on tile items to show loss/profit
       const change = getCityResourceChange({
         housing: city.housing,
         tiles: city.tiles.toModelArray(),

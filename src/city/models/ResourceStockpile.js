@@ -1,4 +1,4 @@
-import { Model, attr, fk, oneToOne } from 'redux-orm'
+import { Model, attr, fk } from 'redux-orm'
 
 export class ResourceStockpile extends Model {}
 ResourceStockpile.modelName = 'ResourceStockpile'
