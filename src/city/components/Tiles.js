@@ -22,53 +22,68 @@ const Tile = ({ tile, cityId }) => {
       <TileSeat district={district} person={person} id={tile.id} />
 
       <TileDetails cityId={cityId} district={district} tile={tile} />
+      <TileBuildings cityId={cityId} district={district} tile={tile} />
     </Box>
   )
 }
 
 const TileDetails = ({ cityId, district, tile }) => {
   return (
-    <Box>
+    <Box mr={2}>
       {district && district.districtType && (
         <Typography>{district.districtType.label}</Typography>
       )}
+
       {tile.feature && <Typography>Feature: {tile.feature}</Typography>}
+
       {tile.resource && <Typography>Resource: {tile.resource}</Typography>}
+
       {Object.entries(tile.resourceChange).map(([resourceId, value]) => (
-        <Typography>
-          {resourceId}: {value}
+        <Typography key={`resourceChange-${resourceId}`}>
+          {resourceId}: +{value}/sec
         </Typography>
       ))}
-      {(district.buildings || []).map((b) => (
-        <>
-          <Typography>{b.name}</Typography>
-          {Object.entries(b.effects).map(([key, value]) => (
-            <Typography>
-              {key} {value}
-            </Typography>
-          ))}
-        </>
-      ))}
-      {(
-        (district &&
-          district.districtType &&
-          district.districtType.buildings) ||
-        []
-      )
-        .filter(
-          (b) =>
-            !(district.buildings || []).map((b) => b.name).includes(b.name),
-        )
-        .map((building) => (
-          <Purchase
-            cityId={+cityId}
-            id="buyBuilding"
-            action={createBuilding({ name: building.name, id: district.id })}
-          />
-        ))}
     </Box>
   )
 }
+
+const TileBuildings = ({ cityId, district, tile }) => {
+  const buildings = Object.values(district.buildings || {})
+  const districtType = district && district.districtType
+  const districtTypeBuildings =
+    (districtType && district.districtType.buildings) || []
+  const purchasableBuildingIds = districtTypeBuildings.filter(
+    (buildingId) => !buildings.map((b) => b.id).includes(buildingId),
+  )
+
+  return (
+    <Box>
+      {buildings.map((building) => (
+        <BuildingItem key={`building-${building.id}`} building={building} />
+      ))}
+
+      {purchasableBuildingIds.map((buildingId) => (
+        <Purchase
+          key={`purchase-${buildingId}`}
+          cityId={+cityId}
+          id="buyBuilding"
+          action={createBuilding({
+            id: buildingId,
+            districtId: district.id,
+          })}
+        />
+      ))}
+    </Box>
+  )
+}
+
+const BuildingItem = ({ building }) => (
+  <Box>
+    <Typography>{building.id}</Typography>
+    cost:<Typography>{JSON.stringify(building.cost)}</Typography>
+    effects:<Typography>{JSON.stringify(building.effects)}</Typography>
+  </Box>
+)
 
 const TileSeat = ({ id, district, person }) => (
   <Box

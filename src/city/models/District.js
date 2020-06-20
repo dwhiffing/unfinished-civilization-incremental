@@ -4,6 +4,7 @@ export class District extends Model {}
 District.modelName = 'District'
 District.fields = {
   id: attr(),
+  buildings: attr(),
   districtTypeId: fk({
     to: 'DistrictType',
     as: 'districtType',

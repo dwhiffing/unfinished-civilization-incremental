@@ -2,13 +2,7 @@ export const districtTypes = [
   {
     id: 'center',
     label: 'City Center',
-    buildings: [
-      {
-        name: 'Granary',
-        cost: { wood: 100 },
-        effects: { housing: 1, food: 1 },
-      },
-    ],
+    buildings: ['granary'],
   },
   { id: 'barracks', label: 'Encampment' },
   {

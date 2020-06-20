@@ -1,4 +1,5 @@
 import { createSelector } from 'redux-orm'
+import mapValues from 'lodash/mapValues'
 import { totalResources } from '../shared/selectors'
 import orm from '../orm'
 import {
@@ -16,7 +17,18 @@ export const getCityPlot = createSelector(orm.City.plot)
 export const getStockpiles = createSelector(orm.ResourceStockpile)
 export const getCityResources = createSelector(orm.City.stockpiles)
 export const getTiles = createSelector(orm.Tile)
-export const getTilesDistrict = createSelector(orm.Tile.district)
+export const getTilesDistrict = createSelector(
+  orm,
+  orm.Tile.district,
+  (_, district) =>
+    district && {
+      ...district,
+      buildings: mapValues(district.buildings || {}, ({ id, ...rest }) => {
+        const building = _.Building.withId(id)
+        return { ...building._fields, ...rest }
+      }),
+    },
+)
 export const getTilesDistrictType = createSelector(
   orm.Tile.district.districtType,
 )
@@ -75,7 +87,7 @@ export const getCityResourceStats = createSelector(
   orm,
   orm.City,
   orm.City.tiles,
-  orm.City.tiles.map(orm.Tile.district),
+  orm.City.tiles.map(getTilesDistrict),
   orm.City.people,
   (_, city, tiles, districts, people) => {
     if (!city) {

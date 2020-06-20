@@ -1,5 +1,5 @@
 import { ORM } from 'redux-orm'
-import { Tile, City, ResourceStockpile, Person } from './city/models'
+import { Tile, City, Building, ResourceStockpile, Person } from './city/models'
 import { DistrictType, District } from './city/models'
 import { Continent, Plot } from './continent/models'
 import { Buyable, Resource, Unlock } from './shared/models'
@@ -15,6 +15,7 @@ orm.register(
   System,
   Unlock,
   Plot,
+  Building,
   Tile,
   DistrictType,
   ResourceStockpile,
