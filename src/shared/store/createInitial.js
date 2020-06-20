@@ -7,6 +7,7 @@ import {
   UNLOCKS,
   buyables,
   resources,
+  RESOURCE_MULTIPLIER,
 } from '../data'
 import { buildings, districtTypes } from '../../city/data'
 import { createSystemReducer } from '../../system/store/createSystem'
@@ -41,7 +42,16 @@ export const createInitialReducer = (sess) => {
     times(random(...SYSTEM_COUNT_RANGE), () => createSystemReducer(sess, {}))
     createCityReducer(sess, { plotId: sess.Plot.first().id })
     unlockReducer(sess, 'center')
-    updateResourceReducer(sess, { resourceId: 'food', id: 0, value: 50 })
+    updateResourceReducer(sess, {
+      resourceId: 'food',
+      id: 0,
+      value: 50 * RESOURCE_MULTIPLIER,
+    })
+    updateResourceReducer(sess, {
+      resourceId: 'wood',
+      id: 0,
+      value: 50 * RESOURCE_MULTIPLIER,
+    })
     updateResourceReducer(sess, { resourceId: 'science', value: 50 })
 
     if (UNLOCK_ALL) {

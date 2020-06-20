@@ -70,8 +70,20 @@ export const getTileResourceChange = (tile) => {
     tile.person ||
     (tile.district && tile.district.districtTypeId === 'center')
   ) {
+    let buildingEffects = []
+    if (tile.district && tile.district.buildings) {
+      buildingEffects = Object.values(tile.district.buildings)
+        .filter((b) => !!b.effects)
+        .map((b) => b.effects.resources)
+    }
+
+    buildingEffects.forEach((effect = {}) => {
+      let [id, value] = Object.entries(effect)[0]
+      value = Array.isArray(value) ? sample(value) : value
+      obj[id] = (obj[id] || 0) + value
+    })
+
     let tileFeatureEffect = BASE_EFFECTS[tile.feature]
-    let tileResourceEffect = RESOURCE_EFFECTS[tile.resource]
     if (tile.district && tile.district.districtTypeId === 'center') {
       tile.feature = null
       tileFeatureEffect = { resources: { food: 2 } }
@@ -82,6 +94,8 @@ export const getTileResourceChange = (tile) => {
         obj[id] = (obj[id] || 0) + value
       })
     }
+
+    let tileResourceEffect = RESOURCE_EFFECTS[tile.resource]
     if (tileResourceEffect) {
       Object.entries(tileResourceEffect.resources).forEach(([id, value]) => {
         value = Array.isArray(value) ? sample(value) : value
@@ -89,5 +103,6 @@ export const getTileResourceChange = (tile) => {
       })
     }
   }
+
   return obj
 }

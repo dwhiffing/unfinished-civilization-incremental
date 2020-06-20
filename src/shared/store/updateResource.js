@@ -8,7 +8,6 @@ export function updateResourceReducer(sess, { resourceId, value, ...ids }) {
   if (value === 0) return sess.state
 
   if (/science|faith|culture/.test(resourceId)) {
-    console.log(value, resourceId)
     const stockpile = sess.ResourceStockpile.filter({ resourceId }).first()
     stockpile.update({ amount: getNewAmount(stockpile, value) })
     return sess.state

@@ -15,7 +15,7 @@ export const ResourceText = ({ resource, resourceChange }) => {
       </Box>
       <Box mx={1} display="flex" flexDirection="row" alignItems="center">
         <Typography>
-          {numeral(resource.amount).format('0,0.0')}
+          {numeral(resource.amount).format('0,0.00')}
           {resource.limit > 0 && '/' + numeral(resource.limit).format('0,0')}
         </Typography>
         <Box mx={1} />
