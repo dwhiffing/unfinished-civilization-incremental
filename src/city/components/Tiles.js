@@ -48,7 +48,7 @@ const TileDetails = ({ cityId, district, tile }) => {
 }
 
 const TileBuildings = ({ cityId, district, tile }) => {
-  const buildings = Object.values(district.buildings || {})
+  const buildings = Object.values((district && district.buildings) || {})
   const districtType = district && district.districtType
   const districtTypeBuildings =
     (districtType && district.districtType.buildings) || []

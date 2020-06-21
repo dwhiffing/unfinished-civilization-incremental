@@ -47,7 +47,7 @@ export const getFullTile = createSelector(
     }
     const _tile = {
       ...tile,
-      district: { ...(district || {}), districtType },
+      district: district ? { ...district, districtType } : null,
       person,
     }
 
@@ -83,23 +83,43 @@ export const getCityPeople = createSelector(
       : [],
 )
 
+export const getCityHousing = createSelector(
+  orm,
+  orm.City,
+  orm.City.tiles.map(getTilesDistrict),
+  (_, city, districts) => {
+    if (!city) {
+      return null
+    }
+
+    return districts
+      .filter((b) => b && b.buildings)
+      .map((d) => Object.values(d.buildings).map((b) => b.effects))
+      .flat()
+      .reduce((sum, e) => sum + e.housing, city.housing)
+  },
+)
+
 export const getCityResourceStats = createSelector(
   orm,
   orm.City,
   orm.City.tiles,
   orm.City.tiles.map(getTilesDistrict),
   orm.City.people,
-  (_, city, tiles, districts, people) => {
+  getCityHousing,
+  (_, city, tiles, districts, people, housing) => {
     if (!city) {
       return null
     }
+    // TODO: need a better way to ensure this function is called with the same data as the selector
+    const _tiles = tiles.map((t, i) => ({
+      ...t,
+      district: districts[i],
+      person: typeof t.personId === 'number',
+    }))
     return getCityResourceChange({
-      housing: city.housing,
-      tiles: tiles.map((t, i) => ({
-        ...t,
-        district: districts[i],
-        person: typeof t.personId === 'number',
-      })),
+      housing,
+      tiles: _tiles,
       numPeople: people.length,
     })
   },
@@ -114,13 +134,25 @@ export const getCityFull = createSelector(
   getCityContinent,
   getCityPeople,
   getCityResourceStats,
-  (_, city, plot, tiles, resources, continent, people, resourceChange) => ({
+  getCityHousing,
+  (
+    _,
+    city,
+    plot,
+    tiles,
+    resources,
+    continent,
+    people,
+    resourceChange,
+    housing,
+  ) => ({
     ...city,
     plot,
     tiles: tiles ? tiles.flat() : [],
     people,
     continent,
     resources,
+    housing,
     resourceChange,
   }),
 )
