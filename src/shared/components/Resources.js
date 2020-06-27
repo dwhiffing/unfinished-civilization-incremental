@@ -54,7 +54,9 @@ export const Resources = ({ hide, resourceChange, resources }) => {
           <Box key={resource.resourceId} display="flex" flexDirection="row">
             <ResourceText
               resource={resource}
-              resourceChange={resourceChange.total[resource.resourceId]}
+              resourceChange={
+                resourceChange && resourceChange.total[resource.resourceId]
+              }
             />
           </Box>
         ))}
