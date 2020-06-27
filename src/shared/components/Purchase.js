@@ -20,6 +20,9 @@ export const Purchase = ({ id, label, action, disabled, ...ids }) => {
   const cost = JSON.stringify(buyable.cost)
     .replace(/"/g, '')
     .replace(/\{|\}/g, '')
+  const effectsString = buyable.effects
+    ? JSON.stringify(buyable.effects).replace(/"/g, '').replace(/\{|\}/g, '')
+    : ''
 
   const attemptPurchase = async () => {
     if (!disabled && isAffordable && !alreadyBought) {
@@ -45,11 +48,12 @@ export const Purchase = ({ id, label, action, disabled, ...ids }) => {
 
   return (
     <Button
+      data-tip={`cost: ${cost}<br>effects: ${effectsString}`}
       color="secondary"
       onClick={attemptPurchase}
       style={{ display: 'block', opacity: !disabled && isAffordable ? 1 : 0.5 }}
     >
-      {label || buyable.label} ({cost})
+      {label || buyable.label}
     </Button>
   )
 }

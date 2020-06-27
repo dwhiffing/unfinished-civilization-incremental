@@ -21,12 +21,22 @@ import { createAction } from '@reduxjs/toolkit'
 export const createInitial = createAction('INIT')
 export const createInitialReducer = (sess) => {
   buyables.forEach((b) => sess.Buyable.upsert(b))
-  buildings.forEach((b) => sess.Building.upsert(b))
+  buildings.forEach((b) => {
+    sess.Buyable.upsert({
+      id: `buyBuilding-${b.id}`,
+      label: `Buy ${b.name}`,
+      cost: b.cost,
+      effects: b.effects,
+      oneTime: true,
+    })
+    sess.Building.upsert(b)
+  })
   technologies.forEach((b) => {
     sess.Buyable.upsert({
       id: `buyTech-${b.id}`,
       label: `Buy ${b.label}`,
       cost: b.cost,
+      effects: b.effects,
       oneTime: true,
     })
     sess.Technology.upsert(b)
@@ -36,6 +46,7 @@ export const createInitialReducer = (sess) => {
       id: `buyCivic-${b.id}`,
       label: `Buy ${b.label}`,
       cost: b.cost,
+      effects: b.effects,
       oneTime: true,
     })
     sess.Civic.upsert(b)
@@ -45,6 +56,7 @@ export const createInitialReducer = (sess) => {
       id: `buyBelief-${b.id}`,
       label: `Buy ${b.label}`,
       cost: b.cost,
+      effects: b.effects,
       oneTime: true,
     })
     sess.Belief.upsert(b)
