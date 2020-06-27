@@ -3,6 +3,7 @@ import { Box } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { Resources, ResourceText } from './Resources'
 import { getStockpiles } from '../../city/selectors'
+import ReactTooltip from 'react-tooltip'
 
 export const Frame = ({ children, sidebar }) => {
   const stockpiles = useSelector((state) => getStockpiles(state)).filter(
@@ -30,6 +31,8 @@ export const Frame = ({ children, sidebar }) => {
           {children}
         </Box>
       </Box>
+
+      <ReactTooltip place="right" multiline />
     </Box>
   )
 }
@@ -38,6 +41,7 @@ export const Sidebar = ({
   label,
   resources,
   resourceChange,
+  resourceTooltips,
   linkText,
   uri,
   children,
@@ -47,6 +51,10 @@ export const Sidebar = ({
     <br />
     <span>{label}</span>
     {children}
-    <Resources resourceChange={resourceChange} resources={resources} />
+    <Resources
+      resourceTooltips={resourceTooltips}
+      resourceChange={resourceChange}
+      resources={resources}
+    />
   </>
 )

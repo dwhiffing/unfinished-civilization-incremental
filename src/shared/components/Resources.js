@@ -3,11 +3,10 @@ import numeral from 'numeral'
 import { Box, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { getUnlocks } from '../selectors'
-import ReactTooltip from 'react-tooltip'
 
-export const ResourceText = ({ resource, resourceChange }) => {
+export const ResourceText = ({ resource, resourceTooltip, resourceChange }) => {
   return (
-    <Box data-tip={`${resource.resourceId}`} display="flex">
+    <Box data-tip={resourceTooltip || `${resource.resourceId}`} display="flex">
       <Box>
         <Typography style={{ color: resource.color, fontWeight: 'bold' }}>
           {resource.resourceId}:
@@ -32,7 +31,12 @@ export const ResourceText = ({ resource, resourceChange }) => {
   )
 }
 
-export const Resources = ({ hide, resourceChange, resources }) => {
+export const Resources = ({
+  hide,
+  resourceChange,
+  resourceTooltips,
+  resources,
+}) => {
   const unlocks = useSelector(getUnlocks)
 
   if (hide) {
@@ -54,13 +58,13 @@ export const Resources = ({ hide, resourceChange, resources }) => {
           <Box key={resource.resourceId} display="flex" flexDirection="row">
             <ResourceText
               resource={resource}
+              resourceTooltip={resourceTooltips[resource.resourceId]}
               resourceChange={
                 resourceChange && resourceChange.total[resource.resourceId]
               }
             />
           </Box>
         ))}
-      <ReactTooltip multiline />
     </Box>
   )
 }
