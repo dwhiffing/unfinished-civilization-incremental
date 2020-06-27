@@ -4,7 +4,7 @@ import mergeWith from 'lodash/mergeWith'
 import sample from 'lodash/sample'
 import orm from '../orm'
 import { totalResources } from '../shared/selectors'
-import { FOOD_DRAIN, RESOURCE_MULTIPLIER } from '../shared/data'
+import { FOOD_DRAIN, SCIENCE_GAIN, RESOURCE_MULTIPLIER } from '../shared/data'
 import { BASE_EFFECTS, RESOURCE_EFFECTS } from './models/Tile'
 
 export const getPerson = createSelector(orm.Person)
@@ -114,9 +114,15 @@ export const getCityResourceStats = createSelector(
     const numPeople = people.length
     const modifiers = getResourceModifiers({ housing, numPeople })
     const drain = { food: FOOD_DRAIN * -numPeople }
-    const gain = tiles
-      .map((t, i) => ({ ...t, district: districts[i] }))
-      .reduce((obj, tile) => sumObjects(obj, getTileResourceChange(tile)), {})
+    const gain = {
+      science: SCIENCE_GAIN * numPeople,
+      ...tiles
+        .map((t, i) => ({ ...t, district: districts[i] }))
+        .reduce(
+          (obj, tile) => sumObjects(obj, getTileResourceChange(tile)),
+          {},
+        ),
+    }
     const subtotal = Object.entries(gain).reduce(
       (_total, [id, value]) => ({ ..._total, [id]: (_total[id] || 0) + value }),
       drain,

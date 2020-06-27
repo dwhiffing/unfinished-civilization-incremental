@@ -12,6 +12,7 @@ export const PLANET_COUNT_RANGE = [2, 5]
 export const CONTINENT_COUNT_RANGE = [2, 4]
 export const PLOT_COUNT_RANGE = [2, 6]
 export const FOOD_DRAIN = 2
+export const SCIENCE_GAIN = 0.5
 
 export const getUniqueName = (model, list) => {
   const takenNames = model
