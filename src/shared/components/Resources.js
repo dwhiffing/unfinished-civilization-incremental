@@ -4,9 +4,18 @@ import { Box, Typography } from '@material-ui/core'
 import { useSelector } from 'react-redux'
 import { getUnlocks } from '../selectors'
 
-export const ResourceText = ({ resource, resourceTooltip, resourceChange }) => {
+export const ResourceText = ({
+  resource,
+  resourceTooltip,
+  resourceChange,
+  onClick,
+}) => {
   return (
-    <Box data-tip={resourceTooltip || `${resource.resourceId}`} display="flex">
+    <Box
+      onClick={onClick}
+      data-tip={resourceTooltip || `${resource.resourceId}`}
+      display="flex"
+    >
       <Box>
         <Typography style={{ color: resource.color, fontWeight: 'bold' }}>
           {resource.resourceId}:

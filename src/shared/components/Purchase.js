@@ -6,13 +6,14 @@ import { getBuyables, getResourceTotals } from '../selectors'
 import { getPlanetResourceTotals } from '../../planet/selectors'
 import { getSystemResourceTotals } from '../../system/selectors'
 import { getCityResourceTotals } from '../../city/selectors'
-import { updateResource } from '../store'
+import { updateResource, purchaseBuyable } from '../store'
 
 export const Purchase = ({ id, label, action, disabled, ...ids }) => {
   const dispatch = useDispatch()
   const buyables = useSelector(getBuyables)
   const buyable = buyables.find((b) => b.id === id)
-  const isAffordable = useGetIsAffordable({ buyable, ...ids })
+  const alreadyBought = buyable.oneTime && buyable.purchased
+  const isAffordable = useGetIsAffordable({ buyable, ...ids }) && !alreadyBought
   if (!buyable) {
     return null
   }
@@ -21,7 +22,7 @@ export const Purchase = ({ id, label, action, disabled, ...ids }) => {
     .replace(/\{|\}/g, '')
 
   const attemptPurchase = async () => {
-    if (!disabled && isAffordable) {
+    if (!disabled && isAffordable && !alreadyBought) {
       await Promise.all(
         Object.entries(buyable.cost).map(([resourceId, value]) =>
           dispatch(
@@ -35,13 +36,16 @@ export const Purchase = ({ id, label, action, disabled, ...ids }) => {
           ),
         ),
       )
+      if (buyable.oneTime) {
+        await dispatch(purchaseBuyable(buyable.id))
+      }
       await dispatch(action)
     }
   }
 
   return (
     <Button
-      color="primary"
+      color="secondary"
       onClick={attemptPurchase}
       style={{ display: 'block', opacity: !disabled && isAffordable ? 1 : 0.5 }}
     >

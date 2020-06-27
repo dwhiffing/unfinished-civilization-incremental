@@ -7,6 +7,7 @@ export const updateResource = createAction('UPDATE_RESOURCE')
 export function updateResourceReducer(sess, { resourceId, value, ...ids }) {
   if (value === 0) return sess.state
 
+  // global resources
   if (/science|faith|culture/.test(resourceId)) {
     const stockpile = sess.ResourceStockpile.filter({ resourceId }).first()
     stockpile.update({ amount: getNewAmount(stockpile, value) })

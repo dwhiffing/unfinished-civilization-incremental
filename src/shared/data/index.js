@@ -2,6 +2,9 @@ import sample from 'lodash/sample'
 export { UNLOCKS } from './unlocks'
 export { resources } from './resources'
 export { buyables } from './buyables'
+export { technologies } from './technologies'
+export { civics } from './civics'
+export { beliefs } from './beliefs'
 
 export const INTERVAL = 1000
 export const RESOURCE_MULTIPLIER = 1

@@ -7,6 +7,9 @@ import {
   UNLOCKS,
   buyables,
   resources,
+  technologies,
+  civics,
+  beliefs,
   RESOURCE_MULTIPLIER,
 } from '../data'
 import { buildings, districtTypes } from '../../city/data'
@@ -19,7 +22,33 @@ export const createInitial = createAction('INIT')
 export const createInitialReducer = (sess) => {
   buyables.forEach((b) => sess.Buyable.upsert(b))
   buildings.forEach((b) => sess.Building.upsert(b))
-  // science.forEach((b) => sess.Science.upsert(b))
+  technologies.forEach((b) => {
+    sess.Buyable.upsert({
+      id: `buyTech-${b.id}`,
+      label: `Buy ${b.label}`,
+      cost: b.cost,
+      oneTime: true,
+    })
+    sess.Technology.upsert(b)
+  })
+  civics.forEach((b) => {
+    sess.Buyable.upsert({
+      id: `buyCivic-${b.id}`,
+      label: `Buy ${b.label}`,
+      cost: b.cost,
+      oneTime: true,
+    })
+    sess.Civic.upsert(b)
+  })
+  beliefs.forEach((b) => {
+    sess.Buyable.upsert({
+      id: `buyBelief-${b.id}`,
+      label: `Buy ${b.label}`,
+      cost: b.cost,
+      oneTime: true,
+    })
+    sess.Belief.upsert(b)
+  })
   resources.forEach((r) => sess.Resource.upsert({ ...r, amount: 0 }))
   districtTypes.forEach((dt) => sess.DistrictType.upsert(dt))
 
@@ -53,6 +82,8 @@ export const createInitialReducer = (sess) => {
       value: 50 * RESOURCE_MULTIPLIER,
     })
     updateResourceReducer(sess, { resourceId: 'science', value: 50 })
+    updateResourceReducer(sess, { resourceId: 'culture', value: 50 })
+    updateResourceReducer(sess, { resourceId: 'faith', value: 50 })
 
     if (UNLOCK_ALL) {
       UNLOCKS.forEach((id) => unlockReducer(sess, id))
