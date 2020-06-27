@@ -25,12 +25,12 @@ export const getContinentFull = createSelector(
   getContinentsPlanet,
   getContinentsCities,
   getContinentsPlots,
-  getContinentResources,
+  getContinentResourceTotals,
   (_, continent, planet, cities, plots, resources) => ({
     ...continent,
     planet,
     plots,
     cities: cities ? compact(cities.flat()) : [],
-    resources: resources ? compact(resources.flat()) : [],
+    resources,
   }),
 )

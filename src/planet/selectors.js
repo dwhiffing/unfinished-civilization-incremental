@@ -23,11 +23,11 @@ export const getPlanetFull = createSelector(
   getPlanets,
   getPlanetsSystem,
   getPlanetsContinents,
-  getPlanetStockpiles,
+  getPlanetResourceTotals,
   (_, planet, system, continents, resources) => ({
     ...planet,
     system,
     continents: continents ? compact(continents.flat(2)) : [],
-    resources: resources ? compact(resources.flat(2)) : [],
+    resources,
   }),
 )
