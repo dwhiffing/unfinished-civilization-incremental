@@ -6,13 +6,13 @@ import { getStockpiles } from '../../city/selectors'
 import ReactTooltip from 'react-tooltip'
 
 export const Frame = ({ children, sidebar }) => {
-  const stockpiles = useSelector((state) => getStockpiles(state)).filter(
+  const globalStockpiles = useSelector((state) => getStockpiles(state)).filter(
     (s) => s.type === 'global',
   )
   return (
     <Box display="flex" flexDirection="column">
       <Box display="flex">
-        {stockpiles.map((resource) => (
+        {globalStockpiles.map((resource) => (
           <ResourceText key={resource.id} resource={resource} />
         ))}
       </Box>

@@ -2,14 +2,10 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { Box } from '@material-ui/core'
 import { getSystemFull } from '../selectors'
-import {
-  getPlanetResourceTotals,
-  getPlanetsCities,
-} from '../../planet/selectors'
+import { getPlanetsCities } from '../../planet/selectors'
 import { explore, settle } from '../../shared/store'
 import { Purchase } from '../../shared/components/Purchase'
 import { useParams } from 'react-router'
-import { Resources } from '../../shared/components/Resources'
 
 export const SystemRoute = () => {
   const { id = '0' } = useParams()
@@ -42,9 +38,6 @@ export const SystemRoute = () => {
 }
 
 const PlanetItem = ({ planet }) => {
-  const resources = useSelector((state) =>
-    getPlanetResourceTotals(state, planet.id),
-  )
   const cities = useSelector((state) =>
     getPlanetsCities(state, planet.id)
       .flat(5)
@@ -55,7 +48,6 @@ const PlanetItem = ({ planet }) => {
       <a href={`#/planet/${planet.id}`} style={{ marginRight: 8 }}>
         {planet.label}
       </a>
-      <Resources hide resources={resources} />
       {cities.length === 0 && (
         <Purchase
           systemId={planet.systemId}

@@ -6,7 +6,6 @@ import { Purchase } from '../../shared/components/Purchase'
 import { explore } from '../../shared/store'
 import { createCity } from '../../city/store'
 import { useParams } from 'react-router'
-import { Resources } from '../../shared/components/Resources'
 
 export const ContinentRoute = () => {
   const { id = '0' } = useParams()
@@ -60,6 +59,5 @@ const CityItem = ({ city }) => (
     >
       {city.label}
     </a>
-    <Resources hide resources={city.stockpiles} />
   </Box>
 )
