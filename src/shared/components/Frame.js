@@ -17,7 +17,6 @@ export const Frame = ({ children, sidebar }) => {
   const technologies = useSelector((state) => getTechnologies(state))
   const civics = useSelector((state) => getCivics(state))
   const beliefs = useSelector((state) => getBeliefs(state))
-  // TODO: should prevent these from being buyable more than once
   const purchases = {
     science: technologies.map((s) => (
       <Purchase

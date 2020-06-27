@@ -26,4 +26,5 @@ export const UNLOCKS = [
   'system',
   'planet',
   'continent',
+  'granary',
 ]

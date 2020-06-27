@@ -15,7 +15,7 @@ import { createPlotReducer, createContinentReducer } from './continent/store'
 import { createCityReducer, createPersonReducer } from './city/store'
 import { createBuildingReducer } from './city/store'
 import { createDistrictReducer, dragReducer } from './city/store'
-import { purchaseBuyableReducer } from './shared/store'
+import { purchaseBuyableReducer, unlockReducer } from './shared/store'
 
 const reducers = {
   INIT: createInitialReducer,
@@ -32,6 +32,7 @@ const reducers = {
   UPDATE_RESOURCE: updateResourceReducer,
   PURCHASE_BUYABLE: purchaseBuyableReducer,
   TICK: applyTickEffectsReducer,
+  UNLOCK: unlockReducer,
   DRAG: dragReducer,
 }
 

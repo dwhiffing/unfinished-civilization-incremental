@@ -15,11 +15,6 @@ export const buyables = [
     cost: { wood: 100 },
   },
   {
-    id: 'buyBuilding',
-    label: 'granary',
-    cost: { wood: 10 },
-  },
-  {
     id: 'exploreContinent',
     label: 'explore',
     cost: { wood: 1000 },

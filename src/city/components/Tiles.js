@@ -3,6 +3,8 @@ import { Box, Typography } from '@material-ui/core'
 import { DragList } from './DragList'
 import { createBuilding } from '../store'
 import { Purchase } from '../../shared/components/Purchase'
+import { useSelector } from 'react-redux'
+import { getUnlocks } from '../../shared/selectors'
 // TOOD: need to add tile productivity based on features
 // need to add district based effects
 export const Tiles = ({ continentId, cityId, tiles }) => {
@@ -48,12 +50,15 @@ const TileDetails = ({ cityId, district, tile }) => {
 }
 
 const TileBuildings = ({ cityId, district, tile }) => {
+  const unlocks = useSelector(getUnlocks)
   const buildings = Object.values((district && district.buildings) || {})
   const districtType = district && district.districtType
   const districtTypeBuildings =
     (districtType && district.districtType.buildings) || []
   const purchasableBuildingIds = districtTypeBuildings.filter(
-    (buildingId) => !buildings.map((b) => b.id).includes(buildingId),
+    (buildingId) =>
+      !buildings.map((b) => b.id).includes(buildingId) &&
+      unlocks.includes(buildingId),
   )
 
   return (
@@ -66,7 +71,7 @@ const TileBuildings = ({ cityId, district, tile }) => {
         <Purchase
           key={`purchase-${buildingId}`}
           cityId={+cityId}
-          id="buyBuilding"
+          id={`buyBuilding-${buildingId}`}
           action={createBuilding({
             id: buildingId,
             districtId: district.id,
