@@ -47,6 +47,8 @@ export const Sidebar = ({
     <br />
     <span>{label}</span>
     {children}
-    <Resources resourceChange={resourceChange} resources={resources} />
+    {resourceChange && (
+      <Resources resourceChange={resourceChange} resources={resources} />
+    )}
   </>
 )

@@ -3,9 +3,8 @@ import { useSelector } from 'react-redux'
 import { getUnlocks } from '../../shared/selectors'
 import { Sidebar } from '../../shared/components/Frame'
 import { useParams } from 'react-router'
-import { getCityFull } from '../selectors'
+import { getCityFull, getResourceModifiers } from '../selectors'
 import { FOOD_DRAIN } from '../../shared/data'
-import { getResourceModifiers } from '../store/getCityResourceChange'
 export const CitySidebar = () => {
   const { id = '0' } = useParams()
   const unlocks = useSelector(getUnlocks)
